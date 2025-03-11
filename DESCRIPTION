@@ -1,0 +1,13 @@
+Package: microbs.lu
+Title: Process PCR datafiles for the microbs.lu dashboard
+Version: 0.0.0.9000
+Authors@R: 
+    person("Prasad", "ADHAV", , "prasad.adhav@list.lu", role = c("aut", "cre"))
+Description: In Luxembourg the waste water treatment plant samples are used to 
+              monitor for epidemic disease such as RSV, Influenye, SARS CoV2 etc.
+              This package takes the raw data files from qPCR and ddPCR tests and 
+              prepares them for the microbs.lu i.e. Luxembourgish national dashboard.
+License: `use_ccby_license()`
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
