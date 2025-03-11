@@ -11,3 +11,16 @@ License: `use_ccby_license()`
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Imports:
+    readxl,
+    tidyverse,
+    utils,
+    janitor,
+    plyr,
+    dplyr,
+    writexl,
+    lubridate,
+    tidyr
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
