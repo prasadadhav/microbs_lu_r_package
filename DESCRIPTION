@@ -20,7 +20,8 @@ Imports:
     dplyr,
     writexl,
     lubridate,
-    tidyr
+    tidyr,
+    usethis
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
