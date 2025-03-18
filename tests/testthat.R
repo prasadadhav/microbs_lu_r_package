@@ -10,5 +10,5 @@ library(testthat)
 library(microbs.lu)
 
 test_check("microbs.lu")
-usethis::use_test("basic")
-usethis::use_test("set_microbs_wdirectory")
+# usethis::use_test("basic")
+# usethis::use_test("set_microbs_wdirectory")
