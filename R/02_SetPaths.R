@@ -1,21 +1,31 @@
-#' @title Process given paths
-#' 
-#' @param path A character string representing the path to be processed.
-#' 
-#' @details This function processes the given path and replaces the backslashes with forward slashes.
-#' 
-#' @return A character string representing the processed path.
-#' @export 
-process_win_path <- function(path) {
-    if (grepl("\\\\", path)) {
-        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\\'.\033[39m")
-    }
-    path <- gsub("\\\\", "/", path)
-    return(path)
+#--------------------------------------------------------------------------------------------------------
+#   Boilerplate code
+#--------------------------------------------------------------------------------------------------------
+#' @title Set Data base path
+#'
+#' @description This is an example function that demonstrates the structure of an R function.
+#'
+#' @param param1 A description of the first parameter.
+#' @param param2 A description of the second parameter.
+#' @return A description of the return value.
+#' @examples
+#' # Example usage
+#' result <- example_function(param1, param2)
+#' @export
+example_function <- function(param1, param2) {
+    # Function implementation goes here
+    result <- param1 + param2
+    return(result)
 }
 
+
+
+#--------------------------------------------------------------------------------------------------------
+#
+#--------------------------------------------------------------------------------------------------------
 #' @title Set the Microbs Working Directory
 #'
+#' @description 
 #' This function allows you to set the working directory for the package.
 #'
 #' @param path A character string representing the path to be set as the working directory. 
@@ -27,24 +37,24 @@ process_win_path <- function(path) {
 #'
 #' @title Set Paths for microbs.lu Package
 #' @description This script sets the paths for various directories used in the microbs.lu package.
-#' @details The following directory structure is required for the package:
-#' \itemize{
-#'   \item \code{00_flux_data} - Directory for flux data.
-#'   \item \code{0_raw_data_ddPCR} - Directory for raw ddPCR data.
-#'   \item \code{0_raw_data_qPCR} - Directory for raw qPCR data.
-#'   \item \code{1_loaded_data} - Directory for loaded data.
-#'   \item \code{2_calc_data} - Directory for calculated data.
-#'   \item \code{3_created_data} - Directory for created data.
-#'   \item \code{4_data_4_dashboard} - Directory for data used in the dashboard.
-#'   \item \code{microbs_runtime.R} - Script for runtime operations.
-#' }
-#' @file /d:/03_Workspace/01_R_Package/microbs.lu/R/02_SetPaths.R
+#' @details The following directory structure is required for the package, these directories are located inside :
+#' .
+#' ├── Data_Treatment
+#' │   ├── 00_flux_data
+#' │   ├── 0_raw_data_ddPCR
+#' │   ├── 0_raw_data_qPCR
+#' │   ├── 1_loaded_data
+#' │   ├── 2_calc_data
+#' │   ├── 3_created_data
+#' │   └── 4_data_4_dashboard
+#' ├── microbs_runtime.R
+#' file ./microbs.lu/R/02_SetPaths.R
 #' @export 
 
 set_microbs_wdirectory <- function(path = "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results") {
     # Check if the provide path is good.
     if (grepl("\\\\", path)) {
-        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\\'.\033[39m")
+        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
     }
 
     # Check if path is missing, use default if it is
@@ -53,22 +63,204 @@ set_microbs_wdirectory <- function(path = "L:/Units & Programmes/BIOTECH/ENVMICR
         message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
     }
     
-    # Process the path and handle backslashes
-    processed_path <- process_win_path(path)
-    
-    if (!dir.exists(processed_path)) {
-        message("Warning: The provided path does not exist: ", processed_path)
+    if (!dir.exists(path)) {
+        message("Error: The provided path does not exist: ", path)
     } else {
-        message("Report: Using provided path: ", processed_path)
+        message("Report: Using provided path: ", path)
     }
     
     # Set the working directory
-    wd <<- processed_path
+    wd <<- path
     setwd(wd)
 }
 
-
+# TODO: Remove this part after the development is finished
 # set_microbs_wdirectory()
 # set_microbs_wdirectory(path = "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results")
-set_microbs_wdirectory(path = "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data")
+# set_microbs_wdirectory(path = "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data")
 # set_microbs_wdirectory(path = "D:\\03_Workspace\\01_R_Package\\microbs_lu_dummy_data")
+#--------------------------------------------------------------------------------------------------------
+#
+#--------------------------------------------------------------------------------------------------------
+#' @title Set path connector in which the data is saved
+#' 
+#' @description Within theteam there is a global directory, and within this directory there is another directory called "Data Treatment".
+#' And finally the data directories are within this directory.
+#' This function allows you to set the path connector bwtween global directory & the data directories.
+#' 
+#' This is not really needed if you are using absolute paths (Complete path for example `/home/user/myWorkingDir/...`).
+#'
+#' @param path A character string representing the path connector. 
+#' The default path is "Data_Treatment".
+#' 
+#' @examples
+#' # Example usage
+#' result <- set_microbs_connector_dir(path="Data_Treatment")
+#' 
+#' @examples
+#' result
+#' 
+#' 
+#' file ./microbs.lu/R/02_SetPaths.R
+#' @export 
+set_microbs_connector_dir <- function(path="Data_Treatment") {
+    # Check if the provide path is good.
+    if (grepl("\\\\", path)) {
+        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
+    }
+
+    # Check if path is missing, use default if it is
+    if (missing(path)) {
+        path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results"
+        message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
+    }
+    
+    if (!dir.exists(path)) {
+        message("Error: The provided path does not exist: ", path)
+    } else {
+        message("Report: Using provided path: ", path)
+    }
+    
+    # Set the working directory
+    path_connector <<- path
+}
+
+#--------------------------------------------------------------------------------------------------------
+# qPCR paths
+#--------------------------------------------------------------------------------------------------------
+#' @title Set dPCR Raw Data Path
+#'
+#' @description The raw data from the qPCR tests are to be stored in the "0_raw_data_qPCR" directory.
+#' It is assumed that the global directory is set using the set_microbs_wdirectory function.
+#' Within this directory there is another director called "Data Treatment", set using the function set_microbs_connector_dir.
+#' This is just because the direectory structure within the team is like this.
+#' It is not necessary to have a connector (in-between) directory.
+#' This function allows you to set the path for the raw ddPCR data.
+#'
+#' @param path A character string representing the path to be set as the working directory. 
+#' The default path is "0_raw_data_qPCR".
+#' @param relative A Boolean to use relative path or not. Default is False.
+#' 
+#' @examples
+#' # Example usage
+#' path <- "0_raw_data_qPCR"
+#' result <- set_microbs_qPCR_rawDataPath(path)
+#' result
+#' 
+#' @examples
+#' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data Treatment/0_raw_data_qPCR"
+#' result <- set_microbs_qPCR_rawDataPath(path)
+#' result
+#' 
+#' file ./microbs.lu/R/02_SetPaths.R
+#' @export 
+set_microbs_qPCR_rawDataPath <- function(path="0_raw_data_qPCR", relative=FALSE) {
+    # Check if the provide path is good.
+    if (grepl("\\\\", path)) {
+        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
+    }
+
+    # Check if path is missing, use default if it is
+    if (missing(path)) {
+        path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data Treatment/0_raw_data_qPCR"
+        message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
+        qPCR_raw_path <<- path
+        return(invisible(path))  # Exit the function early
+    }
+    
+    if (relative) {
+        path <- paste("./", path, sep="")
+        if (!dir.exists(path)) {
+            message("[microbs Error]: The provided path does not exist: ", path)
+        } else {
+            return(invisible(path))  # Exit the function early
+            message("[microbs Report]: Using provided path: ", path)
+        }
+    }
+
+    if (!dir.exists(path)) {
+        message("Error: The provided path does not exist: ", path)
+    } else {
+        message("[microbs Report]: Using provided path: ", path)
+    }
+    
+    # Set the working directory
+    qPCR_raw_path <<- utils_microbs_path_builder(wd, path_connector, path)
+}
+
+
+#--------------------------------------------------------------------------------------------------------
+# ddPCR paths
+#--------------------------------------------------------------------------------------------------------
+#' @title Set ddPCR Raw Data Path
+#'
+#' @description The raw data from the qPCR tests are to be stored in the "0_raw_data_ddPCR" directory.
+#' It is assumed that the global directory is set using the set_microbs_wdirectory function.
+#' Within this directory there is another director called "Data Treatment", set using the function set_microbs_connector_dir.
+#' This is just because the direectory structure within the team is like this.
+#' It is not necessary to have a connector (in-between) directory.
+#' This function allows you to set the path for the raw ddPCR data.
+#'
+#' @param path A character string representing the path to be set as the working directory. 
+#' The default path is "0_raw_data_ddPCR".
+#' @param relative A Boolean to use relative path or not. Default is False.
+#' 
+#' @examples
+#' # Example usage
+#' path <- "0_raw_data_ddPCR"
+#' result <- set_microbs_qPCR_rawDataPath(path)
+#' result
+#' 
+#' @examples
+#' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data Treatment/0_raw_data_ddPCR"
+#' result <- set_microbs_qPCR_rawDataPath(path)
+#' result
+#' 
+#' file ./microbs.lu/R/02_SetPaths.R
+#' @export 
+set_microbs_ddPCR_rawDataPath <- function(path="0_raw_data_ddPCR", relative=FALSE) {
+    # Check if the provide path is good.
+    if (grepl("\\\\", path)) {
+        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
+    }
+
+    # Check if path is missing, use default if it is
+    if (missing(path)) {
+        path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data Treatment/0_raw_data_ddPCR"
+        message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
+        ddPCR_raw_path <<- path
+        return(invisible(path))  # Exit the function early
+    }
+    
+    if (relative) {
+        path <- paste("./", path, sep="")
+        if (!dir.exists(path)) {
+            message("[microbs Error]: The provided path does not exist: ", path)
+        } else {
+            return(invisible(path))  # Exit the function early
+            message("[microbs Report]: Using provided path: ", path)
+        }
+    }
+
+    if (!dir.exists(path)) {
+        message("Error: The provided path does not exist: ", path)
+    } else {
+        message("[microbs Report]: Using provided path: ", path)
+    }
+    
+    # Set the working directory
+    ddPCR_raw_path <<- utils_microbs_path_builder(wd, path_connector, path)
+}
+
+#--------------------------------------------------------------------------------------------------------
+#
+#--------------------------------------------------------------------------------------------------------
+
+
+
+
+
+#--------------------------------------------------------------------------------------------------------
+#
+#--------------------------------------------------------------------------------------------------------
+# Add a function to all the paths
