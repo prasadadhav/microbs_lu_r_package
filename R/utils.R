@@ -15,7 +15,7 @@
 #' connector <- "Data_Treatment"
 #' local_dir_path <- "0_raw_data_qPCR"
 #' result <- utils_path_builder(global_dir_path, connector, local_dir_path)
-#' print(result) # "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data_Treatment/0_raw_data_qPCR"
+#' print(result) 
 #' @export
 utils_microbs_path_builder <- function(global_dir_path, connector, local_dir_path) {
     # Function implementation goes here
