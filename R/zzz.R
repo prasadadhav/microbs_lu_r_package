@@ -5,5 +5,8 @@
 # ddPCR_raw_path <- NULL
 # qPCR_raw_path <- NULL
 
-# utils::globalVariables(c("wd", "path_connector", "ddPCR_raw_path", "qPCR_raw_path"))
-
+.microbs_env <- new.env(parent = emptyenv())
+.microbs_env$wd <- NULL
+.microbs_env$path_connector <- NULL
+.microbs_env$ddPCR_raw_path <- NULL
+.microbs_env$qPCR_raw_path <- NULL  
