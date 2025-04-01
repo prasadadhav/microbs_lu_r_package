@@ -170,26 +170,26 @@ get_microbs_stdCurve_DataPath <- function() {
 #--------------------------------------------------------------------------------------------------------
 # get checked data path
 #--------------------------------------------------------------------------------------------------------
-#' @title get checked data path
-#' 
-#' @description If it returns NULL, it means that the path connector has not been set yet.
-#' Call set_microbs_check_DataPath() to set the path connector.
-#' Add a string to set custom path connector.
-#' Only use the directory name, not the full path.
-#' This function allows you to get the path connector between global directory & the data directories.
-#' 
-#' file ./microbs.lu/R/02_GetPaths.R
-#' 
-#' @examples
-#' # Example usage
-#' result <- get_microbs_check_DataPath()
-#' result
-#' 
-#' @export 
-get_microbs_check_DataPath <- function() {
-    if (is.null(.microbs_env$stdCurve_path)) {
-        message("[microbs Warning]: Did not yet set the path. Use the set_microbs_check_DataPath(path=\"my/custom/path\") function to set a path")
-        message("or use the default by using set_microbs_check_DataPath()")
-    }
-    .microbs_env$stdCurve_path
-}
+# #' @title get checked data path
+# #' 
+# #' @description If it returns NULL, it means that the path connector has not been set yet.
+# #' Call set_microbs_check_DataPath() to set the path connector.
+# #' Add a string to set custom path connector.
+# #' Only use the directory name, not the full path.
+# #' This function allows you to get the path connector between global directory & the data directories.
+# #' 
+# #' file ./microbs.lu/R/02_GetPaths.R
+# #' 
+# #' @examples
+# #' # Example usage
+# #' result <- get_microbs_check_DataPath()
+# #' result
+# #' 
+# #' @export 
+# get_microbs_check_DataPath <- function() {
+#     if (is.null(.microbs_env$stdCurve_path)) {
+#         message("[microbs Warning]: Did not yet set the path. Use the set_microbs_check_DataPath(path=\"my/custom/path\") function to set a path")
+#         message("or use the default by using set_microbs_check_DataPath()")
+#     }
+#     .microbs_env$stdCurve_path
+# }
