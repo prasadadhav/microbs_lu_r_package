@@ -168,28 +168,114 @@ get_microbs_stdCurve_DataPath <- function() {
 }
 
 #--------------------------------------------------------------------------------------------------------
-# get checked data path
+# get loaded path
 #--------------------------------------------------------------------------------------------------------
-# #' @title get checked data path
-# #' 
-# #' @description If it returns NULL, it means that the path connector has not been set yet.
-# #' Call set_microbs_check_DataPath() to set the path connector.
-# #' Add a string to set custom path connector.
-# #' Only use the directory name, not the full path.
-# #' This function allows you to get the path connector between global directory & the data directories.
-# #' 
-# #' file ./microbs.lu/R/02_GetPaths.R
-# #' 
-# #' @examples
-# #' # Example usage
-# #' result <- get_microbs_check_DataPath()
-# #' result
-# #' 
-# #' @export 
-# get_microbs_check_DataPath <- function() {
-#     if (is.null(.microbs_env$stdCurve_path)) {
-#         message("[microbs Warning]: Did not yet set the path. Use the set_microbs_check_DataPath(path=\"my/custom/path\") function to set a path")
-#         message("or use the default by using set_microbs_check_DataPath()")
-#     }
-#     .microbs_env$stdCurve_path
-# }
+#' @title get loaded data path
+#' 
+#' @description If it returns NULL, it means that the path connector has not been set yet.
+#' Call set_microbs_loaded_DataPath() to set the path connector.
+#' Add a string to set custom path connector.
+#' Only use the directory name, not the full path.
+#' This function allows you to get the path connector between global directory & the data directories.
+#' 
+#' file ./microbs.lu/R/02_GetPaths.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_loaded_DataPath()
+#' result
+#' 
+#' @export 
+get_microbs_loaded_DataPath <- function() {
+    if (is.null(.microbs_env$loaded_data_path)) {
+        message("[microbs Warning]: Did not yet set the path. Use the set_microbs_loaded_DataPath(path=\"my/custom/path\") function to set a path")
+        message("or use the default by using set_microbs_loaded_DataPath()")
+    }
+    .microbs_env$loaded_data_path
+}
+
+
+
+#--------------------------------------------------------------------------------------------------------
+# get calc path
+#--------------------------------------------------------------------------------------------------------
+#' @title get loaded data path
+#' 
+#' @description If it returns NULL, it means that the path connector has not been set yet.
+#' Call set_microbs_calc_DataPath() to set the path connector.
+#' Add a string to set custom path connector.
+#' Only use the directory name, not the full path.
+#' This function allows you to get the path connector between global directory & the data directories.
+#' 
+#' file ./microbs.lu/R/02_GetPaths.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_calc_DataPath()
+#' result
+#' 
+#' @export 
+get_microbs_calc_DataPath <- function() {
+    if (is.null(.microbs_env$calc_data_path)) {
+        message("[microbs Warning]: Did not yet set the path. Use the set_microbs_calc_DataPath(path=\"my/custom/path\") function to set a path")
+        message("or use the default by using set_microbs_calc_DataPath()")
+    }
+    .microbs_env$calc_data_path
+}
+
+
+
+#--------------------------------------------------------------------------------------------------------
+# get created path
+#--------------------------------------------------------------------------------------------------------
+#' @title get loaded data path
+#' 
+#' @description If it returns NULL, it means that the path connector has not been set yet.
+#' Call set_microbs_created_DataPath() to set the path connector.
+#' Add a string to set custom path connector.
+#' Only use the directory name, not the full path.
+#' This function allows you to get the path connector between global directory & the data directories.
+#' 
+#' file ./microbs.lu/R/02_GetPaths.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_created_DataPath()
+#' result
+#' 
+#' @export 
+get_microbs_created_DataPath <- function() {
+    if (is.null(.microbs_env$created_data_path)) {
+        message("[microbs Warning]: Did not yet set the path. Use the set_microbs_created_DataPath(path=\"my/custom/path\") function to set a path")
+        message("or use the default by using set_microbs_created_DataPath()")
+    }
+    .microbs_env$created_data_path
+}
+
+
+#--------------------------------------------------------------------------------------------------------
+# get dashboard data path
+#--------------------------------------------------------------------------------------------------------
+#' @title get loaded data path
+#' 
+#' @description If it returns NULL, it means that the path connector has not been set yet.
+#' Call set_microbs_dashboard_DataPath() to set the path connector.
+#' Add a string to set custom path connector.
+#' Only use the directory name, not the full path.
+#' This function allows you to get the path connector between global directory & the data directories.
+#' 
+#' file ./microbs.lu/R/02_GetPaths.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_dashboard_DataPath()
+#' result
+#' 
+#' @export 
+get_microbs_dashboard_DataPath <- function() {
+    if (is.null(.microbs_env$dashboard_data_path)) {
+        message("[microbs Warning]: Did not yet set the path. Use the set_microbs_dashboard_DataPath(path=\"my/custom/path\") function to set a path")
+        message("or use the default by using set_microbs_dashboard_DataPath()")
+    }
+    .microbs_env$dashboard_data_path
+}

@@ -494,7 +494,7 @@ set_microbs_loaded_DataPath <- function(path="1_loaded_data", relative=FALSE) {
 #--------------------------------------------------------------------------------------------------------
 #' @title Set path for created data for SUPERVIR_CAL_DATA_*PCR_*` 
 #'
-#' @description The loaded data are to be stored in the "2_calc_data" directory.
+#' @description The calculated data are to be stored in the "2_calc_data" directory.
 #' It is assumed that the global directory is set using the set_microbs_wdirectory function.
 #' Within this directory there is another director called "Data_Treatment", set using the function set_microbs_connector_dir.
 #' This is just because the direectory structure within the team is like this.
@@ -511,16 +511,16 @@ set_microbs_loaded_DataPath <- function(path="1_loaded_data", relative=FALSE) {
 #' set_microbs_wdirectory() # to set default working directory
 #' set_microbs_connector_dir() # to set default connector directory
 #' path <- "2_calc_data"
-#' result <- set_microbs_loaded_DataPath(path)
+#' result <- set_microbs_calc_DataPath(path)
 #' result
 #' 
 #' @examples
 #' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
-#' result <- set_microbs_loaded_DataPath(path)
+#' result <- set_microbs_calc_DataPath(path)
 #' result
 #'
 #' @export 
-set_microbs_loaded_DataPath <- function(path="2_calc_data", relative=FALSE) {
+set_microbs_calc_DataPath <- function(path="2_calc_data", relative=FALSE) {
     # Check if the provide path is good.
     if (grepl("\\\\", path)) {
         message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
@@ -568,7 +568,7 @@ set_microbs_loaded_DataPath <- function(path="2_calc_data", relative=FALSE) {
 #--------------------------------------------------------------------------------------------------------
 #' @title Set path for created data for `SUPERVIR_*_AGG_*` 
 #'
-#' @description The loaded data are to be stored in the "3_created_data" directory.
+#' @description The created data are to be stored in the "3_created_data" directory.
 #' It is assumed that the global directory is set using the set_microbs_wdirectory function.
 #' Within this directory there is another director called "Data_Treatment", set using the function set_microbs_connector_dir.
 #' This is just because the direectory structure within the team is like this.
@@ -585,16 +585,16 @@ set_microbs_loaded_DataPath <- function(path="2_calc_data", relative=FALSE) {
 #' set_microbs_wdirectory() # to set default working directory
 #' set_microbs_connector_dir() # to set default connector directory
 #' path <- "3_created_data"
-#' result <- set_microbs_loaded_DataPath(path)
+#' result <- set_microbs_created_DataPath(path)
 #' result
 #' 
 #' @examples
 #' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/3_created_data"
-#' result <- set_microbs_loaded_DataPath(path)
+#' result <- set_microbs_created_DataPath(path)
 #' result
 #'
 #' @export 
-set_microbs_loaded_DataPath <- function(path="3_created_data", relative=FALSE) {
+set_microbs_created_DataPath <- function(path="3_created_data", relative=FALSE) {
     # Check if the provide path is good.
     if (grepl("\\\\", path)) {
         message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
@@ -640,5 +640,71 @@ set_microbs_loaded_DataPath <- function(path="3_created_data", relative=FALSE) {
 
 
 #--------------------------------------------------------------------------------------------------------
-# 
+# Dashboard data path 
 #--------------------------------------------------------------------------------------------------------
+#' @title Set path for dashboard data
+#'
+#' @description The final data for dashboard are to be stored in the "4_data_4_dashboard" directory.
+#' It is assumed that the global directory is set using the set_microbs_wdirectory function.
+#' Within this directory there is another director called "Data_Treatment", set using the function set_microbs_connector_dir.
+#' This is just because the direectory structure within the team is like this.
+#' It is not necessary to have a connector (in-between) directory.
+#' This function allows you to set the path for the checked data.
+#' file ./microbs.lu/R/02_SetPaths.R
+#'
+#' @param path A character string representing the path to be set as the working directory. 
+#' The default path is "4_data_4_dashboard".
+#' @param relative A Boolean to use relative path or not. Default is False.
+#' 
+#' @examples
+#' # Example usage
+#' set_microbs_wdirectory() # to set default working directory
+#' set_microbs_connector_dir() # to set default connector directory
+#' path <- "4_data_4_dashboard"
+#' result <- set_microbs_dashboard_DataPath(path)
+#' result
+#' 
+#' @examples
+#' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/4_data_4_dashboard"
+#' result <- set_microbs_dashboard_DataPath(path)
+#' result
+#'
+#' @export 
+set_microbs_dashboard_DataPath <- function(path="4_data_4_dashboard", relative=FALSE) {
+    # Check if the provide path is good.
+    if (grepl("\\\\", path)) {
+        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
+    }
+
+    # Check if path is missing, use default if it is
+    if (missing(path)) {
+        path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data_Treatment/4_data_4_dashboard"
+        message("[microbs Report]: No path provided. Using default path: ", path)
+        .microbs_env$dashboard_data_path <- path
+        return(invisible(path))  # Exit the function early
+    }
+    
+    # Check and set relative path to working directory
+    if (relative) {
+        path <- paste("./", path, sep="")
+        if (!dir.exists(path)) {
+            message("[microbs Error]: The provided path does not exist: ", path)
+        } else {
+            .microbs_env$dashboard_data_path <- path
+            return(invisible(path))  # Exit the function early
+            message("[microbs Report]: Using provided path: ", path)
+        }
+    }
+
+    if (!dir.exists(path)) {
+        message("Error: The provided path does not exist: ", path)
+    } else {
+        message("[microbs Report]: Using provided path: ", path)
+    }
+
+    wd <- get_microbs_wdirectory()
+    path_connector <- get_microbs_connector_dir()
+    
+    # Set the working directory
+    .microbs_env$dashboard_data_path <- utils_microbs_path_builder(wd, path_connector, path)
+}
