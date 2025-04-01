@@ -57,13 +57,13 @@
 set_microbs_wdirectory <- function(path = "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results") {
     # Check if the provide path is good.
     if (grepl("\\\\", path)) {
-        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
+        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
     }
 
     # Check if path is missing, use default if it is
     if (missing(path)) {
         path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results"
-        message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
+        message("[microbs Report]: No path provided. Using default path: ", path)
     }
     
     if (!dir.exists(path)) {
@@ -103,13 +103,13 @@ set_microbs_wdirectory <- function(path = "L:/Units & Programmes/BIOTECH/ENVMICR
 set_microbs_connector_dir <- function(path="Data_Treatment") {
     # Check if the provide path is good.
     if (grepl("\\\\", path)) {
-        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
+        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
     }
 
     # Check if path is missing, use default if it is
     if (missing(path)) {
         path <- "Data_Treatment"
-        message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
+        message("[microbs Report]: No path provided. Using default path: ", path)
     }
     
     if (!dir.exists(path)) {
@@ -157,14 +157,14 @@ set_microbs_connector_dir <- function(path="Data_Treatment") {
 set_microbs_qPCR_rawDataPath <- function(path="0_raw_data_qPCR", relative=FALSE) {
     # Check if the provide path is good.
     if (grepl("\\\\", path)) {
-        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
+        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
     }
 
     # Check if path is missing, use default if it is
     if (missing(path)) {
         path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data_Treatment/0_raw_data_qPCR"
-        message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
-        qPCR_raw_path <- path
+        message("[microbs Report]: No path provided. Using default path: ", path)
+        .microbs_env$qPCR_raw_path <- path
         return(invisible(path))  # Exit the function early
     }
     
@@ -173,6 +173,7 @@ set_microbs_qPCR_rawDataPath <- function(path="0_raw_data_qPCR", relative=FALSE)
         if (!dir.exists(path)) {
             message("[microbs Error]: The provided path does not exist: ", path)
         } else {
+            .microbs_env$qPCR_raw_path <- path
             return(invisible(path))  # Exit the function early
             message("[microbs Report]: Using provided path: ", path)
         }
@@ -185,7 +186,7 @@ set_microbs_qPCR_rawDataPath <- function(path="0_raw_data_qPCR", relative=FALSE)
     }
 
     path_connector <- get_microbs_connector_dir()
-    wd <- get_microbs_wd_dir()
+    wd <- get_microbs_wdirectory()
     
     # Set the working directory
     .microbs_env$qPCR_raw_path <- utils_microbs_path_builder(wd, path_connector, path)
@@ -226,14 +227,14 @@ set_microbs_qPCR_rawDataPath <- function(path="0_raw_data_qPCR", relative=FALSE)
 set_microbs_ddPCR_rawDataPath <- function(path="0_raw_data_ddPCR", relative=FALSE) {
     # Check if the provide path is good.
     if (grepl("\\\\", path)) {
-        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
+        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
     }
 
     # Check if path is missing, use default if it is
     if (missing(path)) {
         path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data_Treatment/0_raw_data_ddPCR"
-        message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
-        ddPCR_raw_path <- path
+        message("[microbs Report]: No path provided. Using default path: ", path)
+        .microbs_env$ddPCR_raw_path <- path
         return(invisible(path))  # Exit the function early
     }
     
@@ -243,6 +244,7 @@ set_microbs_ddPCR_rawDataPath <- function(path="0_raw_data_ddPCR", relative=FALS
         if (!dir.exists(path)) {
             message("[microbs Error]: The provided path does not exist: ", path)
         } else {
+            .microbs_env$ddPCR_raw_path <- path
             return(invisible(path))  # Exit the function early
             message("[microbs Report]: Using provided path: ", path)
         }
@@ -254,7 +256,7 @@ set_microbs_ddPCR_rawDataPath <- function(path="0_raw_data_ddPCR", relative=FALS
         message("[microbs Report]: Using provided path: ", path)
     }
 
-    wd <- get_microbs_wd_dir()
+    wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
     
     # Set the working directory
@@ -295,14 +297,14 @@ set_microbs_ddPCR_rawDataPath <- function(path="0_raw_data_ddPCR", relative=FALS
 set_microbs_flux_DataPath <- function(path="00_flux_data", relative=FALSE) {
     # Check if the provide path is good.
     if (grepl("\\\\", path)) {
-        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
+        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
     }
 
     # Check if path is missing, use default if it is
     if (missing(path)) {
         path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data_Treatment/00_flux_data"
-        message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
-        ddPCR_raw_path <- path
+        message("[microbs Report]: No path provided. Using default path: ", path)
+        .microbs_env$flux_path <- path
         return(invisible(path))  # Exit the function early
     }
     
@@ -312,6 +314,7 @@ set_microbs_flux_DataPath <- function(path="00_flux_data", relative=FALSE) {
         if (!dir.exists(path)) {
             message("[microbs Error]: The provided path does not exist: ", path)
         } else {
+            .microbs_env$flux_path <- path
             return(invisible(path))  # Exit the function early
             message("[microbs Report]: Using provided path: ", path)
         }
@@ -323,7 +326,7 @@ set_microbs_flux_DataPath <- function(path="00_flux_data", relative=FALSE) {
         message("[microbs Report]: Using provided path: ", path)
     }
 
-    wd <- get_microbs_wd_dir()
+    wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
     
     # Set the working directory
@@ -374,14 +377,14 @@ set_microbs_flux_DataPath <- function(path="00_flux_data", relative=FALSE) {
 set_microbs_stdCurve_DataPath <- function(path="00_standard_curve", relative=FALSE) {
     # Check if the provide path is good.
     if (grepl("\\\\", path)) {
-        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
+        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
     }
 
     # Check if path is missing, use default if it is
     if (missing(path)) {
         path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data_Treatment/00_standard_curve"
-        message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
-        ddPCR_raw_path <- path
+        message("[microbs Report]: No path provided. Using default path: ", path)
+        .microbs_env$stdCurve_path <- path
         return(invisible(path))  # Exit the function early
     }
     
@@ -391,6 +394,7 @@ set_microbs_stdCurve_DataPath <- function(path="00_standard_curve", relative=FAL
         if (!dir.exists(path)) {
             message("[microbs Error]: The provided path does not exist: ", path)
         } else {
+            .microbs_env$stdCurve_path <- path
             return(invisible(path))  # Exit the function early
             message("[microbs Report]: Using provided path: ", path)
         }
@@ -402,7 +406,7 @@ set_microbs_stdCurve_DataPath <- function(path="00_standard_curve", relative=FAL
         message("[microbs Report]: Using provided path: ", path)
     }
 
-    wd <- get_microbs_wd_dir()
+    wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
     
     # Set the working directory
@@ -447,14 +451,14 @@ set_microbs_stdCurve_DataPath <- function(path="00_standard_curve", relative=FAL
 set_microbs_check_DataPath <- function(path="1_check_data", relative=FALSE) {
     # Check if the provide path is good.
     if (grepl("\\\\", path)) {
-        message("\033[31m[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.\033[39m")
+        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
     }
 
     # Check if path is missing, use default if it is
     if (missing(path)) {
         path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data_Treatment/1_check_data"
-        message("\033[32m[microbs Report]: No path provided. Using default path: ", path, "\033[39m")
-        ddPCR_raw_path <- path
+        message("[microbs Report]: No path provided. Using default path: ", path)
+        .microbs_env$check_data_path <- path
         return(invisible(path))  # Exit the function early
     }
     
@@ -464,6 +468,7 @@ set_microbs_check_DataPath <- function(path="1_check_data", relative=FALSE) {
         if (!dir.exists(path)) {
             message("[microbs Error]: The provided path does not exist: ", path)
         } else {
+            .microbs_env$check_data_path <- path
             return(invisible(path))  # Exit the function early
             message("[microbs Report]: Using provided path: ", path)
         }
@@ -475,7 +480,7 @@ set_microbs_check_DataPath <- function(path="1_check_data", relative=FALSE) {
         message("[microbs Report]: Using provided path: ", path)
     }
 
-    wd <- get_microbs_wd_dir()
+    wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
     
     # Set the working directory

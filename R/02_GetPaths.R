@@ -13,13 +13,13 @@
 #' 
 #' @examples
 #' # Example usage
-#' result <- get_microbs_wd_dir()
+#' result <- get_microbs_wdirectory()
 #' 
 #' @examples
 #' result
 #' 
 #' @export 
-get_microbs_wd_dir <- function() {
+get_microbs_wdirectory <- function() {
     if (is.null(.microbs_env$wd)) {
         message("[microbs Warning]: Did not yet set the path. Use the set_microbs_wdirectory(path=\"my/custom/path\") function to set a path")
         message("or use the default by using set_microbs_wdirectory()")
