@@ -109,7 +109,9 @@ set_microbs_connector_dir <- function(path="Data_Treatment") {
     # Check if path is missing, use default if it is
     if (missing(path)) {
         path <- "Data_Treatment"
+        .microbs_env$path_connector <- path
         message("[microbs Report]: No path provided. Using default path: ", path)
+        return(invisible(path))  # Exit the function early
     }
     
     if (!dir.exists(path)) {
