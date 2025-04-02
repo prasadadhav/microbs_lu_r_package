@@ -1,7 +1,7 @@
 # Decalring global paths to silence the Rmd warnings
 # Initialize globals
 
-# .microbs_env <- new.env(parent = emptyenv())
+.microbs_env <- new.env(parent = emptyenv())
 # .microbs_env$wd <- NULL
 # .microbs_env$path_connector <- NULL
 # .microbs_env$ddPCR_raw_path <- NULL
@@ -26,7 +26,31 @@
     .microbs_env$loaded_data_path <- NULL
     .microbs_env$calc_data_path <- NULL
     .microbs_env$created_data_path <- NULL
+    .microbs_env$dashboard_data_path <- NULL
 
-    # Create empty variables to store data
-    .microbs_env$df_flu_raw_ddPCR_data <- NULL
+    # Create empty variables to store RAW data
+    .microbs_env$df_empty_raw_ddPCR_data <- data.frame(matrix(ncol=9,nrow=0))
+    colnames(.microbs_env$df_empty_raw_ddPCR_data) <- c('Sample',
+                                    'Target_Name',
+                                    'copies_uL',
+                                    'Accepted_droplets',
+                                    'Positive_droplets',
+                                    'Negative_droplets',
+                                    'PoissonConfMax',
+                                    'PoissonConfMin',
+                                    'dilution')
+
+    .microbs_env$df_flu_ab_raw_ddPCR_data <- .microbs_env$df_empty_raw_ddPCR_data
+    .microbs_env$df_flu_ab_raw_qPCR_data <- NULL
+
+    .microbs_env$df_rsv_raw_ddPCR_data <- .microbs_env$df_empty_raw_ddPCR_data
+    .microbs_env$df_rsc_raw_qPCR_data <- NULL
+
+    .microbs_env$df_sars_raw_ddPCR_data <- .microbs_env$df_empty_raw_ddPCR_data
+    .microbs_env$df_sars_raw_qPCR_data <- NULL
+
+    # old data
+    .microbs_env$df_old_raw_ddPCR_data <- NULL
+    .microbs_env$df_old_raw_qPCR_data <- NULL
+
 }
