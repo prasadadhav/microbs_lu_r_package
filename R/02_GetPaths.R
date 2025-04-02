@@ -199,7 +199,7 @@ get_microbs_loaded_DataPath <- function() {
 #--------------------------------------------------------------------------------------------------------
 # get calc path
 #--------------------------------------------------------------------------------------------------------
-#' @title get loaded data path
+#' @title get calculated data path
 #' 
 #' @description If it returns NULL, it means that the path connector has not been set yet.
 #' Call set_microbs_calc_DataPath() to set the path connector.
@@ -228,7 +228,7 @@ get_microbs_calc_DataPath <- function() {
 #--------------------------------------------------------------------------------------------------------
 # get created path
 #--------------------------------------------------------------------------------------------------------
-#' @title get loaded data path
+#' @title get created data path
 #' 
 #' @description If it returns NULL, it means that the path connector has not been set yet.
 #' Call set_microbs_created_DataPath() to set the path connector.
@@ -240,6 +240,7 @@ get_microbs_calc_DataPath <- function() {
 #' 
 #' @examples
 #' # Example usage
+#' 
 #' result <- get_microbs_created_DataPath()
 #' result
 #' 
@@ -256,7 +257,7 @@ get_microbs_created_DataPath <- function() {
 #--------------------------------------------------------------------------------------------------------
 # get dashboard data path
 #--------------------------------------------------------------------------------------------------------
-#' @title get loaded data path
+#' @title get dashboard data path
 #' 
 #' @description If it returns NULL, it means that the path connector has not been set yet.
 #' Call set_microbs_dashboard_DataPath() to set the path connector.
