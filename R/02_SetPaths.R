@@ -423,70 +423,62 @@ set_microbs_stdCurve_DataPath <- function(path="00_standard_curve", relative=FAL
 # Loaded data path 
 #--------------------------------------------------------------------------------------------------------
 #' @title Set path for loaded data for `SUPERVIR_RAW_DATA_ddPCR_*` & `SUPERVIR_RAW_DATA_qPCR_*`
-#'
-#' @description The loaded data are to be stored in the "1_loaded_data" directory.
-#' It is assumed that the global directory is set using the set_microbs_wdirectory function.
-#' Within this directory there is another director called "Data_Treatment", set using the function set_microbs_connector_dir.
-#' This is just because the direectory structure within the team is like this.
-#' It is not necessary to have a connector (in-between) directory.
-#' This function allows you to set the path for the checked data.
-#' file ./microbs.lu/R/02_SetPaths.R
-#'
-#' @param path A character string representing the path to be set as the working directory. 
-#' The default path is "1_loaded_data".
-#' @param relative A Boolean to use relative path or not. Default is False.
-#' 
-#' @examples
-#' # Example usage
-#' set_microbs_wdirectory() # to set default working directory
-#' set_microbs_connector_dir() # to set default connector directory
-#' path <- "1_loaded_data"
-#' result <- set_microbs_loaded_DataPath(path)
-#' result
-#' 
-#' @examples
-#' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
-#' result <- set_microbs_loaded_DataPath(path)
-#' result
-#'
-#' @export 
-set_microbs_loaded_DataPath <- function(path="1_loaded_data", relative=FALSE) {
-    # Check if the provide path is good.
+#' @description Sets the path to store loaded data in the "1_loaded_data" directory.
+#' This assumes the working directory was set with `set_microbs_wdirectory()` and optionally a connector directory with `set_microbs_connector_dir()`.
+#' @param path Character string path to use. Default is "1_loaded_data".
+#' @param relative Boolean. If TRUE, makes path relative to current working directory. Default is FALSE.
+#' @param build_path Boolean. If TRUE, builds path using working and connector directories. Default is FALSE.
+#' @return The constructed path invisibly.
+#' @export
+set_microbs_loaded_DataPath <- function(path = "1_loaded_data", relative = FALSE, build_path = FALSE) {
+
+    # Warn about backslashes
     if (grepl("\\\\", path)) {
-        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
+        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\\'.")
     }
 
-    # Check if path is missing, use default if it is
-    if (missing(path)) {
+    # Use default hardcoded path if path is missing and build_path is FALSE
+    if (missing(path) && !build_path) {
         path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data_Treatment/1_loaded_data"
         message("[microbs Report]: No path provided. Using default path: ", path)
         .microbs_env$loaded_data_path <- path
-        return(invisible(path))  # Exit the function early
+        return(invisible(path))
     }
-    
-    # Check and set relative path to working directory
+
+    # If relative path
     if (relative) {
-        path <- paste("./", path, sep="")
+        path <- file.path(".", path)
+        if (!dir.exists(path)) {
+            message("[microbs Error]: The provided relative path does not exist: ", path)
+            return(invisible(NULL))
+        }
+        message("[microbs Report]: Using relative path: ", path)
+        .microbs_env$loaded_data_path <- path
+        return(invisible(path))
+    }
+
+    # If full path is provided
+    if (!build_path) {
         if (!dir.exists(path)) {
             message("[microbs Error]: The provided path does not exist: ", path)
-        } else {
-            .microbs_env$loaded_data_path <- path
-            return(invisible(path))  # Exit the function early
-            message("[microbs Report]: Using provided path: ", path)
+            return(invisible(NULL))
         }
-    }
-
-    if (!dir.exists(path)) {
-        message("Error: The provided path does not exist: ", path)
-    } else {
         message("[microbs Report]: Using provided path: ", path)
+        .microbs_env$loaded_data_path <- path
+        return(invisible(path))
     }
 
+    # build_path = TRUE → Build from wd + connector + given path
     wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
-    
-    # Set the working directory
-    .microbs_env$loaded_data_path <- utils_microbs_path_builder(wd, path_connector, path)
+    full_path <- utils_microbs_path_builder(wd, path_connector, path)
+    if (!dir.exists(full_path)) {
+        message("[microbs Error]: The built path does not exist: ", full_path)
+        return(invisible(NULL))
+    }
+    message("[microbs Report]: Using built path: ", full_path)
+    .microbs_env$loaded_data_path <- full_path
+    return(invisible(full_path))
 }
 
 
