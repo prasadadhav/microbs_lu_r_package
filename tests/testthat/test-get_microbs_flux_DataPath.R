@@ -49,7 +49,7 @@ test_that("setting the relative path for flux data", {
 
         test_local_path <- "00_flux_data"
 
-        set_path <- set_microbs_flux_DataPath(test_local_path,  relative=TRUE)
+        set_path <- set_microbs_flux_DataPath(test_local_path,  relative = TRUE)
         test_path <- get_microbs_flux_DataPath()
 
         # Ensure that the function correctly sets the working directory

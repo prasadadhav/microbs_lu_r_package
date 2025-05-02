@@ -34,7 +34,7 @@ test_that("setting the relative path for std. curve data", {
 
         test_local_path <- "4_data_4_dashboard"
 
-        test_path <- set_microbs_dashboard_DataPath(test_local_path,  relative=TRUE)
+        test_path <- set_microbs_dashboard_DataPath(test_local_path,  relative = TRUE)
 
         # Ensure that the function correctly sets the working directory
         expect_equal(true_path, test_path)

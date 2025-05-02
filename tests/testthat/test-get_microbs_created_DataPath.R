@@ -49,7 +49,7 @@ test_that("setting the relative path for created data", {
 
         test_local_path <- "3_created_data"
 
-        set_path <- set_microbs_created_DataPath(test_local_path,  relative=TRUE)
+        set_path <- set_microbs_created_DataPath(test_local_path,  relative = TRUE)
         test_path <- get_microbs_created_DataPath()
 
         # Ensure that the function correctly sets the working directory

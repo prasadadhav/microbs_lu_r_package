@@ -31,7 +31,7 @@ test_that("setting the custom local path for loaded Raw data", {
     test_local_path <- "1_loaded_data"
     true_path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
 
-    set_path <- set_microbs_loaded_DataPath(test_local_path)
+    set_path <- set_microbs_loaded_DataPath(test_local_path, build_path = TRUE)
     test_path <- get_microbs_loaded_DataPath()
 
     # Ensure that the function correctly sets the working directory
@@ -49,7 +49,7 @@ test_that("setting the relative path for loaded Raw data", {
 
         test_local_path <- "1_loaded_data"
 
-        set_path <- set_microbs_loaded_DataPath(test_local_path,  relative=TRUE)
+        set_path <- set_microbs_loaded_DataPath(test_local_path,  relative = TRUE)
         test_path <- get_microbs_loaded_DataPath()
 
         # Ensure that the function correctly sets the working directory

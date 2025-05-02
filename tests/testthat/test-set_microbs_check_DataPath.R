@@ -34,7 +34,7 @@
 
 #         test_local_path <- "1_check_data"
 
-#         test_path <- set_microbs_check_DataPath(test_local_path,  relative=TRUE)
+#         test_path <- set_microbs_check_DataPath(test_local_path,  relative = TRUE)
 
 #         # Ensure that the function correctly sets the working directory
 #         expect_equal(true_path, test_path)

@@ -49,7 +49,7 @@ test_that("setting the relative path for std. curve data", {
 
         test_local_path <- "00_standard_curve"
 
-        set_path <- set_microbs_stdCurve_DataPath(test_local_path,  relative=TRUE)
+        set_path <- set_microbs_stdCurve_DataPath(test_local_path,  relative = TRUE)
         test_path <- get_microbs_stdCurve_DataPath()
 
         # Ensure that the function correctly sets the working directory

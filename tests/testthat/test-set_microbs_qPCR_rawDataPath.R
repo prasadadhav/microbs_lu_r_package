@@ -34,7 +34,7 @@ test_that("setting the relative path for raw qPCR data", {
 
         test_local_path <- "0_raw_data_qPCR"
 
-        test_path <- set_microbs_qPCR_rawDataPath(test_local_path,  relative=TRUE)
+        test_path <- set_microbs_qPCR_rawDataPath(test_local_path,  relative = TRUE)
 
         # Ensure that the function correctly sets the working directory
         expect_equal(true_path, test_path)
