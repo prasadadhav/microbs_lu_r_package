@@ -11,19 +11,19 @@
 #' @description This function loads the old ddPCR data and stores for later usage.
 #' This file contains the old ddPCR raw data. The new loaded data will be added to this data.
 #'
-#' @param path_to_flu_ddPCR A string to describe the path to the RAW excel ddPCR data `SUPERVIR_RAW_DATA_ddPCR_*.xlxs`. 
+#' @param path_to_raw_ddPCR A string to describe the path to the RAW excel ddPCR data `SUPERVIR_RAW_DATA_ddPCR_*.xlxs`. 
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
 #' # Example usage
 #' path_to_old_raw_excel_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
-#' df_flu_raw_ddPCR_data <- load_microbs_old_raw_ddPCR_Data(path_to_old_raw_excel_ddPCR)
+#' df_raw_ddPCR_data <- load_microbs_old_raw_ddPCR_Data(path_to_old_raw_excel_ddPCR)
 #' 
 #' # If you want to use the default path
 #' set_microbs_loaded_DataPath()
-#' df_flu_raw_ddPCR_data <- load_microbs_old_raw_ddPCR_Data() # use default path
-#' ddPCR_df <- df_flu_raw_ddPCR_data$data
-#' ddPCR_latest_file <- df_flu_raw_ddPCR_data$latest_ddPCR_file
+#' df_raw_ddPCR_data <- load_microbs_old_raw_ddPCR_Data() # use default path
+#' ddPCR_df <- df_raw_ddPCR_data$data
+#' ddPCR_latest_file <- df_raw_ddPCR_data$latest_ddPCR_file
 #'
 #' @export
 load_microbs_old_raw_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .microbs_env$loaded_data_path) {
@@ -88,19 +88,19 @@ load_microbs_old_raw_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .micro
 #' @description This function loads the old qPCR data and stores for later usage.
 #' This file contains the old qPCR raw data. The new loaded data will be added to this data.
 #'
-#' @param path_to_flu_qPCR A string to describe the path to the RAW excel qPCR data `SUPERVIR_RAW_DATA_qPCR_*.xlxs`. 
+#' @param path_to_raw_qPCR A string to describe the path to the RAW excel qPCR data `SUPERVIR_RAW_DATA_qPCR_*.xlxs`. 
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
 #' # Example usage
 #' path_to_old_raw_excel_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
-#' df_flu_raw_qPCR_data <- load_microbs_old_raw_qPCR_Data(path_to_old_raw_excel_qPCR)
+#' df_raw_qPCR_data <- load_microbs_old_raw_qPCR_Data(path_to_old_raw_excel_qPCR)
 #' 
 #' # If you want to use the default path
 #' set_microbs_loaded_DataPath()
-#' df_flu_raw_qPCR_data <- load_microbs_old_raw_qPCR_Data() # use default path
-#' qPCR_df <- df_flu_raw_qPCR_data$data
-#' qPCR_latest_file <- df_flu_raw_qPCR_data$latest_qPCR_file
+#' df_raw_qPCR_data <- load_microbs_old_raw_qPCR_Data() # use default path
+#' qPCR_df <- df_raw_qPCR_data$data
+#' qPCR_latest_file <- df_raw_qPCR_data$latest_qPCR_file
 #' 
 #' @export
 load_microbs_old_raw_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .microbs_env$loaded_data_path) {
@@ -157,14 +157,15 @@ load_microbs_old_raw_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .microbs
 }
 
 #--------------------------------------------------------------------------------------------------------
-# Load new Raw Flu AB
+# Load new Raw ddPCR
 #--------------------------------------------------------------------------------------------------------
-#' @title Load Flu A,B data
+#' @title Load ddPCR RAW data
 #'
-#' @description Usually the tests for Flu A and Flu b are done together.
-#' Hence the raw data is available in a single file.
+#' @description Usually the tests for Flu A and Flu b are done together. We also have hRSV data from ddPCR in same directory.
+#' Hence the raw data is available in a single file. This functions needs the previous paths be described
+#' as we are also using the old loaded raw data.
 #'
-#' @param path_to_flu_ddPCR A string to describe the path to the RAW Flu (A/B) ddPCR data. 
+#' @param path_to_raw_ddPCR A string to describe the path to the RAW ddPCR data. 
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
@@ -173,24 +174,26 @@ load_microbs_old_raw_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .microbs
 #' path_to_old_raw_excel_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
 #' set_microbs_loaded_DataPath(path_to_old_raw_excel_ddPCR)
 #' load_microbs_old_raw_ddPCR_Data(path_to_old_raw_excel_ddPCR)
-#' path_to_flu_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_ddPCR"
-#' df_flu_raw_ddPCR_data <- load_microbs_flu_raw_ddPCR_Data(path_to_flu_ddPCR)
+#' path_to_raw_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_ddPCR"
+#' df_raw_ddPCR_data <- load_microbs_raw_ddPCR_Data(path_to_raw_ddPCR)
 #' @export
-load_microbs_flu_raw_ddPCR_Data <- function(path_to_flu_ddPCR = .microbs_env$ddPCR_raw_path) {
+load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_raw_path) {
     # load the data 
-    if (missing(path_to_flu_ddPCR)) {
-        # path_to_flu_ddPCR <- get_microbs_ddPCR_rawDataPath()
-        message("[microbs Report]: No path provided. Using default path: ", path_to_flu_ddPCR)
+    if (missing(path_to_raw_ddPCR)) {
+        # path_to_raw_ddPCR <- get_microbs_ddPCR_rawDataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_raw_ddPCR)
     }
 
     # get the old data
     df_old_raw_ddPCR_data <- get_microbs_old_raw_ddPCR_Data()
     df_new_raw_ddPCR_data <- df_old_raw_ddPCR_data
 
+    # if there is no old data we have to creat an empty df
+
     # load all the names of the CSV files
-    files_list <- list.files(path_to_flu_ddPCR, pattern = "csv")
+    files_list <- list.files(path_to_raw_ddPCR, pattern = "csv")
     for(file in files_list){
-        file_name <- paste(path_to_flu_ddPCR, file, sep = "/")
+        file_name <- paste(path_to_raw_ddPCR, file, sep = "/")
         file <- suppressMessages(utils::read.csv(file_name, sep = ","))
 
         file <- dplyr::select(file, c( Sample.description.1,
@@ -260,10 +263,21 @@ load_microbs_flu_raw_ddPCR_Data <- function(path_to_flu_ddPCR = .microbs_env$ddP
     path_to_old_raw_excel_ddPCR <- get_microbs_loaded_DataPath()
 
     # write the new data into the file
-    writexl::write_xlsx(df_new_raw_ddPCR_data, 
-                paste0(path_to_old_raw_excel_ddPCR,"/","SUPERVIR_RAW_DATA_ddPCR_", # build the path
-                        gsub(':','-',sub(' CEST','',Sys.time())), # substitute ":" with "-"
-                        ".xlsx"))   # save as excel
+    wb <- openxlsx::createWorkbook()
+    openxlsx::addWorksheet(wb, "Sheet1")
+    openxlsx::writeData(wb, "Sheet1", df_new_raw_ddPCR_data)
+    openxlsx::freezePane(wb, sheet = "Sheet1", firstRow = TRUE)
+    xlxs_filename <- paste0(path_to_old_raw_excel_ddPCR, "/SUPERVIR_RAW_DATA_qPCR_",
+                   gsub(":", "-", sub(" CEST", "", Sys.time())),
+                   ".xlsx")
+    openxlsx::saveWorkbook(wb, xlxs_filename, overwrite = TRUE)
+
+    # writexl::write_xlsx(df_new_raw_ddPCR_data, 
+    #                     paste0(path_to_old_raw_excel_ddPCR,"/","SUPERVIR_RAW_DATA_ddPCR_", # build the filename with path
+    #                     gsub(':','-',sub(' CEST','',Sys.time())), # substitute ":" with "-" in the time
+    #                     ".xlsx"), # save as excel
+    #                     firstRow = TRUE # freeze the first row
+    #                     )  
 
     .microbs_env$df_new_raw_ddPCR_data <- df_new_raw_ddPCR_data
 
@@ -272,41 +286,50 @@ load_microbs_flu_raw_ddPCR_Data <- function(path_to_flu_ddPCR = .microbs_env$ddP
 
 
 #--------------------------------------------------------------------------------------------------------
-# Move new Raw Flu AB to archive
+# Move new Raw ddPCR to archive
 #--------------------------------------------------------------------------------------------------------
-#' @title move Flu A,B data
+#' @title move ddPCR data
 #'
 #' @description The processed raw data needs to be moved to the archive once it is loaded.
 #'
-#' @param path_to_flu_ddPCR A string to describe the path to the RAW Flu (A/B) ddPCR data. 
+#' @param path_to_raw_ddPCR A string to describe the path to the RAW ddPCR data. 
 #' 
-#' @return A tibble with the containing the raw data
+#' @return A character vector of archived file names (invisibly).
 #' @examples
 #' # Example usage
-#' path_to_flu_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_ddPCR"
-#' df_flu_raw_ddPCR_data <- archive_microbs_flu_raw_ddPCR_Data(path_to_flu_ddPCR)
+#' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
+#' path_to_raw_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_ddPCR"
+#' df_raw_ddPCR_data <- archive_microbs_raw_ddPCR_Data(path_to_raw_ddPCR)
 #' @export
-archive_microbs_flu_raw_ddPCR_Data <- function(path_to_flu_ddPCR = .microbs_env$ddPCR_raw_path) {
+archive_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_raw_path) {
     # load the data 
-    if (missing(path_to_flu_ddPCR)) {
-        path_to_flu_ddPCR = get_microbs_ddPCR_rawDataPath()
-        message("[microbs Report]: No path provided. Using default path: ", path_to_flu_ddPCR)
+    if (missing(path_to_raw_ddPCR)) {
+        path_to_raw_ddPCR = get_microbs_ddPCR_rawDataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_raw_ddPCR)
     }
 
     # load all the names of the CSV files
-    invisible(ifelse(!dir.exists(file.path(path_to_flu_ddPCR, "Archives")), 
-                        dir.create(file.path(path_to_flu_ddPCR, "Archives")), 
+    invisible(ifelse(!dir.exists(file.path(path_to_raw_ddPCR, "Archives")), 
+                        dir.create(file.path(path_to_raw_ddPCR, "Archives")), 
                         FALSE))
 
-    files_list <- list.files(path_to_flu_ddPCR, pattern = "csv")
+    # TODO: Here use a specific format lookup such as "\\.csv$", because csv will pickup the file even if we have file.csv.txt
+    files_list <- list.files(path_to_raw_ddPCR, pattern = "csv")
     for(file in files_list) {
-        file_name <- paste(path_to_flu_ddPCR, file, sep = "/")
+        file_name <- paste(path_to_raw_ddPCR, file, sep = "/")
         file.copy(from = file_name, 
-                    to = paste0(file.path(path_to_flu_ddPCR, "Archives","/"),
+                    to = paste0(file.path(path_to_raw_ddPCR, "Archives","/"),
                                 file
                     ))
         file.remove(from = file_name)
     }
+
+    if (length(files_list) == 0) {
+        message("[microbs Report]: No CSV files found to archive in ", path_to_raw_ddPCR)
+        return(invisible(character(0)))
+    }
+
+    invisible(files_list)
 }
 
 
@@ -314,21 +337,183 @@ archive_microbs_flu_raw_ddPCR_Data <- function(path_to_flu_ddPCR = .microbs_env$
 
 
 #--------------------------------------------------------------------------------------------------------
-# Load hRSV
+# Load new Raw qPCR
 #--------------------------------------------------------------------------------------------------------
+#' @title Load qPCR RAW data
+#'
+#' @description Usually the tests for SARS-CoV-2 is done with qPCR.
+#' Hence the raw data is available in a single file. This functions needs the previous paths be described
+#' as we are also using the old loaded raw data.
+#'
+#' @param path_to_raw_qPCR A string to describe the path to the RAW qPCR data. 
+#' 
+#' @return A tibble with the containing the raw data
+#' @examples
+#' # Example usage
+#' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
+#' 
+#' path_to_old_raw_excel_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
+#' set_microbs_loaded_DataPath(path_to_old_raw_excel_qPCR)
+#' 
+#' load_microbs_old_raw_qPCR_Data(path_to_old_raw_excel_qPCR)
+#' 
+#' path_to_raw_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_qPCR"
+#' df_raw_qPCR_data <- load_microbs_raw_qPCR_Data(path_to_raw_qPCR)
+#' @export
+load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_path) {
+    # load the data 
+    if (missing(path_to_raw_qPCR)) {
+        # path_to_raw_qPCR <- get_microbs_qPCR_rawDataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_raw_qPCR)
+    }
 
+    # get the old data
+    df_old_raw_qPCR_data <- get_microbs_old_raw_qPCR_Data()
+    df_new_raw_qPCR_data <- df_old_raw_qPCR_data
 
+    # if there is no old data we have to creat an empty df
 
+    # load all the names of the CSV files
+    files_list <- list.files(path_to_raw_qPCR, pattern = "xls")
+    for(file in files_list){
+        file_name <- paste(path_to_raw_qPCR, file, sep = "/")
+        file <- suppressMessages(readxl::read_excel(name_file, sheet=1,skip=0,col_names = FALSE))
 
+        if(file[1,1]=="Block Type"){
+            file_mod <- file %>% filter(!is.na(...6))
+            file_mod <- file_mod[, c("...1", "...2","...3", "...4", "...5", "...6")]
 
+            names(file_mod) <- file_mod[1,]
+            file_mod <- file_mod[-1,]
 
+            file_mod <- file_mod[!is.na(file_mod$`Sample Name`),]
+            if(ncol(file_mod) == 7){
+                file_mod <- subset (file_mod,select=-c(Well,`Well Position`,Task,`Ct Threshold`)) # Drop some columns not needed
+            }
 
+            if(ncol(file_mod)==6){
+                file_mod <- subset (file_mod,select=-c(Well,`Well Position`,`Ct Threshold`)) # Drop some columns not needed
+            }
 
+            file_mod <- file_mod[-contains(c('T-','T+', "T+ RSVA", "T+ SARSCOV2", "T- H2O"),
+                                     vars = c(file_mod$`Sample Name`)),]
+
+            colnames(file_mod) <- c('Sample','Target_Name','CT')
+        }
+
+        for(j in 1:nrow(file_mod)){
+            if (nchar(file_mod$Sample[j])==4){
+                file_mod$Sample[j] <- gsub("^(.{3})(.*)$","\\100\\2",file_mod$Sample[j])
+            }
+
+            if((nchar(file_mod$Sample[j]) < 6 | nchar(file_mod$Sample[j])==7) & substr(file_mod$Sample[j], 1, 3) %in% c("BET","BEG","PET","SCH", "BLE", "MER", "HES","ECH", "UEB", "GRE", "VIE", "BOE", "WIL")) {
+                file_mod$Sample[j] <- gsub("^(.{3})(.*)$","\\10\\2",file_mod$Sample[j])
+            }
+
+            file_mod$Target_Name <- case_when(
+                file_mod$Target_Name == "IAV" ~ "FluA",
+                file_mod$Target_Name == "SARS-COV-2" | file_mod$Target_Name == "SARSCOV2" | file_mod$Target_Name == "E-gene" ~ "SARS-CoV-2",
+                file_mod$Target_Name == "RSV" ~ "hRSV",
+                .default = as.character(file_mod$Target_Name)
+            )
+
+            if(substr(file_mod$Sample[j], 1, 3)  %in% c("BET","BEG","PET","SCH", "BLE", "MER", "HES","ECH", "UEB", "GRE", "VIE", "BOE", "WIL")){
+                    df_new_raw_qPCR_data <- plyr::rbind.fill(df_new_raw_qPCR_data , file_mod[j,])
+                }
+                else{
+                    df_new_raw_qPCR_data  <- plyr::rbind.fill(df_new_raw_qPCR_data , file_mod[j,])
+                }
+        }
+    }
+
+    temp_df <- subset(df_new_raw_qPCR_data, CT != "Undetermined")
+    temp_df_undeterminded <- subset(df_new_raw_qPCR_data, CT == "Undetermined")
+
+    # Keep only uniqe rows
+    df_new_raw_qPCR_data <- dplyr::distinct(temp_df)
+    df_new_raw_qPCR_data <- plyr::rbind.fill(df_new_raw_qPCR_data, temp_df_undeterminded)
+
+    # Order the samples by Target name and Sample.
+    df_new_raw_qPCR_data <- df_new_raw_qPCR_data[
+                                            with(df_new_raw_qPCR_data, 
+                                                order(Target_Name, Sample)
+                                                ),
+                                            # leave empty for column, only operate on rows
+                                            ]
+
+    path_to_old_raw_excel_qPCR <- get_microbs_loaded_DataPath()
+
+    # write the new data into the file
+    wb <- openxlsx::createWorkbook()
+    openxlsx::addWorksheet(wb, "Sheet1")
+    openxlsx::writeData(wb, "Sheet1", df_new_raw_qPCR_data)
+    openxlsx::freezePane(wb, sheet = "Sheet1", firstRow = TRUE)
+    xlxs_filename <- paste0(path_to_old_raw_excel_qPCR, "/SUPERVIR_RAW_DATA_qPCR_",
+                   gsub(":", "-", sub(" CEST", "", Sys.time())),
+                   ".xlsx")
+    openxlsx::saveWorkbook(wb, xlxs_filename, overwrite = TRUE)
+
+    # writexl::write_xlsx(df_new_raw_qPCR_data, 
+    #                     paste0(path_to_old_raw_excel_qPCR,"/","SUPERVIR_RAW_DATA_qPCR_", # build the filename with path
+    #                     gsub(':','-',sub(' CEST','',Sys.time())), # substitute ":" with "-"
+    #                     ".xlsx") # save as excel
+    #                     )  
+
+    .microbs_env$df_new_raw_qPCR_data <- df_new_raw_qPCR_data
+
+    return(.microbs_env$df_new_raw_qPCR_data)
+}
 
 
 #--------------------------------------------------------------------------------------------------------
-# Load Sars-CoV 2
+# Move new Raw qPCR to archive
 #--------------------------------------------------------------------------------------------------------
+#' @title move Flu A,B data
+#'
+#' @description The processed raw data needs to be moved to the archive once it is loaded.
+#'
+#' @param path_to_raw_qPCR A string to describe the path to the RAW Flu (A/B) qPCR data. 
+#' 
+#' @return A character vector of archived file names (invisibly).
+#' @examples
+#' # Example usage
+#' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
+#' path_to_raw_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_qPCR"
+#' df_raw_qPCR_data <- archive_microbs_raw_qPCR_Data(path_to_raw_qPCR)
+#' @export
+archive_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_path) {
+    # load the data 
+    if (missing(path_to_raw_qPCR)) {
+        path_to_raw_qPCR = get_microbs_qPCR_rawDataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_raw_qPCR)
+    }
+
+    # load all the names of the CSV files
+    invisible(ifelse(!dir.exists(file.path(path_to_raw_qPCR, "Archives")), 
+                        dir.create(file.path(path_to_raw_qPCR, "Archives")), 
+                        FALSE))
+
+    # TODO: Here use a specific format lookup such as "\\.csv$", because csv will pickup the file even if we have file.csv.txt
+    files_list <- list.files(path_to_raw_qPCR, pattern = "xls")
+    for(file in files_list) {
+        file_name <- paste(path_to_raw_qPCR, file, sep = "/")
+        file.copy(from = file_name, 
+                    to = paste0(file.path(path_to_raw_qPCR, "Archives","/"),
+                                file
+                    ))
+        file.remove(from = file_name)
+    }
+
+    if (length(files_list) == 0) {
+        message("[microbs Report]: No XLS files found to archive in ", path_to_raw_qPCR)
+        return(invisible(character(0)))
+    }
+
+    invisible(files_list)
+}
+
+
+
 
 
 
