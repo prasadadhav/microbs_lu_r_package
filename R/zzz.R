@@ -23,6 +23,7 @@
     .microbs_env$qPCR_raw_path <- NULL 
     .microbs_env$stdCurve_path <- NULL
     .microbs_env$flux_path <- NULL
+    .microbs_env$checkData_path <- NULL
     .microbs_env$loaded_data_path <- NULL
     .microbs_env$calc_data_path <- NULL
     .microbs_env$created_data_path <- NULL
