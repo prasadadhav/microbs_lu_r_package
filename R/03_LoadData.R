@@ -11,7 +11,7 @@
 #' @description This function loads the old ddPCR data and stores for later usage.
 #' This file contains the old ddPCR raw data. The new loaded data will be added to this data.
 #'
-#' @param path_to_raw_ddPCR A string to describe the path to the RAW excel ddPCR data `SUPERVIR_RAW_DATA_ddPCR_*.xlxs`. 
+#' @param path_to_old_raw_excel_ddPCR A string to describe the path to the RAW excel ddPCR data `SUPERVIR_RAW_DATA_ddPCR_*.xlxs`. 
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
@@ -88,7 +88,7 @@ load_microbs_old_raw_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .micro
 #' @description This function loads the old qPCR data and stores for later usage.
 #' This file contains the old qPCR raw data. The new loaded data will be added to this data.
 #'
-#' @param path_to_raw_qPCR A string to describe the path to the RAW excel qPCR data `SUPERVIR_RAW_DATA_qPCR_*.xlxs`. 
+#' @param path_to_old_raw_excel_qPCR A string to describe the path to the RAW excel qPCR data `SUPERVIR_RAW_DATA_qPCR_*.xlxs`. 
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
@@ -472,7 +472,7 @@ load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_
 #'
 #' @description The processed raw data needs to be moved to the archive once it is loaded.
 #'
-#' @param path_to_raw_qPCR A string to describe the path to the RAW Flu (A/B) qPCR data. 
+#' @param path_to_raw_qPCR A string to describe the path to the RAW qPCR data. 
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
