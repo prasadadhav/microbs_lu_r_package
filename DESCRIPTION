@@ -19,6 +19,7 @@ Imports:
     plyr,
     dplyr,
     writexl,
+    openxlsx,
     lubridate,
     tidyr,
     usethis,
