@@ -416,7 +416,72 @@ set_microbs_stdCurve_DataPath <- function(path="00_standard_curve", relative=FAL
 }
 
 
+#--------------------------------------------------------------------------------------------------------
+# Check data
+#--------------------------------------------------------------------------------------------------------
+#' @title Set check data path
+#'
+#' @description The CT curve data are to be stored in the "1_ckeck_data" directory.
+#' The raw data is loaded and saved into "1_loaded_data".
+#' Then we need to check and report the loaded raw data.
+#' file ./microbs.lu/R/02_SetPaths.R
+#'
+#' @param path A character string representing the path to be set as the working directory. 
+#' The default path is "1_ckeck_data".
+#' @param relative A Boolean to use relative path or not. Default is False.
+#' 
+#' @examples
+#' # Example usage
+#' set_microbs_wdirectory() # to set default working directory
+#' set_microbs_connector_dir() # to set default connector directory
+#' path <- "1_ckeck_data"
+#' result <- set_microbs_stdCurve_DataPath(path)
+#' result
+#' 
+#' @examples
+#' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
+#' result <- set_microbs_check_DataPath(path)
+#' result
+#'
+#' @export 
+set_microbs_check_DataPath <- function(path="1_ckeck_data", relative=FALSE) {
+    # Check if the provide path is good.
+    if (grepl("\\\\", path)) {
+        message("[microbs Report]: Detected backslashes in the path. Please use forward slashes '/' instead of backslashes '\'.")
+    }
 
+    # Check if path is missing, use default if it is
+    if (missing(path)) {
+        path <- "L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results/Data_Treatment/1_ckeck_data"
+        message("[microbs Report]: No path provided. Using default path: ", path)
+        .microbs_env$checkData_path <- path
+        return(invisible(path))  # Exit the function early
+    }
+    
+    # Check and set relative path to working directory
+    if (relative) {
+        path <- paste("./", path, sep="")
+        if (!dir.exists(path)) {
+            message("[microbs Error]: The provided path does not exist: ", path)
+        } else {
+            .microbs_env$checkData_path <- path
+            return(invisible(path))  # Exit the function early
+            message("[microbs Report]: Using provided path: ", path)
+        }
+    }
+
+    if (!dir.exists(path)) {
+        message("Error: The provided path does not exist: ", path)
+    } else {
+        message("[microbs Report]: Using provided path: ", path)
+    }
+
+    wd <- get_microbs_wdirectory()
+    path_connector <- get_microbs_connector_dir()
+    
+    # Set the working directory
+    .microbs_env$checkData_path <- utils_microbs_path_builder(wd, path_connector, path)
+}
 
 
 #--------------------------------------------------------------------------------------------------------
