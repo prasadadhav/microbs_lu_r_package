@@ -54,4 +54,12 @@
     .microbs_env$df_old_raw_ddPCR_data <- NULL
     .microbs_env$df_old_raw_qPCR_data <- NULL
 
+    # new raw data
+    .microbs_env$df_new_raw_ddPCR_data
+    .microbs_env$df_new_raw_qPCR_data
+
+    # check data
+    .microbs_env$df_old_check_ddPCR_data
+    .microbs_env$df_new_check_ddPCR_data
+
 }
