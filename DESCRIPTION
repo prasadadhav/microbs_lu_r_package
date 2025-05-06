@@ -23,7 +23,8 @@ Imports:
     lubridate,
     tidyr,
     usethis,
-    withr
+    withr,
+    magrittr
 Suggests: 
     knitr,
     rmarkdown,
