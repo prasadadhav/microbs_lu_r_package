@@ -133,7 +133,7 @@ get_microbs_qPCR_rawDataPath <- function() {
 #' 
 #' @export 
 get_microbs_flux_DataPath <- function() {
-    if (is.null(.microbs_env$stdCurve_path)) {
+    if (is.null(.microbs_env$flux_path)) {
         message("[microbs Warning]: Did not yet set the path. Use the set_microbs_flux_DataPath(path=\"my/custom/path\") function to set a path")
         message("or use the default by using set_microbs_flux_DataPath()")
     }
@@ -187,11 +187,11 @@ get_microbs_stdCurve_DataPath <- function() {
 #' 
 #' @export 
 get_microbs_check_DataPath <- function() {
-    if (is.null(.microbs_env$stdCurve_path)) {
+    if (is.null(.microbs_env$checkData_path)) {
         message("[microbs Warning]: Did not yet set the path. Use the set_microbs_check_DataPath(path=\"my/custom/path\") function to set a path")
         message("or use the default by using set_microbs_check_DataPath()")
     }
-    .microbs_env$stdCurve_path
+    .microbs_env$checkData_path
 }
 
 #--------------------------------------------------------------------------------------------------------
