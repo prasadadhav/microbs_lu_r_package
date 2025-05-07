@@ -50,11 +50,15 @@
     .microbs_env$df_sars_raw_ddPCR_data <- .microbs_env$df_empty_raw_ddPCR_data
     .microbs_env$df_sars_raw_qPCR_data <- NULL
 
+    # other data (flux, std. curve)
+    .microbs_env$df_flux_data
+    .microbs_env$df_std_curve_data
+
     # old data
     .microbs_env$df_old_raw_ddPCR_data <- NULL
     .microbs_env$df_old_raw_qPCR_data <- NULL
 
-    # new raw data
+    # new raw data (loaded data)
     .microbs_env$df_new_raw_ddPCR_data
     .microbs_env$df_new_raw_qPCR_data
 
@@ -64,5 +68,12 @@
 
     .microbs_env$df_old_check_qPCR_data
     .microbs_env$df_new_check_qPCR_data
+
+    # calc data
+    .microbs_env$df_old_calc_ddPCR_data
+    .microbs_env$df_new_calc_ddPCR_data
+
+    .microbs_env$df_old_calc_qPCR_data
+    .microbs_env$df_new_calc_qPCR_data
 
 }

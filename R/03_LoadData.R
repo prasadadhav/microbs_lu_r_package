@@ -38,10 +38,6 @@ load_microbs_old_raw_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .micro
         stop("[microbs Error]: The provided path does not exist: ", path_to_old_raw_excel_ddPCR)
     }
 
-    # Check if Archives exist, if not create a directory
-    ifelse(!dir.exists(file.path(path_to_old_raw_excel_ddPCR, "Archives")), 
-            dir.create(file.path(path_to_old_raw_excel_ddPCR, "Archives")), FALSE)
-
     # load the names of all files and folders in the given directory path
     file_info <- utils::fileSnapshot(path_to_old_raw_excel_ddPCR)$info
     # remove all the directories from the list
@@ -186,10 +182,6 @@ load_microbs_old_raw_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .microbs
     if (!dir.exists(path_to_old_raw_excel_qPCR)) {
         stop("[microbs Error]: The provided path does not exist: ", path_to_old_raw_excel_qPCR)
     }
-
-    # Check if Archives exist, if not create a directory
-    ifelse(!dir.exists(file.path(path_to_old_raw_excel_qPCR, "Archives")), 
-            dir.create(file.path(path_to_old_raw_excel_qPCR, "Archives")), FALSE)
 
     # load the names of all files and folders in the given directory path
     file_info <- utils::fileSnapshot(path_to_old_raw_excel_qPCR)$info
@@ -386,6 +378,16 @@ load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_r
             df_new_raw_ddPCR_data <- plyr::rbind.fill(df_new_raw_ddPCR_data, file[j,])
         }
     }
+
+    df_new_raw_ddPCR_data <- df_new_raw_ddPCR_data %>%
+        dplyr::mutate(
+                Target_Name = case_when(
+                stringr::str_detect(Target_Name, stringr::regex("RSV", ignore_case = TRUE)) ~ "hRSV",
+                stringr::str_detect(Target_Name, stringr::regex("FluA", ignore_case = TRUE)) ~ "FluA",
+                stringr::str_detect(Target_Name, stringr::regex("FluB", ignore_case = TRUE)) ~ "FluB",
+                TRUE ~ Target_Name  # Keep original if none match
+            )
+        )
 
     for (i in 1:nrow(df_new_raw_ddPCR_data)){
         if (grepl("d$", df_old_raw_ddPCR_data$Sample[i]) ){
@@ -740,7 +742,7 @@ load_microbs_old_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microb
     # Load the latest excel file for ddPCR
     .microbs_env$df_old_check_ddPCR_data <- readxl::read_excel(latest_excel_file_path)
 
-    # Return both the loaded dataframe and the latest file name
+    # Return both the checked dataframe and the latest file name
     .microbs_env$df_old_check_ddPCR_data
 }
 
@@ -884,7 +886,7 @@ load_microbs_old_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_
     # Load the latest excel file for qPCR
     .microbs_env$df_old_check_qPCR_data <- readxl::read_excel(latest_excel_file_path)
 
-    # Return both the loaded dataframe and the latest file name
+    # Return both the checked dataframe 
     .microbs_env$df_old_check_qPCR_data
 }
 
@@ -957,4 +959,350 @@ archive_microbs_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_e
     }
 
     invisible(files_list)
+}
+
+#--------------------------------------------------------------------------------------------------------
+# Load the old calc data ddPCR
+#--------------------------------------------------------------------------------------------------------
+#' @title Load the calc data file 
+#'
+#' @description This function loads the old calc data and stores for later usage.
+#' This file contains the old calced ddPCR raw data. Columns will be added to this data later.
+#'
+#' @param path_to_calc_data_ddPCR A string to describe the path to the calced excel ddPCR data `SUPERVIR_CAL_DATA_ddPCR_*.xlxs`. 
+#' 
+#' @return A tibble with the containing the the old calculated data
+#' @examples
+#' # Example usage
+#' path_to_calc_data_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
+#' df_raw_ddPCR_data <- load_microbs_old_calc_ddPCR_Data(path_to_calc_data_ddPCR)
+#' 
+#' # If you want to use the default path
+#' set_microbs_loaded_DataPath()
+#' set_microbs_calc_DataPath()
+#' df_raw_ddPCR_data <- load_microbs_old_calc_ddPCR_Data() # use default path
+#'
+#' @export
+load_microbs_old_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_env$calc_data_path) {
+    # load the path
+    if ( missing(path_to_calc_data_ddPCR) ) {
+        path_to_calc_data_ddPCR <- get_microbs_calc_DataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_calc_data_ddPCR)
+    }
+
+    # Validate if the provided path exists
+    if (!dir.exists(path_to_calc_data_ddPCR)) {
+        stop("[microbs Error]: The provided path does not exist: ", path_to_calc_data_ddPCR)
+    }
+
+    # load the names of all files and folders in the given directory path
+    file_info <- utils::fileSnapshot(path_to_calc_data_ddPCR)$info
+    # remove all the directories from the list
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    # only keep the file names containg "SUPERVIR_CAL_DATA_ddPCR_"
+    file_info <- subset(file_info,grepl("SUPERVIR_CAL_DATA_ddPCR_",rownames(file_info)))
+    
+    # calc if we have atleast one file
+    if (nrow(file_info) == 0) {
+        stop("[microbs Error]: No matching files found in directory: ", path_to_calc_data_ddPCR)
+    }
+
+    # re-order the files according to time
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+    # Loop through files to select the latest Excel file
+    latest_file <- NULL
+    for (file_name in rownames(file_info)) {
+        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+            latest_file <- file_name
+        }
+    }
+    message("[microbs Report]: Load the latest SUPERVIR_CAL_DATA_ddPCR_* file: ", latest_file)
+
+    # create the file path
+    latest_excel_file_path <- file.path(path_to_calc_data_ddPCR, latest_file)
+
+    # Load the latest excel file for ddPCR
+    .microbs_env$df_old_calc_ddPCR_data <- readxl::read_excel(latest_excel_file_path)
+
+    # Return both the calced dataframe 
+    .microbs_env$df_old_calc_ddPCR_data
+}
+
+
+#--------------------------------------------------------------------------------------------------------
+# Move old calc ddPCR to archive
+#--------------------------------------------------------------------------------------------------------
+#' @title move calc ddPCR data to archive
+#'
+#' @description The old calc data needs to be moved to the archive once a new calc is performed.
+#'
+#' @param path_to_calc_data_ddPCR A string to describe the path to the calc data. 
+#' 
+#' @return A character vector of archived file names (invisibly).
+#' @examples
+#' # Example usage
+#' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
+#' path_to_calc_data_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
+#' df_raw_ddPCR_data <- archive_microbs_calc_ddPCR_Data(path_to_calc_data_ddPCR)
+#' @export
+archive_microbs_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_env$calc_data_path) {
+    # load the data 
+    if (missing(path_to_calc_data_ddPCR)) {
+        path_to_calc_data_ddPCR = get_microbs_ddPCR_rawDataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_calc_data_ddPCR)
+    }
+
+    # load all the names of the CSV files
+    invisible(ifelse(!dir.exists(file.path(path_to_calc_data_ddPCR, "Archives")), 
+                        dir.create(file.path(path_to_calc_data_ddPCR, "Archives")), 
+                        FALSE))
+
+    file_info <- utils::fileSnapshot(path_to_calc_data_ddPCR)$info
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info,grepl("calc_data_ddPCR_",rownames(file_info)))
+
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+
+    latest_file <- NULL
+    for (file_name in rownames(file_info)) {
+        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+            latest_file <- file_name
+        }
+    }
+
+    file_info <- file_info[rownames(file_info) != latest_file, ]
+
+    # TODO: Here use a specific format lookup such as "\\.csv$", because csv will pickup the file even if we have file.csv.txt
+    files_list <- list.files(path_to_calc_data_ddPCR, pattern = "SUPERVIR_CAL_DATA_ddPCR_")
+    # for(file in files_list) {
+    for(file in rownames(file_info)) {
+        file_path <- paste(path_to_calc_data_ddPCR, file, sep = "/")
+
+        if (file == latest_file) {
+            next  # Skip the latest file
+        } else {
+            archive_path <- file.path(path_to_calc_data_ddPCR, "Archives", file)
+            file.copy(from = file_path, to = archive_path)
+            file.remove(file_path)
+
+            # Add archived file name to list
+            files_list <- c(files_list, file)
+        }
+    }
+
+    if (length(files_list) == 0) {
+        message("[microbs Report]: No SUPERVIR_CAL_DATA_ddPCR_ files found to archive in ", path_to_calc_data_ddPCR)
+        return(invisible(character(0)))
+    }
+
+    invisible(files_list)
+}
+
+
+#--------------------------------------------------------------------------------------------------------
+# Load the old calc data qPCR
+#--------------------------------------------------------------------------------------------------------
+#' @title Load the calc data file 
+#'
+#' @description This function loads the old calc data and stores for later usage.
+#' This file contains the old calced qPCR raw data. Columns will be added to this data later.
+#'
+#' @param path_to_calc_data_qPCR A string to describe the path to the calced excel qPCR data `SUPERVIR_CAL_DATA_qPCR_*.xlxs`. 
+#' 
+#' @return A tibble with the containing the the old calculated data
+#' @examples
+#' # Example usage
+#' path_to_calc_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
+#' df_raw_qPCR_data <- load_microbs_old_calc_qPCR_Data(path_to_calc_data_qPCR)
+#' 
+#' # If you want to use the default path
+#' set_microbs_loaded_DataPath()
+#' set_microbs_calc_DataPath()
+#' df_raw_qPCR_data <- load_microbs_old_calc_qPCR_Data() # use default path
+#'
+#' @export
+load_microbs_old_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env$calc_data_path) {
+    # load the path
+    if ( missing(path_to_calc_data_qPCR) ) {
+        path_to_calc_data_qPCR <- get_microbs_calc_DataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_calc_data_qPCR)
+    }
+
+    # Validate if the provided path exists
+    if (!dir.exists(path_to_calc_data_qPCR)) {
+        stop("[microbs Error]: The provided path does not exist: ", path_to_calc_data_qPCR)
+    }
+
+    # load the names of all files and folders in the given directory path
+    file_info <- utils::fileSnapshot(path_to_calc_data_qPCR)$info
+    # remove all the directories from the list
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    # only keep the file names containg "SUPERVIR_CAL_DATA_qPCR_"
+    file_info <- subset(file_info,grepl("SUPERVIR_CAL_DATA_qPCR_",rownames(file_info)))
+    
+    # calc if we have atleast one file
+    if (nrow(file_info) == 0) {
+        stop("[microbs Error]: No matching files found in directory: ", path_to_calc_data_qPCR)
+    }
+
+    # re-order the files according to time
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+    # Loop through files to select the latest Excel file
+    latest_file <- NULL
+    for (file_name in rownames(file_info)) {
+        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+            latest_file <- file_name
+        }
+    }
+    message("[microbs Report]: Load the latest SUPERVIR_CAL_DATA_qPCR_* file: ", latest_file)
+
+    # create the file path
+    latest_excel_file_path <- file.path(path_to_calc_data_qPCR, latest_file)
+
+    # Load the latest excel file for qPCR
+    .microbs_env$df_old_calc_qPCR_data <- readxl::read_excel(latest_excel_file_path)
+
+    # Return both the calced dataframe 
+    .microbs_env$df_old_calc_qPCR_data
+}
+
+
+#--------------------------------------------------------------------------------------------------------
+# Move old calc qPCR to archive
+#--------------------------------------------------------------------------------------------------------
+#' @title move calc qPCR data to archive
+#'
+#' @description The old calc data needs to be moved to the archive once a new calc is performed.
+#'
+#' @param path_to_calc_data_qPCR A string to describe the path to the calc data. 
+#' 
+#' @return A character vector of archived file names (invisibly).
+#' @examples
+#' # Example usage
+#' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
+#' path_to_calc_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
+#' df_raw_qPCR_data <- archive_microbs_calc_qPCR_Data(path_to_calc_data_qPCR)
+#' @export
+archive_microbs_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env$calc_data_path) {
+    # load the data 
+    if (missing(path_to_calc_data_qPCR)) {
+        path_to_calc_data_qPCR = get_microbs_qPCR_rawDataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_calc_data_qPCR)
+    }
+
+    # load all the names of the CSV files
+    invisible(ifelse(!dir.exists(file.path(path_to_calc_data_qPCR, "Archives")), 
+                        dir.create(file.path(path_to_calc_data_qPCR, "Archives")), 
+                        FALSE))
+
+    file_info <- utils::fileSnapshot(path_to_calc_data_qPCR)$info
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info,grepl("calc_data_qPCR_",rownames(file_info)))
+
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+
+    latest_file <- NULL
+    for (file_name in rownames(file_info)) {
+        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+            latest_file <- file_name
+        }
+    }
+
+    file_info <- file_info[rownames(file_info) != latest_file, ]
+
+    # TODO: Here use a specific format lookup such as "\\.csv$", because csv will pickup the file even if we have file.csv.txt
+    files_list <- list.files(path_to_calc_data_qPCR, pattern = "SUPERVIR_CAL_DATA_qPCR_")
+    # for(file in files_list) {
+    for(file in rownames(file_info)) {
+        file_path <- paste(path_to_calc_data_qPCR, file, sep = "/")
+
+        if (file == latest_file) {
+            next  # Skip the latest file
+        } else {
+            archive_path <- file.path(path_to_calc_data_qPCR, "Archives", file)
+            file.copy(from = file_path, to = archive_path)
+            file.remove(file_path)
+
+            # Add archived file name to list
+            files_list <- c(files_list, file)
+        }
+    }
+
+    if (length(files_list) == 0) {
+        message("[microbs Report]: No SUPERVIR_CAL_DATA_qPCR_ files found to archive in ", path_to_calc_data_qPCR)
+        return(invisible(character(0)))
+    }
+
+    invisible(files_list)
+}
+
+
+#--------------------------------------------------------------------------------------------------------
+# Load the flux data
+#--------------------------------------------------------------------------------------------------------
+#' @title Load the flux data file 
+#'
+#' @description This function loads the flux data and stores for later usage.
+#'
+#' @param path_to_flux_data A string to describe the path to the calced excel ddPCR data `VIRALERT_WW_*.xlxs`. 
+#' 
+#' @return A tibble with the containing the the old calculated data
+#' @examples
+#' # Example usage
+#' path_to_flux_data <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/00_flux_data"
+#' set_microbs_flux_DataPath(path_to_flux_data)
+#' df_flux_data <- load_microbs_flux_Data()
+#' 
+#' # If you want to use the default path
+#' set_microbs_flux_DataPath()
+#' df_flux_data <- load_microbs_flux_Data() # use default path
+#'
+#' @export
+load_microbs_flux_Data <- function(path_to_flux_data = .microbs_env$flux_path) {
+    # load the path
+    if ( missing(path_to_flux_data) ) {
+        path_to_flux_data <- get_microbs_flux_DataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_flux_data)
+    }
+
+    # Validate if the provided path exists
+    if (!dir.exists(path_to_flux_data)) {
+        stop("[microbs Error]: The provided path does not exist: ", path_to_flux_data)
+    }
+
+    # load the names of all files and folders in the given directory path
+    file_info <- utils::fileSnapshot(path_to_flux_data)$info
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info,grepl("VIRALERT_WW_",rownames(file_info)))
+    
+    # calc if we have atleast one file
+    if (nrow(file_info) == 0) {
+        stop("[microbs Error]: No matching files found in directory: ", path_to_flux_data)
+    }
+
+    # re-order the files according to time
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+    # Loop through files to select the latest Excel file
+    latest_file <- NULL
+    for (file_name in rownames(file_info)) {
+        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+            latest_file <- file_name
+        }
+    }
+    message("[microbs Report]: Load the latest VIRALERT_WW_* file: ", latest_file)
+
+    # create the file path
+    latest_excel_file_path <- file.path(path_to_flux_data, latest_file)
+
+    # Load the latest excel file for ddPCR
+    .microbs_env$df_flux_data <- readxl::read_excel(latest_excel_file_path)
+    colnames(.microbs_env$df_flux_data) <- c('Sample','Sample_Date','Flow_rate',"week_nb")
+
+    # Return both the calced dataframe 
+    .microbs_env$df_flux_data
 }

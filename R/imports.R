@@ -4,3 +4,4 @@
 #' @importFrom readr read_csv
 #' @importFrom writexl write_xlsx
 #' @importFrom base position
+#' @importFrom strinr str_detect regex
