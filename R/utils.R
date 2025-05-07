@@ -22,3 +22,57 @@ utils_microbs_path_builder <- function(global_dir_path, connector, local_dir_pat
     result <- paste(global_dir_path,"/",connector,"/",local_dir_path, sep="")
     return(result)
 }
+
+
+
+
+
+
+
+
+
+#--------------------------------------------------------------------------------------------------------
+#   silent/quite mode
+#--------------------------------------------------------------------------------------------------------
+#' @title Run the code silently without any outputs
+#'
+#' @description This function suppersses all the warnings, messages, print, cat etc.
+#'
+#' @param expr Any code R code block
+#' @param quiet A bool to switch the silent mode on or off
+
+#' @examples
+#' # Example usage
+#' 
+#' quiet_mode <- TRUE
+#' 
+#' run_microbs_silently({
+#'      # ------------------------------------------------------
+#'      # ----------------#  start Code block  # ---------------
+#'      # ------------------------------------------------------
+#' 
+#'      print("this message won't be shown if quiet_mode TRUE")
+#' 
+#'      # ------------------------------------------------------
+#'      # ----------------#   end Code block   # ---------------
+#'      # ------------------------------------------------------
+#' }, quiet = quiet_mode)
+#' 
+#' 
+#' 
+#' @export
+run_microbs_silently <- function(expr, quiet = TRUE) {
+  if (quiet) {
+    invisible(
+      capture.output(
+        suppressMessages(
+          suppressWarnings(
+            eval(expr)
+          )
+        )
+      )
+    )
+  } else {
+    eval(expr)
+  }
+}
