@@ -638,7 +638,7 @@ archive_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_r
                         dir.create(file.path(path_to_raw_qPCR, "Archives")), 
                         FALSE))
 
-    # TODO: Here use a specific format lookup such as "\\.csv$", because csv will pickup the file even if we have file.csv.txt
+    # TODO: Here use a specific format lookup such as "\\.xls$", because csv will pickup the file even if we have file.csv.txt
     files_list <- list.files(path_to_raw_qPCR, pattern = "xls")
     for(file in files_list) {
         file_name <- paste(path_to_raw_qPCR, file, sep = "/")
@@ -759,7 +759,7 @@ load_microbs_old_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microb
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_check_data_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
-#' df_raw_ddPCR_data <- archive_microbs_raw_ddPCR_Data(path_to_check_data_ddPCR)
+#' df_raw_ddPCR_data <- archive_microbs_check_ddPCR_Data(path_to_check_data_ddPCR)
 #' @export
 archive_microbs_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microbs_env$checkData_path) {
     # load the data 
@@ -768,24 +768,191 @@ archive_microbs_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microbs
         message("[microbs Report]: No path provided. Using default path: ", path_to_check_data_ddPCR)
     }
 
-    # load all the names of the CSV files
+    # load all the names of the check files files
     invisible(ifelse(!dir.exists(file.path(path_to_check_data_ddPCR, "Archives")), 
                         dir.create(file.path(path_to_check_data_ddPCR, "Archives")), 
                         FALSE))
 
+    file_info <- utils::fileSnapshot(path_to_check_data_ddPCR)$info
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info,grepl("Check_data_ddPCR_",rownames(file_info)))
+
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+
+    latest_file <- NULL
+    for (file_name in rownames(file_info)) {
+        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+            latest_file <- file_name
+        }
+    }
+
+    file_info <- file_info[rownames(file_info) != latest_file, ]
+
     # TODO: Here use a specific format lookup such as "\\.csv$", because csv will pickup the file even if we have file.csv.txt
-    files_list <- list.files(path_to_check_data_ddPCR, pattern = "csv")
-    for(file in files_list) {
-        file_name <- paste(path_to_check_data_ddPCR, file, sep = "/")
-        file.copy(from = file_name, 
-                    to = paste0(file.path(path_to_check_data_ddPCR, "Archives","/"),
-                                file
-                    ))
-        file.remove(from = file_name)
+    files_list <- list.files(path_to_check_data_ddPCR, pattern = "Check_data_ddPCR_")
+    # for(file in files_list) {
+    for(file in rownames(file_info)) {
+        file_path <- paste(path_to_check_data_ddPCR, file, sep = "/")
+
+        if (file == latest_file) {
+            next  # Skip the latest file
+        } else {
+            archive_path <- file.path(path_to_check_data_ddPCR, "Archives", file)
+            file.copy(from = file_path, to = archive_path)
+            file.remove(file_path)
+
+            # Add archived file name to list
+            files_list <- c(files_list, file)
+        }
     }
 
     if (length(files_list) == 0) {
-        message("[microbs Report]: No CSV files found to archive in ", path_to_check_data_ddPCR)
+        message("[microbs Report]: No Check_data_ddPCR_ files found to archive in ", path_to_check_data_ddPCR)
+        return(invisible(character(0)))
+    }
+
+    invisible(files_list)
+}
+
+
+#--------------------------------------------------------------------------------------------------------
+# Load the old check data qPCR
+#--------------------------------------------------------------------------------------------------------
+#' @title Load the check data file 
+#'
+#' @description This function loads the old check data and stores for later usage.
+#' This file contains the old checked qPCR raw data. Columns will be added to this data later.
+#'
+#' @param path_to_check_data_qPCR A string to describe the path to the checked excel qPCR data `Check_data_qPCR_*.xlxs`. 
+#' 
+#' @return A tibble with the containing the raw data
+#' @examples
+#' # Example usage
+#' path_to_check_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
+#' df_raw_qPCR_data <- load_microbs_old_check_qPCR_Data(path_to_check_data_qPCR)
+#' 
+#' # If you want to use the default path
+#' set_microbs_loaded_DataPath()
+#' set_microbs_check_DataPath()
+#' df_raw_qPCR_data <- load_microbs_old_check_qPCR_Data() # use default path
+#'
+#' @export
+load_microbs_old_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_env$checkData_path) {
+    # load the path
+    if ( missing(path_to_check_data_qPCR) ) {
+        path_to_check_data_qPCR <- get_microbs_check_DataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_check_data_qPCR)
+    }
+
+    # Validate if the provided path exists
+    if (!dir.exists(path_to_check_data_qPCR)) {
+        stop("[microbs Error]: The provided path does not exist: ", path_to_check_data_qPCR)
+    }
+
+    # Check if Archives exist, if not create a directory
+    ifelse(!dir.exists(file.path(path_to_check_data_qPCR, "Archives")), 
+            dir.create(file.path(path_to_check_data_qPCR, "Archives")), FALSE)
+
+    # load the names of all files and folders in the given directory path
+    file_info <- utils::fileSnapshot(path_to_check_data_qPCR)$info
+    # remove all the directories from the list
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    # only keep the file names containg "Check_data_qPCR_"
+    file_info <- subset(file_info,grepl("Check_data_qPCR_",rownames(file_info)))
+    
+    # Check if we have atleast one file
+    if (nrow(file_info) == 0) {
+        stop("[microbs Error]: No matching files found in directory: ", path_to_check_data_qPCR)
+    }
+
+    # re-order the files according to time
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+    # Loop through files to select the latest Excel file
+    latest_file <- NULL
+    for (file_name in rownames(file_info)) {
+        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+            latest_file <- file_name
+        }
+    }
+    message("[microbs Report]: Load the latest Check_data_qPCR_* file: ", latest_file)
+
+    # create the file path
+    latest_excel_file_path <- file.path(path_to_check_data_qPCR, latest_file)
+
+    # Load the latest excel file for qPCR
+    .microbs_env$df_old_check_qPCR_data <- readxl::read_excel(latest_excel_file_path)
+
+    # Return both the loaded dataframe and the latest file name
+    .microbs_env$df_old_check_qPCR_data
+}
+
+
+#--------------------------------------------------------------------------------------------------------
+# Move old check qPCR to archive
+#--------------------------------------------------------------------------------------------------------
+#' @title move check qPCR data to archive
+#'
+#' @description The old check data needs to be moved to the archive once a new check is performed.
+#'
+#' @param path_to_check_data_qPCR A string to describe the path to the check data. 
+#' 
+#' @return A character vector of archived file names (invisibly).
+#' @examples
+#' # Example usage
+#' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
+#' path_to_check_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
+#' df_raw_qPCR_data <- archive_microbs_check_qPCR_Data(path_to_check_data_qPCR)
+#' @export
+archive_microbs_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_env$checkData_path) {
+    # load the data 
+    if (missing(path_to_check_data_qPCR)) {
+        path_to_check_data_qPCR = get_microbs_qPCR_rawDataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_check_data_qPCR)
+    }
+
+    # load all the names of the CSV files
+    invisible(ifelse(!dir.exists(file.path(path_to_check_data_qPCR, "Archives")), 
+                        dir.create(file.path(path_to_check_data_qPCR, "Archives")), 
+                        FALSE))
+
+    file_info <- utils::fileSnapshot(path_to_check_data_qPCR)$info
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info,grepl("Check_data_qPCR_",rownames(file_info)))
+
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+
+    latest_file <- NULL
+    for (file_name in rownames(file_info)) {
+        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+            latest_file <- file_name
+        }
+    }
+
+    file_info <- file_info[rownames(file_info) != latest_file, ]
+
+    # TODO: Here use a specific format lookup such as "\\.csv$", because csv will pickup the file even if we have file.csv.txt
+    files_list <- list.files(path_to_check_data_qPCR, pattern = "Check_data_qPCR_")
+    # for(file in files_list) {
+    for(file in rownames(file_info)) {
+        file_path <- paste(path_to_check_data_qPCR, file, sep = "/")
+
+        if (file == latest_file) {
+            next  # Skip the latest file
+        } else {
+            archive_path <- file.path(path_to_check_data_qPCR, "Archives", file)
+            file.copy(from = file_path, to = archive_path)
+            file.remove(file_path)
+
+            # Add archived file name to list
+            files_list <- c(files_list, file)
+        }
+    }
+
+    if (length(files_list) == 0) {
+        message("[microbs Report]: No Check_data_qPCR_ files found to archive in ", path_to_check_data_qPCR)
         return(invisible(character(0)))
     }
 
