@@ -136,7 +136,7 @@ get_microbs_old_check_ddPCR_Data <- function() {
 #' result
 #' 
 #' @export 
-get_microbs_old_check_ddPCR_Data <- function() {
+get_microbs_old_check_qPCR_Data <- function() {
     if (is.null(.microbs_env$df_old_check_qPCR_data)) {
         message("[microbs Warning]: Did not yet set the path. Use the load_microbs_old_check_1PCR_Data() function to set a path")
         message("or use the default by using load_microbs_old_check_qPCR_Data()")
