@@ -361,7 +361,7 @@ load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_r
 
         for(j in 1 : nrow(file)){
             file <- file %>%
-                dplyr::mutate(dilution = case_when(
+                dplyr::mutate(dilution = dplyr::case_when(
                     grepl("D$", Sample) ~ 2,      # if the name ends with "D", value = 2
                     grepl("T$", Sample) ~ 3,      # if the name ends with "D", value = 3
                     grepl("d$", Sample) ~ 10,
@@ -369,7 +369,7 @@ load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_r
                 ))
 
             # Module: Add new Virus name here
-            file$Target_Name <- case_when(
+            file$Target_Name <- dplyr::case_when(
                 file$Target_Name == "InfluA" | file$Target_Name == "IAV" | file$Target_Name == "Influ A" ~ "FluA",
                 file$Target_Name == "InfluB" | file$Target_Name == "IBV" | file$Target_Name == "Influ B" ~ "FluB",
                 file$Target_Name == "RSV" | file$Target_Name == "hRSV" | file$Target_Name == "rsv" ~ "hRSV",
@@ -381,7 +381,7 @@ load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_r
 
     df_new_raw_ddPCR_data <- df_new_raw_ddPCR_data %>%
         dplyr::mutate(
-                Target_Name = case_when(
+                Target_Name = dplyr::case_when(
                 stringr::str_detect(Target_Name, stringr::regex("RSV", ignore_case = TRUE)) ~ "hRSV",
                 stringr::str_detect(Target_Name, stringr::regex("FluA", ignore_case = TRUE)) ~ "FluA",
                 stringr::str_detect(Target_Name, stringr::regex("FluB", ignore_case = TRUE)) ~ "FluB",
@@ -415,7 +415,7 @@ load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_r
     openxlsx::addWorksheet(wb, "Sheet1")
     openxlsx::writeData(wb, "Sheet1", df_new_raw_ddPCR_data)
     openxlsx::freezePane(wb, sheet = "Sheet1", firstRow = TRUE)
-    xlxs_filename <- paste0(path_to_old_raw_excel_ddPCR, "/SUPERVIR_RAW_DATA_qPCR_",
+    xlxs_filename <- paste0(path_to_old_raw_excel_ddPCR, "/SUPERVIR_RAW_DATA_ddPCR_",
                    gsub(":", "-", sub(" CEST", "", Sys.time())),
                    ".xlsx")
     openxlsx::saveWorkbook(wb, xlxs_filename, overwrite = TRUE)
@@ -557,7 +557,7 @@ load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_
             }
 
             # Module: Add new Virus name here
-            file_mod$Target_Name <- case_when(
+            file_mod$Target_Name <- dplyr::case_when(
                 file_mod$Target_Name == "IAV" ~ "FluA",
                 file_mod$Target_Name == "SARS-COV-2" | file_mod$Target_Name == "SARSCOV2" | file_mod$Target_Name == "E-gene" ~ "SARS-CoV-2",
                 file_mod$Target_Name == "RSV" ~ "hRSV",
@@ -717,7 +717,7 @@ load_microbs_old_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microb
     # remove all the directories from the list
     file_info <- subset(file_info, file_info$isdir == FALSE)
     # only keep the file names containg "Check_data_ddPCR_"
-    file_info <- subset(file_info,grepl("Check_data_ddPCR_",rownames(file_info)))
+    file_info <- subset(file_info,grepl("Check_data_ddPCR_", rownames(file_info)))
     
     # Check if we have atleast one file
     if (nrow(file_info) == 0) {
@@ -1255,11 +1255,11 @@ archive_microbs_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env
 #' # Example usage
 #' path_to_flux_data <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/00_flux_data"
 #' set_microbs_flux_DataPath(path_to_flux_data)
-#' df_flux_data <- load_microbs_flux_Data()
+#' df_flux_data <- load_microbs_flux_Data(path_to_flux_data)
 #' 
 #' # If you want to use the default path
-#' set_microbs_flux_DataPath()
-#' df_flux_data <- load_microbs_flux_Data() # use default path
+#' # set_microbs_flux_DataPath()
+#' # df_flux_data <- load_microbs_flux_Data() # use default path
 #'
 #' @export
 load_microbs_flux_Data <- function(path_to_flux_data = .microbs_env$flux_path) {
