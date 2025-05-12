@@ -181,11 +181,11 @@ set_microbs_qPCR_rawDataPath <- function(path="0_raw_data_qPCR", relative=FALSE)
         }
     }
 
-    if (!dir.exists(path)) {
-        message("Error: The provided path does not exist: ", path)
-    } else {
-        message("[microbs Report]: Using provided path: ", path)
-    }
+    # if (!dir.exists(path)) {
+    #     message("Error: The provided path does not exist: ", path)
+    # } else {
+    #     message("[microbs Report]: Using provided path: ", path)
+    # }
 
     path_connector <- get_microbs_connector_dir()
     wd <- get_microbs_wdirectory()
@@ -252,11 +252,11 @@ set_microbs_ddPCR_rawDataPath <- function(path="0_raw_data_ddPCR", relative=FALS
         }
     }
 
-    if (!dir.exists(path)) {
-        message("Error: The provided path does not exist: ", path)
-    } else {
-        message("[microbs Report]: Using provided path: ", path)
-    }
+    # if (!dir.exists(path)) {
+    #     message("Error: The provided path does not exist: ", path)
+    # } else {
+    #     message("[microbs Report]: Using provided path: ", path)
+    # }
 
     wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
@@ -322,11 +322,11 @@ set_microbs_flux_DataPath <- function(path="00_flux_data", relative=FALSE) {
         }
     }
 
-    if (!dir.exists(path)) {
-        message("Error: The provided path does not exist: ", path)
-    } else {
-        message("[microbs Report]: Using provided path: ", path)
-    }
+    # if (!dir.exists(path)) {
+    #     message("Error: The provided path does not exist: ", path)
+    # } else {
+    #     message("[microbs Report]: Using provided path: ", path)
+    # }
 
     wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
@@ -402,11 +402,11 @@ set_microbs_stdCurve_DataPath <- function(path="00_standard_curve", relative=FAL
         }
     }
 
-    if (!dir.exists(path)) {
-        message("Error: The provided path does not exist: ", path)
-    } else {
-        message("[microbs Report]: Using provided path: ", path)
-    }
+    # if (!dir.exists(path)) {
+    #     message("Error: The provided path does not exist: ", path)
+    # } else {
+    #     message("[microbs Report]: Using provided path: ", path)
+    # }
 
     wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
@@ -465,16 +465,16 @@ set_microbs_check_DataPath <- function(path="1_ckeck_data", relative=FALSE) {
             message("[microbs Error]: The provided path does not exist: ", path)
         } else {
             .microbs_env$checkData_path <- path
-            return(invisible(path))  # Exit the function early
             message("[microbs Report]: Using provided path: ", path)
+            return(invisible(path))  # Exit the function early
         }
     }
 
-    if (!dir.exists(path)) {
-        message("Error: The provided path does not exist: ", path)
-    } else {
-        message("[microbs Report]: Using provided path: ", path)
-    }
+    # if (!dir.exists(path)) {
+    #     message("Error: The provided path does not exist: ", path)
+    # } else {
+    #     message("[microbs Report]: Using provided path: ", path)
+    # }
 
     wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
@@ -605,11 +605,11 @@ set_microbs_calc_DataPath <- function(path="2_calc_data", relative=FALSE) {
         }
     }
 
-    if (!dir.exists(path)) {
-        message("Error: The provided path does not exist: ", path)
-    } else {
-        message("[microbs Report]: Using provided path: ", path)
-    }
+    # if (!dir.exists(path)) {
+    #     message("Error: The provided path does not exist: ", path)
+    # } else {
+    #     message("[microbs Report]: Using provided path: ", path)
+    # }
 
     wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
@@ -679,11 +679,11 @@ set_microbs_created_DataPath <- function(path="3_created_data", relative=FALSE) 
         }
     }
 
-    if (!dir.exists(path)) {
-        message("Error: The provided path does not exist: ", path)
-    } else {
-        message("[microbs Report]: Using provided path: ", path)
-    }
+    # if (!dir.exists(path)) {
+    #     message("Error: The provided path does not exist: ", path)
+    # } else {
+    #     message("[microbs Report]: Using provided path: ", path)
+    # }
 
     wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
@@ -755,11 +755,11 @@ set_microbs_dashboard_DataPath <- function(path="4_data_4_dashboard", relative=F
         }
     }
 
-    if (!dir.exists(path)) {
-        message("Error: The provided path does not exist: ", path)
-    } else {
-        message("[microbs Report]: Using provided path: ", path)
-    }
+    # if (!dir.exists(path)) {
+    #     message("Error: The provided path does not exist: ", path)
+    # } else {
+    #     message("[microbs Report]: Using provided path: ", path)
+    # }
 
     wd <- get_microbs_wdirectory()
     path_connector <- get_microbs_connector_dir()
