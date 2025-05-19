@@ -69,10 +69,11 @@ load_microbs_old_raw_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .micro
     .microbs_env$df_old_raw_ddPCR_data <-  readxl::read_excel(latest_excel_file_path)
 
     # Return both the loaded dataframe and the latest file name
-    return(list(
-        data <- .microbs_env$df_old_raw_ddPCR_data,
-        latest_ddPCR_file <- latest_file
-    ))
+    # return(list(
+    #     data <- .microbs_env$df_old_raw_ddPCR_data,
+    #     latest_ddPCR_file <- latest_file
+    # ))
+    .microbs_env$df_old_raw_ddPCR_data
 }
 
 #--------------------------------------------------------------------------------------------------------
@@ -214,10 +215,11 @@ load_microbs_old_raw_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .microbs
     .microbs_env$df_old_raw_qPCR_data <-  readxl::read_excel(latest_excel_file_path)
 
     # Return both the loaded dataframe and the latest file name
-    return(list(
-        data <- .microbs_env$df_old_raw_qPCR_data,
-        latest_qPCR_file <- latest_file
-    ))
+    # return(list(
+    #     data <- .microbs_env$df_old_raw_qPCR_data,
+    #     latest_qPCR_file <- latest_file
+    # ))
+    .microbs_env$df_old_raw_qPCR_data
 }
 
 
@@ -317,7 +319,7 @@ archive_microbs_loaded_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .micro
 load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_raw_path) {
     # load the data 
     if (missing(path_to_raw_ddPCR)) {
-        # path_to_raw_ddPCR <- get_microbs_ddPCR_rawDataPath()
+        path_to_raw_ddPCR <- get_microbs_ddPCR_rawDataPath()
         message("[microbs Report]: No path provided. Using default path: ", path_to_raw_ddPCR)
     }
 
@@ -977,10 +979,6 @@ archive_microbs_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_e
 #' path_to_calc_data_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
 #' df_raw_ddPCR_data <- load_microbs_old_calc_ddPCR_Data(path_to_calc_data_ddPCR)
 #' 
-#' # If you want to use the default path
-#' set_microbs_loaded_DataPath()
-#' set_microbs_calc_DataPath()
-#' df_raw_ddPCR_data <- load_microbs_old_calc_ddPCR_Data() # use default path
 #'
 #' @export
 load_microbs_old_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_env$calc_data_path) {
@@ -1023,7 +1021,7 @@ load_microbs_old_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_
     latest_excel_file_path <- file.path(path_to_calc_data_ddPCR, latest_file)
 
     # Load the latest excel file for ddPCR
-    .microbs_env$df_old_calc_ddPCR_data <- readxl::read_excel(latest_excel_file_path)
+    .microbs_env$df_old_calc_ddPCR_data <- readxl::read_excel(latest_excel_file_path, , sheet = 3)
 
     # Return both the calced dataframe 
     .microbs_env$df_old_calc_ddPCR_data
@@ -1163,7 +1161,7 @@ load_microbs_old_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_en
     latest_excel_file_path <- file.path(path_to_calc_data_qPCR, latest_file)
 
     # Load the latest excel file for qPCR
-    .microbs_env$df_old_calc_qPCR_data <- readxl::read_excel(latest_excel_file_path)
+    .microbs_env$df_old_calc_qPCR_data <- readxl::read_excel(latest_excel_file_path, , sheet = 3)
 
     # Return both the calced dataframe 
     .microbs_env$df_old_calc_qPCR_data
@@ -1301,7 +1299,15 @@ load_microbs_flux_Data <- function(path_to_flux_data = .microbs_env$flux_path) {
 
     # Load the latest excel file for ddPCR
     .microbs_env$df_flux_data <- readxl::read_excel(latest_excel_file_path)
-    colnames(.microbs_env$df_flux_data) <- c('Sample','Sample_Date','Flow_rate',"week_nb")
+    colnames(.microbs_env$df_flux_data) <- c('Sample',
+                                                'Sample_Date', 
+                                                'col not needed water type', 
+                                                'col not needed site', 
+                                                'Flow_rate',
+                                                'week_nb')
+
+    .microbs_env$df_flux_data <- .microbs_env$df_flux_data %>% 
+                                    dplyr::select(Sample, Sample_Date, Flow_rate, week_nb)
 
     # Return both the calced dataframe 
     .microbs_env$df_flux_data
