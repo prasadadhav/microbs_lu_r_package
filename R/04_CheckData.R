@@ -103,6 +103,8 @@ check_microbs_raw_ddPCR_Data <- function(path_to_check_data = .microbs_env$check
         openxlsx::saveWorkbook(wb, xlxs_filename, overwrite = TRUE)
     }
 
+    .microbs_env$df_new_check_ddPCR_data <- df_new_check_ddPCR_data
+
     .microbs_env$df_new_check_ddPCR_data
 }
 
