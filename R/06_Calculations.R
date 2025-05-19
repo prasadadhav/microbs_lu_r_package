@@ -532,7 +532,7 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
     openxlsx::writeData(wb, "2.Sites", sites)
     openxlsx::writeData(wb, "3.Data", df_new_calc_qPCR_data)
     openxlsx::freezePane(wb, sheet = "3.Data", firstRow = TRUE)
-    xlxs_filename <- paste0(path_to_calc_data_ddPCR, "/SUPERVIR_CAL_DATA_qPCR_",
+    xlxs_filename <- paste0(path_to_calc_data_qPCR, "/SUPERVIR_CAL_DATA_qPCR_",
                    gsub(":", "-", sub(" CEST", "", Sys.time())),
                    ".xlsx")
     openxlsx::saveWorkbook(wb, xlxs_filename, overwrite = TRUE)
