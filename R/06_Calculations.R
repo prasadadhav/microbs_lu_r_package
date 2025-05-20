@@ -51,9 +51,6 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
     df_flux_data <- get_microbs_flux_Data()
 
     df_new_calc_ddPCR_data <- dplyr::left_join(df_old_calc_ddPCR_data, df_flux_data, by = c('Sample'))
-    str(df_old_calc_ddPCR_data)
-    str(df_flux_data)
-    str(df_new_calc_ddPCR_data)
 
     df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data %>%
                                     dplyr::mutate(
@@ -70,7 +67,6 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
     df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data %>%
                              dplyr::filter(df_new_calc_ddPCR_data$Accepted_droplets >= 10000)
 
-    str(df_new_calc_ddPCR_data)
     df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data %>%  dplyr::mutate(
         inhab = dplyr::case_when(
             substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "BEG" ~ 139731,
@@ -478,7 +474,7 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
 
     df_new_calc_qPCR_data <- df_new_calc_qPCR_data %>% dplyr::select(Sample, Target_Name, Sample_Date, week_nb, inhab, everything())
 
-    .microbs_env$df_new_calc_qPCR_data <- df_new_raw_qPCR_data
+    .microbs_env$df_new_calc_qPCR_data <- df_new_calc_qPCR_data
 
     Metadata <- data.frame(
         "Dataset title"= c("SUPERVIR monitoring results"),
@@ -542,5 +538,5 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
                    ".xlsx")
     openxlsx::saveWorkbook(wb, xlxs_filename, overwrite = TRUE)
 
-    return(.microbs_env$df_new_calc_ddPCR_data)
+    return(.microbs_env$df_new_calc_qPCR_data)
 }
