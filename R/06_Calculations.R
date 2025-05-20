@@ -276,6 +276,8 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' set_microbs_connector_dir("Data_Treatment")
 #' 
+#' set_microbs_stdCurve_DataPath("00_standard_curve")
+#' 
 #' path_to_raw_qPCR <- "0_raw_data_qPCR"
 #' set_microbs_qPCR_rawDataPath(path_to_raw_qPCR)
 #' 
@@ -347,7 +349,7 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
     df_new_raw_qPCR_data_mutate <- df_new_raw_qPCR_data
     df_new_raw_qPCR_data_mutate$num <- sequence(rle(df_new_raw_qPCR_data_mutate$Sample)$lengths)
     max_reliquat <- max(df_new_raw_qPCR_data_mutate$num)
-    df_new_raw_qPCR_data_mutate <- pivot_wider(df_new_raw_qPCR_data_mutate,
+    df_new_raw_qPCR_data_mutate <- tidyr::pivot_wider(df_new_raw_qPCR_data_mutate,
                                                     names_from = num,
                                                     id_cols = c(Sample,Target_Name),
                                                     values_from = c(CT,CT_sign,positive)
@@ -356,13 +358,13 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
     std_curve_path <- get_microbs_stdCurve_DataPath()
     info_target_data<- read.csv(paste0(std_curve_path,"/","SUPERVIR_LIST_RT-qPCR_Assay summary.csv"), header = TRUE)
     df_new_raw_qPCR_data_mutate <- dplyr::left_join(df_new_raw_qPCR_data_mutate, info_target_data, 
-                                                    by = join_by(Target_Name == Assay)
+                                                    by = dplyr::join_by(Target_Name == Assay)
                                                     )
 
     df_new_raw_qPCR_data_mutate <- df_new_raw_qPCR_data_mutate %>%
-                    mutate(sumrange = rowSums(select(., starts_with("positive")), na.rm = TRUE))
+                    dplyr::mutate(sumrange = rowSums(dplyr::select(., starts_with("positive")), na.rm = TRUE))
 
-    df_new_raw_qPCR_data_mutate <- df_new_raw_qPCR_data_mutate %>% select(-starts_with("positive"))
+    df_new_raw_qPCR_data_mutate <- df_new_raw_qPCR_data_mutate %>% dplyr::select(-starts_with("positive"))
     df_new_raw_qPCR_data_mutate <- subset(df_new_raw_qPCR_data_mutate, select =- c(sumrange))
 
     df_new_raw_qPCR_data_mutate <- df_new_raw_qPCR_data_mutate %>%  dplyr::mutate(
@@ -384,9 +386,12 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
     )
 
     df_flux_data <- get_microbs_flux_Data()
-    df_flux_data$`Sampling Dates` <- as.character(df_flux_data$`Sampling Dates`)
+    df_flux_data <- df_flux_data %>%
+                        dplyr::mutate(Sample_Date = as.character(Sample_Date))
+
     df_flux_data <- df_flux_data[ , !names(df_flux_data) %in% c("Site", "Water type")]
-    colnames(flux) <- c('Sample','Sample_Date','Flow_rate','week_nb')
+    colnames(df_flux_data) <- c('Sample','Sample_Date','Flow_rate','week_nb')
+
     df_new_raw_qPCR_data_mutate <- dplyr::left_join(df_new_raw_qPCR_data_mutate, df_flux_data, by = c("Sample"))
 
     df_new_raw_qPCR_data_mutate$copies_reaction_1 = 10^((df_new_raw_qPCR_data_mutate$Intercept - as.numeric(df_new_raw_qPCR_data_mutate$CT_1)) / abs(df_new_raw_qPCR_data_mutate$Slope))
@@ -394,11 +399,11 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
     df_new_raw_qPCR_data_mutate$copies_reaction_3 = 10^((df_new_raw_qPCR_data_mutate$Intercept - as.numeric(df_new_raw_qPCR_data_mutate$CT_3)) / abs(df_new_raw_qPCR_data_mutate$Slope))
     df_new_raw_qPCR_data_mutate$copies_reaction_4 = 10^((df_new_raw_qPCR_data_mutate$Intercept - as.numeric(df_new_raw_qPCR_data_mutate$CT_4)) / abs(df_new_raw_qPCR_data_mutate$Slope))
 
-    df_new_raw_qPCR_data_mutate <- df_new_raw_qPCR_data_mutate %>% mutate(
-        copies_reaction_1 = ifelse(str_detect(Sample, "d$"), copies_reaction_1 * 10, copies_reaction_1),
-        copies_reaction_2 = ifelse(str_detect(Sample, "d$"), copies_reaction_2 * 10, copies_reaction_2),
-        copies_reaction_3 = ifelse(str_detect(Sample, "d$"), copies_reaction_3 * 10, copies_reaction_3),
-        copies_reaction_4 = ifelse(str_detect(Sample, "d$"), copies_reaction_4 * 10, copies_reaction_4)
+    df_new_raw_qPCR_data_mutate <- df_new_raw_qPCR_data_mutate %>% dplyr::mutate(
+        copies_reaction_1 = ifelse(stringr::str_detect(Sample, "d$"), copies_reaction_1 * 10, copies_reaction_1),
+        copies_reaction_2 = ifelse(stringr::str_detect(Sample, "d$"), copies_reaction_2 * 10, copies_reaction_2),
+        copies_reaction_3 = ifelse(stringr::str_detect(Sample, "d$"), copies_reaction_3 * 10, copies_reaction_3),
+        copies_reaction_4 = ifelse(stringr::str_detect(Sample, "d$"), copies_reaction_4 * 10, copies_reaction_4)
     )
 
     df_new_raw_qPCR_data_mutate$CT_sign_1 <- ifelse(
@@ -464,7 +469,7 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
     df_new_raw_qPCR_data_mutate$copies_inhab_3 <- (df_new_raw_qPCR_data_mutate$copies_day_3 / df_new_raw_qPCR_data_mutate$inhab) * 100000
     df_new_raw_qPCR_data_mutate$copies_inhab_4 <- (df_new_raw_qPCR_data_mutate$copies_day_4 / df_new_raw_qPCR_data_mutate$inhab) * 100000
 
-    df_new_raw_qPCR_data_mutate <- subset(df_new_raw_qPCR_data_mutate, dplyr::select = -c(rep2.LOD, rep3.LOD,rep4.LOD,rep5.LOD,rep8.LOD))
+    df_new_raw_qPCR_data_mutate <- subset(df_new_raw_qPCR_data_mutate, select = -c(rep2.LOD, rep3.LOD,rep4.LOD,rep5.LOD,rep8.LOD))
     df_new_calc_qPCR_data <- df_new_raw_qPCR_data_mutate
 
     df_new_calc_qPCR_data$mean_copies_L <- rowMeans(df_new_calc_qPCR_data[, c("copies_L_1", "copies_L_2", "copies_L_3", "copies_L_4")], na.rm = TRUE)
