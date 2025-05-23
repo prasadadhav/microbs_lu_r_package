@@ -76,3 +76,23 @@ run_microbs_silently <- function(expr, quiet = TRUE) {
     eval(expr)
   }
 }
+
+
+
+#--------------------------------------------------------------------------------------------------------
+#   Extract WWTP 
+#--------------------------------------------------------------------------------------------------------
+#' @title Extracts the first few alphabets that signify the WWTP
+#'
+#' @description This is an example function that demonstrates the structure of an R function.
+#'
+#' @param column A column with strings
+#' @return A column of strings with extract only first alphabets
+#' 
+#' ^([A-Za-z]+) → captures the letters at the beginning
+#' [0-9]+.*$ → skips the rest (digits and any trailing letter like d)
+#' 
+#' @export
+utils_extract_WWTP <- function(sample_column) {
+  sub("^([A-Za-z]+)[0-9]+.*$", "\\1", sample_column)
+}
