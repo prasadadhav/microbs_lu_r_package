@@ -232,6 +232,110 @@ get_microbs_new_calc_ddPCR_Data <- function() {
     .microbs_env$df_new_calc_ddPCR_data
 }
 
+
+#--------------------------------------------------------------------------------------------------------
+# get new flu created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_flu_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_calc_ddPCR_Data()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_flu_sheet1 <- function() {
+    if (is.null(.microbs_env$sheet1_flu)) {
+        message("[microbs Warning]: Use the create_microbs_flu_file() function to create flu data")
+    }
+    .microbs_env$sheet1_flu
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new flu created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_flu_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_calc_ddPCR_Data()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_flu_sheet2 <- function() {
+    if (is.null(.microbs_env$sheet2_flu)) {
+        message("[microbs Warning]: Use the create_microbs_flu_file() function to create flu data")
+    }
+    .microbs_env$sheet2_flu
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new flu created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_flu_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_calc_ddPCR_Data()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_flu_sheet3 <- function() {
+    if (is.null(.microbs_env$sheet3_flu)) {
+        message("[microbs Warning]: Use the create_microbs_flu_file() function to create flu data")
+    }
+    .microbs_env$sheet3_flu
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new flu created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_flu_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_calc_ddPCR_Data()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_flu_sheet4 <- function() {
+    if (is.null(.microbs_env$sheet4_flu)) {
+        message("[microbs Warning]: Use the create_microbs_flu_file() function to create flu data")
+    }
+    .microbs_env$sheet4_flu
+}
+
+
+
+
 #--------------------------------------------------------------------------------------------------------
 # get old calc qPCR data
 #--------------------------------------------------------------------------------------------------------
