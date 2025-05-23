@@ -246,6 +246,30 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
     openxlsx::writeData(wb, "2.Sites", sites)
     openxlsx::writeData(wb, "3.Data", df_new_calc_ddPCR_data)
     openxlsx::freezePane(wb, sheet = "3.Data", firstRow = TRUE)
+
+    # Find which rows match the grepl condition
+    rows_to_highlight <- which(
+        rowSums(
+            dplyr::select(df_new_calc_ddPCR_data, dplyr::starts_with("dilution")) > 0,
+            na.rm = TRUE
+            ) > 0
+        ) + 1  # +1 for header row in Excel
+
+    # Create a yellow style
+    yellowStyle <- openxlsx::createStyle(fgFill = "#FFFF00")
+
+    # Apply yellow fill to each matching row
+    for (r in rows_to_highlight) {
+        row_corrected = r
+        openxlsx::addStyle(wb,
+                            sheet = "3.Data",
+                            style = yellowStyle,
+                            rows = row_corrected,
+                            cols = 1:ncol(df_new_calc_ddPCR_data),
+                            gridExpand = TRUE,
+                            stack = TRUE)
+    }
+
     xlxs_filename <- paste0(path_to_calc_data_ddPCR, "/SUPERVIR_CAL_DATA_ddPCR_",
                    gsub(":", "-", sub(" CEST", "", Sys.time())),
                    ".xlsx")
