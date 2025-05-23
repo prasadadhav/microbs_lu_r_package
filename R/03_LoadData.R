@@ -417,6 +417,29 @@ load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_r
     openxlsx::addWorksheet(wb, "Sheet1")
     openxlsx::writeData(wb, "Sheet1", df_new_raw_ddPCR_data)
     openxlsx::freezePane(wb, sheet = "Sheet1", firstRow = TRUE)
+
+    # Find which rows match the grepl condition
+    rows_to_highlight <- which(
+            !is.na(df_new_raw_ddPCR_data$dilution) & 
+            df_new_raw_ddPCR_data$dilution > 0
+        ) 
+        + 1   # +1 because Excel has a header row
+
+    # Create a yellow style
+    yellowStyle <- openxlsx::createStyle(fgFill = "#FFFF00")
+
+    # Apply yellow fill to each matching row
+    for (r in rows_to_highlight) {
+        row_corrected = r + 1
+        openxlsx::addStyle(wb,
+                            sheet = "Sheet1",
+                            style = yellowStyle,
+                            rows = row_corrected,
+                            cols = 1:ncol(df_new_raw_ddPCR_data),
+                            gridExpand = TRUE,
+                            stack = TRUE)
+    }
+
     xlxs_filename <- paste0(path_to_old_raw_excel_ddPCR, "/SUPERVIR_RAW_DATA_ddPCR_",
                    gsub(":", "-", sub(" CEST", "", Sys.time())),
                    ".xlsx")
@@ -566,6 +589,15 @@ load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_
                 .default = as.character(file_mod$Target_Name)
             )
 
+            for(j in 1 : nrow(file_mod)){
+            file_mod <- file_mod %>%
+                dplyr::mutate(dilution = dplyr::case_when(
+                    grepl("D$", Sample) ~ 2,      # if the name ends with "D", value = 2
+                    grepl("d$", Sample) ~ 10,
+                    TRUE ~ 0                    # if not, value = 0
+                ))
+            }
+
             if(substr(file_mod$Sample[j], 1, 3)  %in% c("BET","BEG","PET","SCH", "BLE", "MER", "HES","ECH", "UEB", "GRE", "VIE", "BOE", "WIL")){
                     df_new_raw_qPCR_data <- plyr::rbind.fill(df_new_raw_qPCR_data , file_mod[j,])
                 }
@@ -597,6 +629,24 @@ load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_
     openxlsx::addWorksheet(wb, "Sheet1")
     openxlsx::writeData(wb, "Sheet1", df_new_raw_qPCR_data)
     openxlsx::freezePane(wb, sheet = "Sheet1", firstRow = TRUE)
+
+    # Find which rows match the grepl condition
+    rows_to_highlight <- which(grepl("d$", df_new_raw_qPCR_data$Sample)) + 1  # +1 because Excel has a header row
+
+    # Create a yellow style
+    yellowStyle <- openxlsx::createStyle(fgFill = "#FFFF00")
+
+    # Apply yellow fill to each matching row
+    for (r in rows_to_highlight) {
+        openxlsx::addStyle(wb,
+                            sheet = "Sheet1",
+                            style = yellowStyle,
+                            rows = r,
+                            cols = 1:ncol(df_new_raw_qPCR_data),
+                            gridExpand = TRUE,
+                            stack = TRUE)
+    }
+
     xlxs_filename <- paste0(path_to_old_raw_excel_qPCR, "/SUPERVIR_RAW_DATA_qPCR_",
                    gsub(":", "-", sub(" CEST", "", Sys.time())),
                    ".xlsx")
