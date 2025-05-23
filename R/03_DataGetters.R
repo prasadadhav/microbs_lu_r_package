@@ -175,7 +175,7 @@ get_microbs_old_check_qPCR_Data <- function() {
 
 
 #--------------------------------------------------------------------------------------------------------
-# get calc ddPCR data
+# get old calc ddPCR data
 #--------------------------------------------------------------------------------------------------------
 #' @title get old calc data for ddPCR
 #' 
@@ -204,7 +204,36 @@ get_microbs_old_calc_ddPCR_Data <- function() {
 }
 
 #--------------------------------------------------------------------------------------------------------
-# get calc qPCR data
+# get new calc ddPCR data
+#--------------------------------------------------------------------------------------------------------
+#' @title get new calc data for ddPCR
+#' 
+#' @description If it returns NULL, it means that the new check data has not been loaded yet.
+#' Call load_microbs_new_calc_ddPCR_Data() to load the data.
+#' Need to set relevant paths.
+#' Preferably use full path.
+#' This function allows you to load the new loaded RAW data located in `2_calc_data`.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_calc_ddPCR_Data()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_calc_ddPCR_Data <- function() {
+    if (is.null(.microbs_env$df_new_calc_ddPCR_data)) {
+        message("[microbs Warning]: Did not yet set the path. Use the load_microbs_new_calc_ddPCR_Data() function to set a path")
+        message("or use the default by using load_microbs_new_calc_ddPCR_Data()")
+    }
+    .microbs_env$df_new_calc_ddPCR_data
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get old calc qPCR data
 #--------------------------------------------------------------------------------------------------------
 #' @title get old raw check data for qPCR
 #' 
@@ -230,6 +259,35 @@ get_microbs_old_calc_qPCR_Data <- function() {
         message("or use the default by using load_microbs_old_calc_qPCR_Data()")
     }
     .microbs_env$df_old_calc_qPCR_data
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new calc qPCR data
+#--------------------------------------------------------------------------------------------------------
+#' @title get new raw check data for qPCR
+#' 
+#' @description If it returns NULL, it means that the new calc data has not been loaded yet.
+#' Call load_microbs_new_calc_qPCR_Data() to load the data.
+#' Need to set relevant paths.
+#' Preferably use full path.
+#' This function allows you to load the new loaded RAW data located in `2_calc_data`.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_calc_qPCR_Data()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_calc_qPCR_Data <- function() {
+    if (is.null(.microbs_env$df_new_calc_qPCR_data)) {
+        message("[microbs Warning]: Did not yet set the path. Use the load_microbs_new_calc_qPCR_Data() function to set a path")
+        message("or use the default by using load_microbs_new_calc_qPCR_Data()")
+    }
+    .microbs_env$df_new_calc_qPCR_data
 }
 
 #--------------------------------------------------------------------------------------------------------
