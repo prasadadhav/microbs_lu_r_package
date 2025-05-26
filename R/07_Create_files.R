@@ -32,12 +32,15 @@
 #' set_microbs_flux_DataPath(path_to_flux_data)
 #' load_microbs_flux_Data()
 #' 
+#' set_microbs_calc_DataPath("2_calc_data")
+#' set_microbs_created_DataPath("3_created_data")
+#' 
 #' calculations_microbs_ddPCR()
 #' create_microbs_flu_file()
 #' 
 #' 
 #' @export 
-create_microbs_flu_file <- function() {
+create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$created_data_path) {
     if (is.null(path_to_loaded_raw_excel_ddPCR = .microbs_env$created_data_path)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_loaded_DataPath(),")
         message("and then load_microbs_old_raw_ddPCR_Data() function to set a path")
@@ -244,6 +247,8 @@ create_microbs_flu_file <- function() {
     .microbs_env$sheet3_flu <- sheet3_flu
     .microbs_env$sheet4_flu <- sheet4_flu
 }
+
+
 
 
 

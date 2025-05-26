@@ -30,6 +30,8 @@
 #' set_microbs_flux_DataPath(path_to_flux_data)
 #' load_microbs_flux_Data()
 #' 
+#' set_microbs_calc_DataPath("2_calc_data")
+#' 
 #' calculations_microbs_ddPCR()
 #' 
 #' 
@@ -312,6 +314,8 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 #' path_to_flux_data <- "00_flux_data"
 #' set_microbs_flux_DataPath(path_to_flux_data)
 #' load_microbs_flux_Data()
+#' 
+#' set_microbs_calc_DataPath("2_calc_data")
 #' 
 #' calculations_microbs_qPCR()
 #' 
