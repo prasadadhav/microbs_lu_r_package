@@ -245,7 +245,7 @@ get_microbs_new_calc_ddPCR_Data <- function() {
 #' 
 #' @examples
 #' # Example usage
-#' result <- get_microbs_new_calc_ddPCR_Data()
+#' result <- get_microbs_new_create_flu_sheet1()
 #' 
 #' @examples
 #' result
@@ -270,7 +270,7 @@ get_microbs_new_create_flu_sheet1 <- function() {
 #' 
 #' @examples
 #' # Example usage
-#' result <- get_microbs_new_calc_ddPCR_Data()
+#' result <- get_microbs_new_create_flu_sheet2()
 #' 
 #' @examples
 #' result
@@ -295,7 +295,7 @@ get_microbs_new_create_flu_sheet2 <- function() {
 #' 
 #' @examples
 #' # Example usage
-#' result <- get_microbs_new_calc_ddPCR_Data()
+#' result <- get_microbs_new_create_flu_sheet3()
 #' 
 #' @examples
 #' result
@@ -320,7 +320,7 @@ get_microbs_new_create_flu_sheet3 <- function() {
 #' 
 #' @examples
 #' # Example usage
-#' result <- get_microbs_new_calc_ddPCR_Data()
+#' result <- get_microbs_new_create_flu_sheet4()
 #' 
 #' @examples
 #' result
