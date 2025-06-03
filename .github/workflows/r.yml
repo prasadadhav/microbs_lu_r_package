@@ -33,7 +33,11 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
-          remotes::install_deps(dependencies = TRUE)
+          remotes::install_deps(dependencies = TRUE, type = "both", upgrade = "always")
+        shell: Rscript {0}
+      - name: Install additional packages
+        run: |
+          install.packages(c("readxl", "usethis", "tidyverse", "utils", "janitor", "plyr", "dplyr", "openxlsx"))
         shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
