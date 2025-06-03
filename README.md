@@ -12,6 +12,7 @@ The goal of microbs.lu is to ...
 You can install the development version of microbs.lu from [GitHub](https://github.com/) with:
 
 ``` r
+Sys.setenv(GITHUB_PAT = "Ask_Prasad_for_a_token")
 # install.packages("devtools")
 devtools::install_github("prasadadhav/microbs_lu_r_package")
 ```
