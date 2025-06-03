@@ -2,6 +2,7 @@
 # microbs.lu
 
 <!-- badges: start -->
+[![Install from GitHub](https://img.shields.io/badge/install%20from-GitHub-blue)](https://github.com/prasadadhav/microbs_lu_r_package)
 <!-- badges: end -->
 
 The goal of microbs.lu is to ...
@@ -11,8 +12,8 @@ The goal of microbs.lu is to ...
 You can install the development version of microbs.lu from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("pak")
-pak::pak("prasadadhav/microbs_lu_r_package")
+# install.packages("devtools")
+devtools::install_github("prasadadhav/microbs_lu_r_package")
 ```
 
 ## Example
