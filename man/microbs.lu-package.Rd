@@ -6,10 +6,10 @@
 \alias{microbs.lu-package}
 \title{microbs.lu: A Package for Data treatment done for monitoring diseases through  Waste Water Treatment Plants}
 \description{
-In Luxembourg the waste water treatment plant samples are used to monitor for epidemic disease such as RSV, Influenye, SARS CoV2 etc. This package takes the raw data files from qPCR and ddPCR tests and prepares them for the microbs.lu i.e. Luxembourgish national dashboard.
+In Luxembourg the waste water treatment plant samples are used to monitor for epidemic disease such as RSV, Influenza, SARS CoV2 etc. This package takes the raw data files from qPCR and ddPCR tests and prepares them for the microbs.lu i.e. Luxembourgish national dashboard.
 }
 \author{
-\strong{Maintainer}: Prasad ADHAV \email{prasad.adhav@list.lu}
+\strong{Maintainer}: Prasad ADHAV \email{prasad.adhav@list.lu} [copyright holder]
 
 }
 \keyword{internal}

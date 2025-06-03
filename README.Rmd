@@ -1,0 +1,16 @@
+This is the R package to process the Microbs Dashboard data.
+
+## Installation
+
+You can install the development version of phylotypr from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("prasadadhav/microbs_lu_r_package")
+```
+
+Use the package as follows
+```r
+library(microbs.lu)
+```

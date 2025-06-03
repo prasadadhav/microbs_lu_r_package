@@ -1,33 +1,11 @@
 Package: microbs.lu
-Title: Process PCR datafiles for the microbs.lu dashboard
-Version: 0.0.2.0000
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
 Authors@R: 
-    person("Prasad", "ADHAV", , "prasad.adhav@list.lu", role = c("aut", "cre", "cph"))
-Description: In Luxembourg the waste water treatment plant samples are used to 
-              monitor for epidemic disease such as RSV, Influenza, SARS CoV2 etc.
-              This package takes the raw data files from qPCR and ddPCR tests and 
-              prepares them for the microbs.lu i.e. Luxembourgish national dashboard.
-License: file LICENSE
+    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Imports:
-    readxl,
-    tidyverse,
-    utils,
-    janitor,
-    plyr,
-    dplyr,
-    writexl,
-    openxlsx,
-    lubridate,
-    tidyr,
-    usethis,
-    withr,
-    magrittr
-Suggests: 
-    knitr,
-    rmarkdown,
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
-VignetteBuilder: knitr

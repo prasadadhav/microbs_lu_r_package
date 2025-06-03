@@ -1,17 +1,26 @@
-This is the R package to process the Microbs Dashboard data.
+
+# microbs.lu
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of microbs.lu is to ...
 
 ## Installation
 
-You can install the development version of phylotypr from
-[GitHub](https://github.com/) with:
+You can install the development version of microbs.lu from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("prasadadhav/microbs.lu")
+# install.packages("pak")
+pak::pak("prasadadhav/microbs_lu_r_package")
 ```
 
-You can also get the official release version from CRAN
+## Example
+
+This is a basic example which shows you how to solve a common problem:
 
 ``` r
-install.packages("microbs.lu")
+library(microbs.lu)
+## basic example code
 ```
+
