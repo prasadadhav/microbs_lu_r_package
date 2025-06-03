@@ -49,7 +49,7 @@ get_microbs_old_raw_ddPCR_Data <- function() {
 #' 
 #' @export 
 get_microbs_new_raw_ddPCR_Data <- function() {
-    if (is.null(.microbs_env$df_old_raw_ddPCR_data)) {
+    if (is.null(.microbs_env$df_new_raw_ddPCR_data)) {
         message("[microbs Warning]: Did not yet set the path. Use the load_microbs_raw_ddPCR_Data() function to set a path")
         message("or use the default by using load_microbs_raw_ddPCR_Data()")
     }
@@ -333,7 +333,205 @@ get_microbs_new_create_flu_sheet4 <- function() {
     .microbs_env$sheet4_flu
 }
 
+#--------------------------------------------------------------------------------------------------------
+# get new hRSV created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_hRSV_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_create_hRSV_sheet1()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_hRSV_sheet1 <- function() {
+    if (is.null(.microbs_env$sheet1_hRSV)) {
+        message("[microbs Warning]: Use the create_microbs_hRSV_file() function to create hRSV data")
+    }
+    .microbs_env$sheet1_hRSV
+}
 
+#--------------------------------------------------------------------------------------------------------
+# get new hRSV created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_hRSV_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_create_hRSV_sheet2()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_hRSV_sheet2 <- function() {
+    if (is.null(.microbs_env$sheet2_hRSV)) {
+        message("[microbs Warning]: Use the create_microbs_hRSV_file() function to create hRSV data")
+    }
+    .microbs_env$sheet2_hRSV
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new hRSV created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_hRSV_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_create_hRSV_sheet3()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_hRSV_sheet3 <- function() {
+    if (is.null(.microbs_env$sheet3_hRSV)) {
+        message("[microbs Warning]: Use the create_microbs_hRSV_file() function to create hRSV data")
+    }
+    .microbs_env$sheet3_hRSV
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new hRSV created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_hRSV_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_create_hRSV_sheet4()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_hRSV_sheet4 <- function() {
+    if (is.null(.microbs_env$sheet4_hRSV)) {
+        message("[microbs Warning]: Use the create_microbs_hRSV_file() function to create hRSV data")
+    }
+    .microbs_env$sheet4_hRSV
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new sars created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_sars_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_create_sars_sheet1()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_sars_sheet1 <- function() {
+    if (is.null(.microbs_env$sheet1_sars)) {
+        message("[microbs Warning]: Use the create_microbs_sars_file() function to create sars data")
+    }
+    .microbs_env$sheet1_sars
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new sars created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_sars_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_create_sars_sheet2()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_sars_sheet2 <- function() {
+    if (is.null(.microbs_env$sheet2_sars)) {
+        message("[microbs Warning]: Use the create_microbs_sars_file() function to create sars data")
+    }
+    .microbs_env$sheet2_sars
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new sars created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_sars_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_create_sars_sheet3()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_sars_sheet3 <- function() {
+    if (is.null(.microbs_env$sheet3_sars)) {
+        message("[microbs Warning]: Use the create_microbs_sars_file() function to create sars data")
+    }
+    .microbs_env$sheet3_sars
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new sars created sheet
+#--------------------------------------------------------------------------------------------------------
+#' @title get new created data for fku
+#' 
+#' @description If it returns NULL, it means that the new create data has not been run yet.
+#' Call create_microbs_sars_file() to load the data.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' # Example usage
+#' result <- get_microbs_new_create_sars_sheet4()
+#' 
+#' @examples
+#' result
+#' 
+#' @export 
+get_microbs_new_create_sars_sheet4 <- function() {
+    if (is.null(.microbs_env$sheet4_sars)) {
+        message("[microbs Warning]: Use the create_microbs_sars_file() function to create sars data")
+    }
+    .microbs_env$sheet4_sars
+}
 
 
 #--------------------------------------------------------------------------------------------------------
