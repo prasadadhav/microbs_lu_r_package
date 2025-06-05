@@ -51,6 +51,8 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
     }
 
     df_old_calc_ddPCR_data <- get_microbs_new_raw_ddPCR_Data()
+    
+    # flux has the sample dates
     df_flux_data <- get_microbs_flux_Data()
 
     df_new_calc_ddPCR_data <- dplyr::left_join(df_old_calc_ddPCR_data, df_flux_data, by = c('Sample'))
@@ -342,15 +344,13 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
     # useless here be careful, see if need later
     # df_old_calc_qPCR_data <- load_microbs_raw_qPCR_Data()
 
-    
-
     # PSA: Here if CT is undetermined or NA we Replace by 999
+    # This is because CT values higher than ~37 for SARS, is considered not useful to make caluclations
     df_new_raw_qPCR_data$CT <- ifelse(
         suppressWarnings(is.na(as.numeric(
             df_new_raw_qPCR_data$CT))) | df_new_raw_qPCR_data$CT == "Undetermined",
             999,
-            as.numeric(df_new_raw_qPCR_data$CT
-        )
+            as.numeric(df_new_raw_qPCR_data$CT)
     )
 
     df_new_raw_qPCR_data$CT_sign <- dplyr::case_when(

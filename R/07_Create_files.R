@@ -68,7 +68,7 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     df_new_calc_ddPCR_data_fluA$WWTP <- utils_extract_WWTP(df_new_calc_ddPCR_data_fluA$Sample)
 
     # fluB
-    df_new_calc_ddPCR_data_fluB <- subset(df_new_calc_ddPCR_data, Target_Name %in% c("fluB"))
+    df_new_calc_ddPCR_data_fluB <- subset(df_new_calc_ddPCR_data, Target_Name %in% c("FluB"))
     
     df_new_calc_ddPCR_data_fluB <- df_new_calc_ddPCR_data_fluB %>% dplyr::select(Sample, week_nb, copies_day_mean, inhab, copies_inhab_mean)
 
@@ -80,7 +80,9 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
                             by = dplyr::join_by(Sample, week_nb, inhab),
                             relationship = "many-to-many")
 
+    #----------------------
     # Sheet 1: Aggregate the data for all weekly per WWTP and nationwide.
+    #----------------------
     # flu A
     mean_WWTP_week_FluA_ddPCR <- aggregate(sheet_1_data$copies_day_ddPCR_FluA,
                                         by = list(week_nb = sheet_1_data$week_nb, WWTP = sheet_1_data$WWTP),
@@ -116,14 +118,16 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     aggregate_ddPCR_FluB <- plyr::join(aggregate_ddPCR_FluB_num,aggregate_ddPCR_den,by = 'week_nb')
     aggregate_ddPCR_FluB$copies_days_inhab_ddPCR_FluB <- aggregate_ddPCR_FluB$copies_day_sum_ddPCR_FluB / aggregate_ddPCR_FluB$inhab_sum * 100000
 
-    ddPCR <- dplyr::full_join(aggregate_ddPCR_FluA,aggregate_ddPCR_FluB,by = 'week_nb')
-    ddPCR <- subset(ddPCR, select = -c(inhab_sum.x,inhab_sum.y))
+    ddPCR <- dplyr::full_join(aggregate_ddPCR_FluA, aggregate_ddPCR_FluB, by = 'week_nb')
+    # ddPCR <- subset(ddPCR, select = -c(inhab_sum.x, inhab_sum.y))
 
     sheet1_flu <- ddPCR
     # sheet1_flu <- dplyr::left_join(expand.grid(week_nb = weeks), ddPCR, by = "week_nb")
     sheet1_flu <- sheet1_flu %>% dplyr::arrange(week_nb) 
 
+    #----------------------
     # Sheet 2: Weekly flu concentrations per WWTP
+    #----------------------
     # flu a
     aggregate_FluA_WWTP_ddPCR <- aggregate(sheet_1_data$copies_day_ddPCR_FluA, by = list(sheet_1_data$WWTP,sheet_1_data$week_nb),
                                         FUN = function(x) if(all(is.na(x))) 0 else mean(x, na.rm = TRUE))
@@ -150,9 +154,12 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
 
     sheet2_flu <- expand.grid(week_nb = ddPCR$week_nb, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
     sheet2_flu <- dplyr::left_join(sheet2_flu, ddPCR, by = c('WWTP','week_nb'))
+    sheet2_flu <- sheet2_flu %>% dplyr::distinct(WWTP, week_nb, .keep_all = TRUE)
     sheet2_flu <- sheet2_flu %>% dplyr::arrange(week_nb) #Redplyr::arrange the columns
 
+    #----------------------
     # Sheet 3: Weekly positivity rates (percent of positive detections) for each virus (Sheet 3)
+    #----------------------
     sheet_1_data$positive_ddPCR_FluA <- ((rowSums(sheet_1_data[, grepl("CT_sign_ddPCR_FluA",names(sheet_1_data))] == "positive", na.rm=T) > 0) * 1)
     sheet_1_data$positive_ddPCR_FluB <- ((rowSums(sheet_1_data[, grepl("CT_sign_ddPCR_FluB",names(sheet_1_data))] == "positive", na.rm=T) > 0) * 1)
     sheet_1_data$dummy <- 1
@@ -179,7 +186,9 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     # sheet3_flu <- dplyr::left_join(sheet3_flu, ddPCR, by='week_nb')
     sheet3_flu <- sheet3_flu %>% dplyr::arrange(week_nb) #Redplyr::arrange the columns
 
+    #----------------------
     # Sheet 4
+    #----------------------
     sheet_2_data_fluA <- aggregate(sheet_1_data$positive_ddPCR_FluA, by=list(sheet_1_data$WWTP,sheet_1_data$week_nb),
                                 FUN = function(x) if(all(is.na(x))) NA else sum(x, na.rm = TRUE)) #Nombre de positifs
 
@@ -367,7 +376,9 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
 
     data_hRSV_ddPCR$WWTP <- utils_extract_WWTP(data_hRSV_ddPCR$Sample)
 
+    #----------------------
     # Sheet 1: Aggregate the data for all weekly per WWTP and nationwide.
+    #----------------------
     mean_WWTP_week_hRSV_ddPCR <- aggregate(data_hRSV_ddPCR$copies_day_ddPCR_hRSV,
                                        by = list(week_nb = data_hRSV_ddPCR$week_nb, WWTP = data_hRSV_ddPCR$WWTP),
                                        FUN = function(x) if (all(is.na(x))) 0 else mean(x, na.rm = TRUE))
@@ -387,11 +398,13 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     
     aggregate_ddPCR_den <- aggregate_ddPCR_den %>% dplyr::rename(inhab_sum = x, week_nb = Group.1)
     aggregate_ddPCR_hRSV <- plyr::join(aggregate_ddPCR_hRSV_num,aggregate_ddPCR_den, by = 'week_nb')
-    aggregate_ddPCR_hRSV$copies_days_inhab_ddPCR_hRSV <- aggregate_ddPCR_hRSV$copies_day_sum_ddPCR_hRSV/aggregate_ddPCR_hRSV$inhab_sum*100000
+    aggregate_ddPCR_hRSV$copies_days_inhab_ddPCR_hRSV <- aggregate_ddPCR_hRSV$copies_day_sum_ddPCR_hRSV / aggregate_ddPCR_hRSV$inhab_sum * 100000
 
     sheet1_hRSV <- aggregate_ddPCR_hRSV %>% dplyr::arrange(week_nb) 
 
+    #----------------------
     # Sheet 2: Weekly flu concentrations per WWTP
+    #----------------------
     aggregate_hRSV_WWTP_ddPCR <- aggregate(data_hRSV_ddPCR$copies_day_ddPCR_hRSV, by = list(data_hRSV_ddPCR$WWTP, data_hRSV_ddPCR$week_nb),
                                        FUN = function(x) if(all(is.na(x))) 0 else mean(x, na.rm = TRUE))
     
@@ -406,10 +419,13 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
 
     sheet2_hRSV <- expand.grid(week_nb = aggregate_hRSV_WWTP_ddPCR$week_nb, 
                         WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
-    sheet2_hRSV <- dplyr::left_join(sheet2_hRSV, aggregate_hRSV_WWTP_ddPCR, by=c('WWTP','week_nb'))                    
+    sheet2_hRSV <- dplyr::left_join(sheet2_hRSV, aggregate_hRSV_WWTP_ddPCR, by = c('WWTP','week_nb'))
+    sheet2_hRSV <- sheet2_hRSV %>% dplyr::distinct(WWTP, week_nb, .keep_all = TRUE)                    
     sheet2_hRSV <- sheet2_hRSV %>% dplyr::arrange(week_nb)
 
+    #----------------------
     # Sheet 3: Weekly positivity rates (percent of positive detections) for each virus (Sheet 3)
+    #----------------------
     data_hRSV_ddPCR$positive_ddPCR_hRSV <- ((rowSums(data_hRSV_ddPCR[, grepl("CT_sign_ddPCR_hRSV", names(data_hRSV_ddPCR))] == "positive", na.rm=T) > 0) * 1)
     data_hRSV_ddPCR$dummy <- 1
     test2 <- aggregate(data_hRSV_ddPCR$dummy, by = list(data_hRSV_ddPCR$week_nb), FUN = sum)
@@ -426,7 +442,9 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     sheet3_hRSV <- dplyr::left_join(sheet3_hRSV, test_tot_hRSV_ddPCR, by = 'week_nb')
     sheet3_hRSV <- sheet3_hRSV %>% dplyr::arrange(week_nb)
 
+    #----------------------
     # Sheet 4
+    #----------------------
     test_hRSV_ddPCR <- aggregate(data_hRSV_ddPCR$positive_ddPCR_hRSV, by=list(data_hRSV_ddPCR$WWTP,data_hRSV_ddPCR$week_nb),
                              FUN=function(x) if(all(is.na(x))) NA else sum(x, na.rm = TRUE)) #Nombre de positifs
     test_hRSV_ddPCR <- test_hRSV_ddPCR %>% dplyr::rename(numerator = x,WWTP=Group.1,week_nb=Group.2)
@@ -633,7 +651,9 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     message("debug1")
     str(data_qPCR)
 
+    #----------------------
     # Sheet 1
+    #----------------------
     mean_WWTP_week <- aggregate(data_qPCR$mean_copies_day,
                                        by = list(week_nb = data_qPCR$week_nb, lieu = data_qPCR$WWTP),
                                        FUN = function(x) if (all(is.na(x))) 0 else mean(x, na.rm = TRUE))
@@ -652,7 +672,7 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     aggregate_copies_den <- aggregate_copies_den %>% dplyr::rename(inhab_sum := x, week_nb = Group.1)
     aggregate_copies <- plyr::join(aggregate_copies_num, aggregate_copies_den, by = 'week_nb')
     aggregate_copies[copies_days_inhab] <- aggregate_copies[var_name_num_1]/aggregate_copies$inhab_sum * 100000    
-    aggregate_copies <- subset(aggregate_copies, select = -inhab_sum)
+    # aggregate_copies <- subset(aggregate_copies, select = -inhab_sum)
 
     sheet1 <- expand.grid(week_nb = aggregate_copies$week_nb)
     sheet1 <- dplyr::left_join(sheet1, aggregate_copies, by = "week_nb")
@@ -662,7 +682,9 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     message("debug2")
     str(sheet1_sars)
 
+    #----------------------
     # Sheet 2
+    #----------------------
     name_file <- data_qPCR
     var_name_num_2 <- "copies_day_sum_qPCR"
     final <- "aggregate_copies_qPCR"
@@ -691,7 +713,9 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     message("debug3")
     str(sheet2_sars)
     
+    #----------------------
     # Sheet 3
+    #----------------------
     final_3 <- "positivity_rate_qPCR"
     var_name <- "positive_rate_qPCR"
 
@@ -717,7 +741,9 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     message("debug4")
     str(sheet3_sars)
 
+    #----------------------
     # Sheet 4
+    #----------------------
     final_4 <- "positivity_rate_WWTP_qPCR"
 
     name_file$positive <- ((rowSums(name_file[, grepl("sign",names(name_file))] == "Positive_non_quanti" |
