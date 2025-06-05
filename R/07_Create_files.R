@@ -466,7 +466,7 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
 
 
 #--------------------------------------------------------------------------------------------------------
-# Move old check created flu to archive
+# Move old check created RSV to archive
 #--------------------------------------------------------------------------------------------------------
 #' @title move check ddPCR data to archive
 #'
@@ -643,8 +643,8 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
 
     aggregate_copies_den <- aggregate(den$inhab, by = list(den$week_nb), FUN = sum)
     aggregate_copies_den <- aggregate_copies_den %>% dplyr::rename(inhab_sum := x, week_nb = Group.1)
-    aggregate_copies <- plyr::join(aggregate_copies_num,aggregate_copies_den, by = 'week_nb')
-    aggregate_copies[copies_days_inhab] <- aggregate_copies[var_name_num_1]/aggregate_copies$inhab_sum * 100000
+    aggregate_copies <- plyr::join(aggregate_copies_num, aggregate_copies_den, by = 'week_nb')
+    aggregate_copies[copies_days_inhab] <- aggregate_copies[var_name_num_1]/aggregate_copies$inhab_sum * 100000    
     aggregate_copies <- subset(aggregate_copies, select = -inhab_sum)
 
     sheet1 <- expand.grid(week_nb = aggregate_copies$week_nb)
@@ -657,18 +657,19 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
 
     # Sheet 2
     name_file <- data_qPCR
-    var_name_num_2 <- "copies_days_inhab_qPCR"
+    var_name_num_2 <- "copies_day_sum_qPCR"
     final <- "aggregate_copies_qPCR"
 
-    aggregate_copies_num <- aggregate(name_file$mean_copies_day, by=list(name_file$WWTP, name_file$week_nb),
-                                      FUN = function(x) if(all(is.na(x))) 0 else mean(x, na.rm = TRUE))
+    aggregate_copies_num <- aggregate(name_file$mean_copies_day, 
+                                        by = list(name_file$WWTP, name_file$week_nb),
+                                        FUN = function(x) if(all(is.na(x))) 0 else mean(x, na.rm = TRUE))
     aggregate_copies_num <- aggregate_copies_num %>% dplyr::rename(!!var_name_num_2 := x, WWTP = Group.1, week_nb = Group.2)
 
     den <- name_file %>% dplyr::select(WWTP, week_nb, inhab) %>% dplyr::distinct()
     aggregate_copies_den <- aggregate(den$inhab, by = list(den$WWTP,den$week_nb),
                                       FUN = function(x) if(all(is.na(x))) 0 else mean(x, na.rm = TRUE))
-    aggregate_copies_den <- aggregate_copies_den %>% dplyr::rename(inhab_sum := x,WWTP = Group.1, week_nb = Group.2)
-    aggregate_copies <- plyr::join(aggregate_copies_num,aggregate_copies_den,by = c('WWTP','week_nb'))
+    aggregate_copies_den <- aggregate_copies_den %>% dplyr::rename(inhab_sum := x, WWTP = Group.1, week_nb = Group.2)
+    aggregate_copies <- plyr::join(aggregate_copies_num, aggregate_copies_den, by = c('WWTP','week_nb'))
     aggregate_copies[copies_days_inhab] <- aggregate_copies[var_name_num_2]/aggregate_copies$inhab_sum * 100000
     aggregate_copies <- subset(aggregate_copies, select = -inhab_sum)
     assign(final, aggregate_copies)
@@ -676,6 +677,8 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     sheet2 <- expand.grid(week_nb = aggregate_copies$week_nb, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
     sheet2 <- dplyr::left_join(sheet2, aggregate_copies_qPCR, by = c('WWTP','week_nb'))
     sheet2 <- sheet2 %>% dplyr::filter(sheet2$week_nb != "NA")
+    # sheet2 <- sheet2 %>% dplyr::select(week_nb, WWTP) %>% dplyr::distinct()
+    sheet2 <- sheet2 %>% dplyr::distinct(week_nb, WWTP, .keep_all = TRUE)
     sheet2 <- sheet2 %>% dplyr::arrange(week_nb, WWTP)
     sheet2_sars <- sheet2[sheet2$week_nb >= "2020_14" & sheet2$week_nb <= format(max_time,"%Y_%V"),]
     message("debug3")
@@ -701,6 +704,7 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     sheet3 <- expand.grid(week_nb = test_tot$week_nb)
     sheet3 <- dplyr::left_join(sheet3, positivity_rate_qPCR, by = "week_nb")
     sheet3 <- sheet3 %>% dplyr::filter(sheet3$week_nb != "NA")
+    sheet2 <- sheet2 %>% dplyr::select(WWTP, week_nb) %>% dplyr::distinct()
     sheet3 <- sheet3 %>% dplyr::arrange(week_nb)
     sheet3_sars <- sheet3[sheet3$week_nb >= "2020_14" & sheet3$week_nb <= format(max_time,"%Y_%V"),]
     message("debug4")
@@ -725,6 +729,7 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     sheet4 <- expand.grid(week_nb = test_tot$week_nb, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
     sheet4 <- dplyr::left_join(sheet4, positivity_rate_WWTP_qPCR, by = c("week_nb","WWTP"))
     sheet4 <- sheet4 %>% dplyr::filter(sheet4$week_nb != "NA")
+    sheet2 <- sheet2 %>% dplyr::select(WWTP, week_nb) %>% dplyr::distinct()
     sheet4 <- sheet4 %>% dplyr::arrange(week_nb, WWTP)
     sheet4_sars <- sheet4[sheet4$week_nb >= "2020_14" & sheet4$week_nb <= format(max_time, "%Y_%V"),]
     message("debug5")
@@ -754,4 +759,75 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     .microbs_env$sheet2_sars <- sheet2_sars 
     .microbs_env$sheet3_sars <- sheet3_sars 
     .microbs_env$sheet4_sars <- sheet4_sars 
+}
+
+
+#--------------------------------------------------------------------------------------------------------
+# Move old check created SARS data to archive
+#--------------------------------------------------------------------------------------------------------
+#' @title move check qPCR data to archive
+#'
+#' @description The old check data needs to be moved to the archive once a new check is performed.
+#'
+#' @param path_to_create_data_qPCR A string to describe the path to the created data. 
+#' 
+#' @return A character vector of archived file names (invisibly).
+#' @examples
+#' # Example usage
+#' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
+#' path_to_create_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/3_created_data"
+#' df_raw_qPCR_data <- archive_microbs_created_rsv_Data(path_to_create_data_qPCR)
+#' @export
+archive_microbs_created_rsv_Data <- function(path_to_create_data_qPCR = .microbs_env$created_data_path) {
+    # load the data 
+    if (missing(path_to_create_data_qPCR)) {
+        path_to_create_data_qPCR = get_microbs_qPCR_rawDataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_create_data_qPCR)
+    }
+
+    # load all the names of the check files files
+    invisible(ifelse(!dir.exists(file.path(path_to_create_data_qPCR, "Archives")), 
+                        dir.create(file.path(path_to_create_data_qPCR, "Archives")), 
+                        FALSE))
+
+    file_info <- utils::fileSnapshot(path_to_create_data_qPCR)$info
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, grepl("SUPERVIR_WW_SARSCOV2_AGG_", rownames(file_info)))
+
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+
+    latest_file <- NULL
+    for (file_name in rownames(file_info)) {
+        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+        if (grepl("\\.xlsx$ | \\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+            latest_file <- file_name
+        }
+    }
+
+    file_info <- file_info[rownames(file_info) != latest_file, ]
+
+    # TODO: Here use a specific format lookup such as "\\.csv$", because csv will pickup the file even if we have file.csv.txt
+    files_list <- list.files(path_to_create_data_qPCR, pattern = "SUPERVIR_WW_SARSCOV2_AGG_")
+    # for(file in files_list) {
+    for(file in rownames(file_info)) {
+        file_path <- paste(path_to_create_data_qPCR, file, sep = "/")
+
+        if (file == latest_file) {
+            next  # Skip the latest file
+        } else {
+            archive_path <- file.path(path_to_create_data_qPCR, "Archives", file)
+            file.copy(from = file_path, to = archive_path)
+            file.remove(file_path)
+
+            # Add archived file name to list
+            files_list <- c(files_list, file)
+        }
+    }
+
+    if (length(files_list) == 0) {
+        message("[microbs Report]: No SUPERVIR_WW_SARSCOV2_AGG_ files found to archive in ", path_to_create_data_qPCR)
+        return(invisible(character(0)))
+    }
+
+    invisible(files_list)
 }
