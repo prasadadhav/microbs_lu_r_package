@@ -53,13 +53,19 @@ load_microbs_old_raw_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .micro
     # re-order the files according to time
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
     # Loop through files to select the latest Excel file
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
+
     message("[microbs Report]: Load the latest RAW_DATA_ddPCR_* file: ", latest_file)
 
     # create the file path
@@ -113,15 +119,21 @@ archive_microbs_loaded_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .mic
         stop("[microbs Error]: No matching files found in directory: ", path_to_old_raw_excel_ddPCR)
     }
 
-    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+    file_info <- file_info[order(file_info$mtime, decreasing = TRUE),]
 
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
 
     files_list <- c() # create empty list to store the names of the files archived
 
@@ -199,13 +211,20 @@ load_microbs_old_raw_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .microbs
     # re-order the files according to time
     file_info <- file_info[order(file_info$mtime, decreasing = TRUE),]
     # Loop through files to select the latest Excel file
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
+
     message("[microbs Report]: Load the latest RAW_DATA_qPCR_* file: ", latest_file)
 
     # create the file path
@@ -262,13 +281,18 @@ archive_microbs_loaded_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .micro
 
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
 
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
 
     files_list <- c() # create empty list to store the names of the files archived
 
@@ -353,11 +377,12 @@ load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_r
                             'PoissonConfMax',
                             'PoissonConfMin')
         
-        file <- subset(file,toupper(Target_Name) != "RPP30")
-        patterns <- c('NTC',"IAV","IBV","RPP30","T+","INFLU")
+        file <- subset(file, toupper(Target_Name) != "RPP30")
+        patterns <- c("NTC", "IAV", "IBV", "RPP30", "T\\+", "T-", "INFLU")
 
-        file <- file %>%
-                    dplyr::filter(!('Sample' %in% patterns))
+        # file <- file %>%
+        #             dplyr::filter(!('Sample' %in% patterns))
+        file <- file[!grepl(paste(patterns, collapse = "|"), toupper(file$Sample)), ]
 
         file <- subset(file, !grepl("No Call", copies_uL))
 
@@ -779,13 +804,19 @@ load_microbs_old_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microb
     # re-order the files according to time
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
     # Loop through files to select the latest Excel file
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
+
     message("[microbs Report]: Load the latest Check_data_ddPCR_* file: ", latest_file)
 
     # create the file path
@@ -833,13 +864,18 @@ archive_microbs_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microbs
 
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
 
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
 
     file_info <- file_info[rownames(file_info) != latest_file, ]
 
@@ -923,13 +959,19 @@ load_microbs_old_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_
     # re-order the files according to time
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
     # Loop through files to select the latest Excel file
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
+
     message("[microbs Report]: Load the latest Check_data_qPCR_* file: ", latest_file)
 
     # create the file path
@@ -977,13 +1019,18 @@ archive_microbs_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_e
 
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
 
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
 
     file_info <- file_info[rownames(file_info) != latest_file, ]
 
@@ -1058,13 +1105,19 @@ load_microbs_old_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_
     # re-order the files according to time
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
     # Loop through files to select the latest Excel file
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
+
     message("[microbs Report]: Load the latest SUPERVIR_CAL_DATA_ddPCR_* file: ", latest_file)
 
     # create the file path
@@ -1112,13 +1165,18 @@ archive_microbs_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_e
 
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
 
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        message("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
 
     file_info <- file_info[rownames(file_info) != latest_file, ]
 
@@ -1198,13 +1256,19 @@ load_microbs_old_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_en
     # re-order the files according to time
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
     # Loop through files to select the latest Excel file
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
+
     message("[microbs Report]: Load the latest SUPERVIR_CAL_DATA_qPCR_* file: ", latest_file)
 
     # create the file path
@@ -1252,13 +1316,18 @@ archive_microbs_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env
 
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
 
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        message("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
 
     file_info <- file_info[rownames(file_info) != latest_file, ]
 
@@ -1335,13 +1404,19 @@ load_microbs_flux_Data <- function(path_to_flux_data = .microbs_env$flux_path) {
     # re-order the files according to time
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
     # Loop through files to select the latest Excel file
-    latest_file <- NULL
-    for (file_name in rownames(file_info)) {
-        latest_file <- rownames(file_info)[which.max(file_info$mtime)]
-        if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
-            latest_file <- file_name
-        }
+    # latest_file <- NULL
+    # for (file_name in rownames(file_info)) {
+    #     latest_file <- rownames(file_info)[which.max(file_info$mtime)]
+    #     if (grepl("\\.xlsx$|\\.xls$", file_name, ignore.case = TRUE)) { # Ensure it's an Excel file
+    #         latest_file <- file_name
+    #     }
+    # }
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
     }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
+
     message("[microbs Report]: Load the latest VIRALERT_WW_* file: ", latest_file)
 
     # create the file path
