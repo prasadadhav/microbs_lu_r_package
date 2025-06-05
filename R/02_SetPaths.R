@@ -42,6 +42,7 @@
 #' @description This script sets the paths for various directories used in the microbs.lu package.
 #' @details The following directory structure is required for the package, these directories are located inside :
 #' .
+#' 
 #' ├── Data_Treatment
 #' │   ├── 00_flux_data
 #' │   ├── 00_standard_curve
@@ -94,11 +95,10 @@ set_microbs_wdirectory <- function(path = "L:/Units & Programmes/BIOTECH/ENVMICR
 #' 
 #' @examples
 #' # Example usage
+#' \dontrun{
 #' result <- set_microbs_connector_dir(path="Data_Treatment")
-#' 
-#' @examples
 #' result
-#' 
+#' }
 #' @export 
 set_microbs_connector_dir <- function(path="Data_Treatment") {
     # Check if the provide path is good.
@@ -143,17 +143,21 @@ set_microbs_connector_dir <- function(path="Data_Treatment") {
 #' @param relative A Boolean to use relative path or not. Default is False.
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory() # to set default working directory
 #' set_microbs_connector_dir() # to set default connector directory
 #' path <- "0_raw_data_qPCR"
 #' result <- set_microbs_qPCR_rawDataPath(path)
 #' result
+#' }
 #' 
 #' @examples
+#' \dontrun{
 #' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_qPCR"
 #' result <- set_microbs_qPCR_rawDataPath(path)
 #' result
+#' }
 #' 
 #' @export 
 set_microbs_qPCR_rawDataPath <- function(path="0_raw_data_qPCR", relative=FALSE) {
@@ -213,17 +217,21 @@ set_microbs_qPCR_rawDataPath <- function(path="0_raw_data_qPCR", relative=FALSE)
 #' @param relative A Boolean to use relative path or not. Default is False.
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory() # to set default working directory
 #' set_microbs_connector_dir() # to set default connector directory
 #' path <- "0_raw_data_ddPCR"
 #' result <- set_microbs_qPCR_rawDataPath(path)
 #' result
+#' }
 #' 
 #' @examples
+#' \dontrun{
 #' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_ddPCR"
 #' result <- set_microbs_qPCR_rawDataPath(path)
 #' result
+#' }
 #'
 #' @export 
 set_microbs_ddPCR_rawDataPath <- function(path="0_raw_data_ddPCR", relative=FALSE) {
@@ -284,16 +292,20 @@ set_microbs_ddPCR_rawDataPath <- function(path="0_raw_data_ddPCR", relative=FALS
 #' 
 #' @examples
 #' # Example usage
+#' \dontrun{
 #' set_microbs_wdirectory() # to set default working directory
 #' set_microbs_connector_dir() # to set default connector directory
 #' path <- "00_flux_data"
 #' result <- set_microbs_flux_DataPath(path)
 #' result
+#' }
 #' 
 #' @examples
+#' \dontrun{
 #' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/00_flux_data"
 #' result <- set_microbs_flux_DataPath(path)
 #' result
+#' }
 #'
 #' @export 
 set_microbs_flux_DataPath <- function(path="00_flux_data", relative=FALSE) {
@@ -363,17 +375,21 @@ set_microbs_flux_DataPath <- function(path="00_flux_data", relative=FALSE) {
 #' @param relative A Boolean to use relative path or not. Default is False.
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory() # to set default working directory
 #' set_microbs_connector_dir() # to set default connector directory
 #' path <- "00_standard_curve"
 #' result <- set_microbs_stdCurve_DataPath(path)
 #' result
+#' }
 #' 
 #' @examples
+#' \dontrun{
 #' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/00_standard_curve"
 #' result <- set_microbs_stdCurve_DataPath(path)
 #' result
+#' }
 #'
 #' @export 
 set_microbs_stdCurve_DataPath <- function(path="00_standard_curve", relative=FALSE) {
@@ -431,17 +447,21 @@ set_microbs_stdCurve_DataPath <- function(path="00_standard_curve", relative=FAL
 #' @param relative A Boolean to use relative path or not. Default is False.
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory() # to set default working directory
 #' set_microbs_connector_dir() # to set default connector directory
 #' path <- "1_ckeck_data"
 #' result <- set_microbs_stdCurve_DataPath(path)
 #' result
+#' }
 #' 
 #' @examples
+#' \dontrun{
 #' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
 #' result <- set_microbs_check_DataPath(path)
 #' result
+#' }
 #'
 #' @export 
 set_microbs_check_DataPath <- function(path="1_ckeck_data", relative=FALSE) {
@@ -566,17 +586,21 @@ set_microbs_loaded_DataPath <- function(path = "1_loaded_data", relative = FALSE
 #' @param relative A Boolean to use relative path or not. Default is False.
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory() # to set default working directory
 #' set_microbs_connector_dir() # to set default connector directory
 #' path <- "2_calc_data"
 #' result <- set_microbs_calc_DataPath(path)
 #' result
+#' }
 #' 
 #' @examples
+#' \dontrun{
 #' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
 #' result <- set_microbs_calc_DataPath(path)
 #' result
+#' }
 #'
 #' @export 
 set_microbs_calc_DataPath <- function(path="2_calc_data", relative=FALSE) {
@@ -640,17 +664,21 @@ set_microbs_calc_DataPath <- function(path="2_calc_data", relative=FALSE) {
 #' @param relative A Boolean to use relative path or not. Default is False.
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory() # to set default working directory
 #' set_microbs_connector_dir() # to set default connector directory
 #' path <- "3_created_data"
 #' result <- set_microbs_created_DataPath(path)
 #' result
+#' }
 #' 
 #' @examples
+#' \dontrun{
 #' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/3_created_data"
 #' result <- set_microbs_created_DataPath(path)
 #' result
+#' }
 #'
 #' @export 
 set_microbs_created_DataPath <- function(path="3_created_data", relative=FALSE) {
@@ -716,17 +744,21 @@ set_microbs_created_DataPath <- function(path="3_created_data", relative=FALSE) 
 #' @param relative A Boolean to use relative path or not. Default is False.
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory() # to set default working directory
 #' set_microbs_connector_dir() # to set default connector directory
 #' path <- "4_data_4_dashboard"
 #' result <- set_microbs_dashboard_DataPath(path)
 #' result
+#' }
 #' 
 #' @examples
+#' \dontrun{
 #' path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/4_data_4_dashboard"
 #' result <- set_microbs_dashboard_DataPath(path)
 #' result
+#' }
 #'
 #' @export 
 set_microbs_dashboard_DataPath <- function(path="4_data_4_dashboard", relative=FALSE) {

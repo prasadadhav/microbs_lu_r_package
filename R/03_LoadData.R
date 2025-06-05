@@ -15,6 +15,7 @@
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' path_to_old_raw_excel_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
 #' df_raw_ddPCR_data <- load_microbs_old_raw_ddPCR_Data(path_to_old_raw_excel_ddPCR)
@@ -24,6 +25,7 @@
 #' df_raw_ddPCR_data <- load_microbs_old_raw_ddPCR_Data() # use default path
 #' ddPCR_df <- df_raw_ddPCR_data$data
 #' ddPCR_latest_file <- df_raw_ddPCR_data$latest_ddPCR_file
+#' }
 #'
 #' @export
 load_microbs_old_raw_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .microbs_env$loaded_data_path) {
@@ -93,10 +95,12 @@ load_microbs_old_raw_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .micro
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_old_raw_excel_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
 #' list_of_loaded_ddPCR_files_archived <- archive_microbs_loaded_ddPCR_Data(path_to_old_raw_excel_ddPCR)
+#' }
 #' @export
 archive_microbs_loaded_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .microbs_env$loaded_data_path) {
     # load the data 
@@ -173,6 +177,7 @@ archive_microbs_loaded_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .mic
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' path_to_old_raw_excel_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
 #' df_raw_qPCR_data <- load_microbs_old_raw_qPCR_Data(path_to_old_raw_excel_qPCR)
@@ -182,6 +187,7 @@ archive_microbs_loaded_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .mic
 #' df_raw_qPCR_data <- load_microbs_old_raw_qPCR_Data() # use default path
 #' qPCR_df <- df_raw_qPCR_data$data
 #' qPCR_latest_file <- df_raw_qPCR_data$latest_qPCR_file
+#' }
 #' 
 #' @export
 load_microbs_old_raw_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .microbs_env$loaded_data_path) {
@@ -253,10 +259,12 @@ load_microbs_old_raw_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .microbs
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_old_raw_excel_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
 #' list_of_loaded_qPCR_files_archived <- archive_microbs_loaded_qPCR_Data(path_to_old_raw_excel_qPCR)
+#' }
 #' @export
 archive_microbs_loaded_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .microbs_env$loaded_data_path) {
     # load the data 
@@ -332,6 +340,7 @@ archive_microbs_loaded_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .micro
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_old_raw_excel_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_loaded_data"
@@ -339,6 +348,7 @@ archive_microbs_loaded_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .micro
 #' load_microbs_old_raw_ddPCR_Data(path_to_old_raw_excel_ddPCR)
 #' path_to_raw_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_ddPCR"
 #' df_raw_ddPCR_data <- load_microbs_raw_ddPCR_Data(path_to_raw_ddPCR)
+#' }
 #' @export
 load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_raw_path) {
     # load the data 
@@ -494,10 +504,12 @@ load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_r
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_raw_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_ddPCR"
 #' df_raw_ddPCR_data <- archive_microbs_raw_ddPCR_Data(path_to_raw_ddPCR)
+#' }
 #' @export
 archive_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_raw_path) {
     # load the data 
@@ -545,6 +557,7 @@ archive_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPC
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' 
@@ -555,6 +568,7 @@ archive_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPC
 #' 
 #' path_to_raw_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_qPCR"
 #' df_raw_qPCR_data <- load_microbs_raw_qPCR_Data(path_to_raw_qPCR)
+#' }
 #' @export
 load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_path) {
     # load the data 
@@ -700,10 +714,12 @@ load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_raw_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/0_raw_data_qPCR"
 #' df_raw_qPCR_data <- archive_microbs_raw_qPCR_Data(path_to_raw_qPCR)
+#' }
 #' @export
 archive_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_path) {
     # load the data 
@@ -763,6 +779,7 @@ archive_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_r
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' path_to_check_data_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
 #' df_raw_ddPCR_data <- load_microbs_old_check_ddPCR_Data(path_to_check_data_ddPCR)
@@ -771,6 +788,7 @@ archive_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_r
 #' set_microbs_loaded_DataPath()
 #' set_microbs_check_DataPath()
 #' df_raw_ddPCR_data <- load_microbs_old_check_ddPCR_Data() # use default path
+#' }
 #'
 #' @export
 load_microbs_old_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microbs_env$checkData_path) {
@@ -841,10 +859,12 @@ load_microbs_old_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microb
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_check_data_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
 #' df_raw_ddPCR_data <- archive_microbs_check_ddPCR_Data(path_to_check_data_ddPCR)
+#' }
 #' @export
 archive_microbs_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microbs_env$checkData_path) {
     # load the data 
@@ -918,6 +938,7 @@ archive_microbs_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microbs
 #' 
 #' @return A tibble with the containing the raw data
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' path_to_check_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
 #' df_raw_qPCR_data <- load_microbs_old_check_qPCR_Data(path_to_check_data_qPCR)
@@ -926,6 +947,7 @@ archive_microbs_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microbs
 #' set_microbs_loaded_DataPath()
 #' set_microbs_check_DataPath()
 #' df_raw_qPCR_data <- load_microbs_old_check_qPCR_Data() # use default path
+#' }
 #'
 #' @export
 load_microbs_old_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_env$checkData_path) {
@@ -996,10 +1018,12 @@ load_microbs_old_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_check_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
 #' df_raw_qPCR_data <- archive_microbs_check_qPCR_Data(path_to_check_data_qPCR)
+#' }
 #' @export
 archive_microbs_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_env$checkData_path) {
     # load the data 
@@ -1072,9 +1096,11 @@ archive_microbs_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_e
 #' 
 #' @return A tibble with the containing the the old calculated data
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' path_to_calc_data_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
 #' df_raw_ddPCR_data <- load_microbs_old_calc_ddPCR_Data(path_to_calc_data_ddPCR)
+#' }
 #' 
 #'
 #' @export
@@ -1142,10 +1168,12 @@ load_microbs_old_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_calc_data_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
 #' df_raw_ddPCR_data <- archive_microbs_calc_ddPCR_Data(path_to_calc_data_ddPCR)
+#' }
 #' @export
 archive_microbs_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_env$calc_data_path) {
     # load the data 
@@ -1219,6 +1247,7 @@ archive_microbs_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_e
 #' 
 #' @return A tibble with the containing the the old calculated data
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' path_to_calc_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
 #' df_raw_qPCR_data <- load_microbs_old_calc_qPCR_Data(path_to_calc_data_qPCR)
@@ -1227,6 +1256,7 @@ archive_microbs_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_e
 #' set_microbs_loaded_DataPath()
 #' set_microbs_calc_DataPath()
 #' df_raw_qPCR_data <- load_microbs_old_calc_qPCR_Data() # use default path
+#' }
 #'
 #' @export
 load_microbs_old_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env$calc_data_path) {
@@ -1293,10 +1323,12 @@ load_microbs_old_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_en
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_calc_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/2_calc_data"
 #' df_raw_qPCR_data <- archive_microbs_calc_qPCR_Data(path_to_calc_data_qPCR)
+#' }
 #' @export
 archive_microbs_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env$calc_data_path) {
     # load the data 
@@ -1369,6 +1401,7 @@ archive_microbs_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env
 #' 
 #' @return A tibble with the containing the the old calculated data
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' path_to_flux_data <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/00_flux_data"
 #' set_microbs_flux_DataPath(path_to_flux_data)
@@ -1377,6 +1410,7 @@ archive_microbs_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env
 #' # If you want to use the default path
 #' # set_microbs_flux_DataPath()
 #' # df_flux_data <- load_microbs_flux_Data() # use default path
+#' }
 #'
 #' @export
 load_microbs_flux_Data <- function(path_to_flux_data = .microbs_env$flux_path) {

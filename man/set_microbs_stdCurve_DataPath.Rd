@@ -22,15 +22,19 @@ This function allows you to set the path for the CT standard curve data.
 file ./microbs.lu/R/02_SetPaths.R
 }
 \examples{
+\dontrun{
 # Example usage
 set_microbs_wdirectory() # to set default working directory
 set_microbs_connector_dir() # to set default connector directory
 path <- "00_standard_curve"
 result <- set_microbs_stdCurve_DataPath(path)
 result
+}
 
+\dontrun{
 path <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/00_standard_curve"
 result <- set_microbs_stdCurve_DataPath(path)
 result
+}
 
 }

@@ -12,6 +12,7 @@ NULL
 #' 
 #' @return A tibble of checked data. # TODO
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' 
@@ -21,6 +22,7 @@ NULL
 #' path_to_check_data <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
 #' df_check_ddPCR_data <- load_microbs_old_check_ddPCR_Data(path_to_check_data)
 #' check_microbs_raw_ddPCR_Data(path_to_check_data)
+#' }
 #' @export
 check_microbs_raw_ddPCR_Data <- function(path_to_check_data = .microbs_env$checkData_path) {
     # load the data 
@@ -89,6 +91,8 @@ check_microbs_raw_ddPCR_Data <- function(path_to_check_data = .microbs_env$check
         print("No sample (ddPCR) was added since the last update")
     }
 
+    df_new_check_ddPCR_data <- NULL
+
     if(nrow(diff_check)!=0){
         df_new_check_ddPCR_data <- rbind(df_old_check_ddPCR_data, diff_check)
         df_new_check_ddPCR_data <- df_new_check_ddPCR_data[order(df_new_check_ddPCR_data$Target_Name, df_new_check_ddPCR_data$Sample),]
@@ -124,6 +128,7 @@ NULL
 #' 
 #' @return A tibble of checked data. # TODO
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' 
@@ -133,6 +138,7 @@ NULL
 #' path_to_check_data <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/1_ckeck_data"
 #' df_check_qPCR_data <- load_microbs_old_check_qPCR_Data(path_to_check_data)
 #' check_microbs_raw_qPCR_Data(path_to_check_data)
+#' }
 #' @export
 check_microbs_raw_qPCR_Data <- function(path_to_check_data = .microbs_env$checkData_path) {
     # load the data 

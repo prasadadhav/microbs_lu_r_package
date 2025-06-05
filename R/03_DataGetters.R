@@ -12,11 +12,11 @@
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_old_raw_ddPCR_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_old_raw_ddPCR_Data <- function() {
@@ -41,11 +41,11 @@ get_microbs_old_raw_ddPCR_Data <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_raw_ddPCR_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_raw_ddPCR_Data <- function() {
@@ -71,11 +71,11 @@ get_microbs_new_raw_ddPCR_Data <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_old_raw_qPCR_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_old_raw_qPCR_Data <- function() {
@@ -100,11 +100,11 @@ get_microbs_old_raw_qPCR_Data <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_raw_qPCR_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_raw_qPCR_Data <- function() {
@@ -129,11 +129,11 @@ get_microbs_new_raw_qPCR_Data <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_old_check_ddPCR_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_old_check_ddPCR_Data <- function() {
@@ -158,11 +158,11 @@ get_microbs_old_check_ddPCR_Data <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_old_check_qPCR_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_old_check_qPCR_Data <- function() {
@@ -188,11 +188,11 @@ get_microbs_old_check_qPCR_Data <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_old_calc_ddPCR_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_old_calc_ddPCR_Data <- function() {
@@ -217,11 +217,11 @@ get_microbs_old_calc_ddPCR_Data <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_calc_ddPCR_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_calc_ddPCR_Data <- function() {
@@ -244,11 +244,11 @@ get_microbs_new_calc_ddPCR_Data <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_flu_sheet1()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_flu_sheet1 <- function() {
@@ -269,11 +269,11 @@ get_microbs_new_create_flu_sheet1 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_flu_sheet2()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_flu_sheet2 <- function() {
@@ -294,11 +294,11 @@ get_microbs_new_create_flu_sheet2 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_flu_sheet3()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_flu_sheet3 <- function() {
@@ -319,11 +319,11 @@ get_microbs_new_create_flu_sheet3 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_flu_sheet4()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_flu_sheet4 <- function() {
@@ -344,11 +344,11 @@ get_microbs_new_create_flu_sheet4 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_hRSV_sheet1()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_hRSV_sheet1 <- function() {
@@ -369,11 +369,11 @@ get_microbs_new_create_hRSV_sheet1 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_hRSV_sheet2()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_hRSV_sheet2 <- function() {
@@ -394,11 +394,11 @@ get_microbs_new_create_hRSV_sheet2 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_hRSV_sheet3()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_hRSV_sheet3 <- function() {
@@ -419,11 +419,11 @@ get_microbs_new_create_hRSV_sheet3 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_hRSV_sheet4()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_hRSV_sheet4 <- function() {
@@ -444,11 +444,11 @@ get_microbs_new_create_hRSV_sheet4 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_sars_sheet1()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_sars_sheet1 <- function() {
@@ -469,11 +469,11 @@ get_microbs_new_create_sars_sheet1 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_sars_sheet2()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_sars_sheet2 <- function() {
@@ -494,11 +494,11 @@ get_microbs_new_create_sars_sheet2 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_sars_sheet3()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_sars_sheet3 <- function() {
@@ -519,11 +519,11 @@ get_microbs_new_create_sars_sheet3 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_create_sars_sheet4()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_create_sars_sheet4 <- function() {
@@ -548,11 +548,11 @@ get_microbs_new_create_sars_sheet4 <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_old_calc_qPCR_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_old_calc_qPCR_Data <- function() {
@@ -577,11 +577,11 @@ get_microbs_old_calc_qPCR_Data <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_new_calc_qPCR_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_new_calc_qPCR_Data <- function() {
@@ -606,11 +606,11 @@ get_microbs_new_calc_qPCR_Data <- function() {
 #' file ./microbs.lu/R/03_DataGetters.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' result <- get_microbs_flux_Data()
-#' 
-#' @examples
 #' result
+#' }
 #' 
 #' @export 
 get_microbs_flux_Data <- function() {

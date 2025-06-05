@@ -20,8 +20,8 @@ file ./microbs.lu/R/02_SetPaths.R
 }
 \examples{
 # Example usage
+\dontrun{
 result <- set_microbs_connector_dir(path="Data_Treatment")
-
 result
-
+}
 }

@@ -11,6 +11,7 @@
 #' file ./microbs.lu/R/07_Create_files.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' 
 #' 
@@ -37,7 +38,7 @@
 #' 
 #' calculations_microbs_ddPCR()
 #' create_microbs_flu_file()
-#' 
+#' }
 #' 
 #' @export 
 create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$created_data_path) {
@@ -241,10 +242,12 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_create_data_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/3_created_data"
 #' df_raw_ddPCR_data <- archive_microbs_created_flu_Data(path_to_create_data_ddPCR)
+#' }
 #' @export
 archive_microbs_created_flu_Data <- function(path_to_create_data_ddPCR = .microbs_env$created_data_path) {
     # load the data 
@@ -314,6 +317,7 @@ archive_microbs_created_flu_Data <- function(path_to_create_data_ddPCR = .microb
 #' file ./microbs.lu/R/07_Create_files.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' 
 #' 
@@ -339,7 +343,7 @@ archive_microbs_created_flu_Data <- function(path_to_create_data_ddPCR = .microb
 #' 
 #' calculations_microbs_ddPCR()
 #' create_microbs_rsv_file()
-#' 
+#' }
 #' 
 #' @export 
 create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$created_data_path) {
@@ -476,10 +480,12 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_create_data_ddPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/3_created_data"
 #' df_raw_ddPCR_data <- archive_microbs_created_rsv_Data(path_to_create_data_ddPCR)
+#' }
 #' @export
 archive_microbs_created_rsv_Data <- function(path_to_create_data_ddPCR = .microbs_env$created_data_path) {
     # load the data 
@@ -549,6 +555,7 @@ archive_microbs_created_rsv_Data <- function(path_to_create_data_ddPCR = .microb
 #' file ./microbs.lu/R/07_Create_files.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' 
 #' 
@@ -574,7 +581,7 @@ archive_microbs_created_rsv_Data <- function(path_to_create_data_ddPCR = .microb
 #' 
 #' calculations_microbs_qPCR()
 #' create_microbs_sars_file()
-#' 
+#' }
 #' 
 #' @export 
 create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$created_data_path) {
@@ -773,10 +780,12 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
 #' 
 #' @return A character vector of archived file names (invisibly).
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_create_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/3_created_data"
 #' df_raw_qPCR_data <- archive_microbs_created_rsv_Data(path_to_create_data_qPCR)
+#' }
 #' @export
 archive_microbs_created_rsv_Data <- function(path_to_create_data_qPCR = .microbs_env$created_data_path) {
     # load the data 

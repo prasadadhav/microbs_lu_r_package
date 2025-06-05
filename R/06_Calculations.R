@@ -11,6 +11,7 @@
 #' file ./microbs.lu/R/06_Calculations.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' set_microbs_connector_dir("Data_Treatment")
@@ -33,7 +34,7 @@
 #' set_microbs_calc_DataPath("2_calc_data")
 #' 
 #' calculations_microbs_ddPCR()
-#' 
+#' }
 #' 
 #' @export 
 calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs_env$loaded_data_path, path_to_calc_data_ddPCR = .microbs_env$calc_data_path) {
@@ -294,6 +295,7 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 #' file ./microbs.lu/R/06_Calculations.R
 #' 
 #' @examples
+#' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' set_microbs_connector_dir("Data_Treatment")
@@ -318,7 +320,7 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 #' set_microbs_calc_DataPath("2_calc_data")
 #' 
 #' calculations_microbs_qPCR()
-#' 
+#' }
 #' 
 #' @export 
 #' 
