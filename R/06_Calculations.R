@@ -49,7 +49,7 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
         message("and then load_microbs_old_calc_ddPCR_Data() function to set a path")
     }
 
-    df_old_calc_ddPCR_data <- load_microbs_raw_ddPCR_Data()
+    df_old_calc_ddPCR_data <- get_microbs_new_raw_ddPCR_Data()
     df_flux_data <- get_microbs_flux_Data()
 
     df_new_calc_ddPCR_data <- dplyr::left_join(df_old_calc_ddPCR_data, df_flux_data, by = c('Sample'))
