@@ -80,6 +80,16 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
                             by = dplyr::join_by(Sample, week_nb, inhab),
                             relationship = "many-to-many")
 
+    max_time <- pmax(as.Date(max(lubridate::parse_date_time(paste(as.integer(stringr::str_sub(sheet_1_data$week_nb, 1, 4)),
+                                                                as.integer(stringr::str_sub(sheet_1_data$week_nb, 6, 8)), 
+                                                                1, sep="/"),
+                                                                'Y/W/w'),
+                                                                na.rm = TRUE)),
+                                                                na.rm = TRUE)
+
+    weeks <- data.frame(week_nb = generate_weeks(2024, 2025))
+    weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%Y_%V"),]
+
     #----------------------
     # Sheet 1: Aggregate the data for all weekly per WWTP and nationwide.
     #----------------------
@@ -122,7 +132,7 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     # ddPCR <- subset(ddPCR, select = -c(inhab_sum.x, inhab_sum.y))
 
     sheet1_flu <- ddPCR
-    # sheet1_flu <- dplyr::left_join(expand.grid(week_nb = weeks), ddPCR, by = "week_nb")
+    sheet1_flu <- dplyr::left_join(expand.grid(week_nb = weeks), ddPCR, by = "week_nb")
     sheet1_flu <- sheet1_flu %>% dplyr::arrange(week_nb) 
 
     #----------------------
@@ -152,7 +162,7 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
 
     ddPCR <- dplyr::full_join(aggregate_FluA_WWTP_ddPCR,aggregate_FluB_WWTP_ddPCR, by = c('WWTP', 'week_nb'))
 
-    sheet2_flu <- expand.grid(week_nb = ddPCR$week_nb, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
+    sheet2_flu <- expand.grid(week_nb = weeks, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
     sheet2_flu <- dplyr::left_join(sheet2_flu, ddPCR, by = c('WWTP','week_nb'))
     sheet2_flu <- sheet2_flu %>% dplyr::distinct(WWTP, week_nb, .keep_all = TRUE)
     sheet2_flu <- sheet2_flu %>% dplyr::arrange(week_nb) #Redplyr::arrange the columns
@@ -182,8 +192,8 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
 
     ddPCR <- dplyr::full_join(sheet_2_data_tot_fluA,sheet_2_data_tot_fluB, by = 'week_nb')
 
-    sheet3_flu <- ddPCR #expand.grid(week_nb = weeks)
-    # sheet3_flu <- dplyr::left_join(sheet3_flu, ddPCR, by='week_nb')
+    sheet3_flu <- expand.grid(week_nb = weeks)
+    sheet3_flu <- dplyr::left_join(sheet3_flu, ddPCR, by = 'week_nb')
     sheet3_flu <- sheet3_flu %>% dplyr::arrange(week_nb) #Redplyr::arrange the columns
 
     #----------------------
@@ -209,8 +219,9 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     sheet_2_data_tot_fluB$positive_rate_FluB_ddPCR <- sheet_2_data_tot_fluB$numerator / sheet_2_data_tot_fluB$denominator*100
     sheet_2_data_tot_fluB <- dplyr::select(sheet_2_data_tot_fluB, -c(numerator,denominator))
 
-    sheet4_flu <- expand.grid(week_nb = ddPCR$week_nb, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
-    sheet4_flu <- dplyr::left_join(sheet4_flu, dplyr::full_join(sheet_2_data_tot_fluA,sheet_2_data_tot_fluB,c('WWTP','week_nb')), by=c('WWTP','week_nb'))
+    sheet4_flu <- expand.grid(week_nb = weeks, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
+    sheet4_flu <- dplyr::left_join(sheet4_flu, dplyr::full_join(sheet_2_data_tot_fluA,sheet_2_data_tot_fluB,
+                                        c('WWTP', 'week_nb')), by = c('WWTP','week_nb'))
     sheet4_flu <- sheet4_flu %>% dplyr::arrange(week_nb) #Redplyr::arrange the columns
 
     wb <- openxlsx::createWorkbook()
