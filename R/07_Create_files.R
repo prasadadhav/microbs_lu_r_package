@@ -87,7 +87,7 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
                                                                 na.rm = TRUE)),
                                                                 na.rm = TRUE)
 
-    weeks <- data.frame(week_nb = generate_weeks(2024, 2025))
+    weeks <- data.frame(week_nb = generate_weeks(2024, 2050))
     weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%Y_%V"),]
 
     #----------------------
@@ -388,7 +388,7 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     data_hRSV_ddPCR$WWTP <- utils_extract_WWTP(data_hRSV_ddPCR$Sample)
 
     max_time <- pmax(as.Date(max(as.Date(data_hRSV_ddPCR$Sample_Date), na.rm = TRUE)), na.rm = TRUE)
-    weeks <- data.frame(week_nb = generate_weeks(2024, 2025))
+    weeks <- data.frame(week_nb = generate_weeks(2024, 2050))
     weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%Y_%V"),]
 
     #----------------------
@@ -667,10 +667,13 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
 
     max_time <- pmax(as.Date(max(as.Date(data_qPCR$Sample_Date), na.rm=TRUE)), na.rm = TRUE)
 
+    weeks <- data.frame(week_nb = generate_weeks(2020, 2050))
+    weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%Y_%V"),]
+
     copies_days_inhab <- "copies_days_inhab_qPCR"
     var_name_num_1 <- "copies_day_sum_qPCR"
-    message("debug1")
-    str(data_qPCR)
+
+
 
     #----------------------
     # Sheet 1
@@ -695,13 +698,10 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     aggregate_copies[copies_days_inhab] <- aggregate_copies[var_name_num_1]/aggregate_copies$inhab_sum * 100000    
     # aggregate_copies <- subset(aggregate_copies, select = -inhab_sum)
 
-    sheet1 <- expand.grid(week_nb = aggregate_copies$week_nb)
+    sheet1 <- expand.grid(week_nb = weeks)
     sheet1 <- dplyr::left_join(sheet1, aggregate_copies, by = "week_nb")
     sheet1 <- sheet1 %>% dplyr::filter(sheet1$week_nb != "NA")
-    sheet1 <- sheet1 %>% dplyr::arrange(week_nb)
-    sheet1_sars <- sheet1[sheet1$week_nb >= "2020_14" & sheet1$week_nb <= format(max_time,"%Y_%V"),]
-    message("debug2")
-    str(sheet1_sars)
+    sheet1_sars <- sheet1 %>% dplyr::arrange(week_nb)
 
     #----------------------
     # Sheet 2
@@ -724,15 +724,12 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     aggregate_copies <- subset(aggregate_copies, select = -inhab_sum)
     assign(final, aggregate_copies)
 
-    sheet2 <- expand.grid(week_nb = aggregate_copies$week_nb, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
+    sheet2 <- expand.grid(week_nb = weeks, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
     sheet2 <- dplyr::left_join(sheet2, aggregate_copies_qPCR, by = c('WWTP','week_nb'))
     sheet2 <- sheet2 %>% dplyr::filter(sheet2$week_nb != "NA")
     # sheet2 <- sheet2 %>% dplyr::select(week_nb, WWTP) %>% dplyr::distinct()
     sheet2 <- sheet2 %>% dplyr::distinct(week_nb, WWTP, .keep_all = TRUE)
-    sheet2 <- sheet2 %>% dplyr::arrange(week_nb, WWTP)
-    sheet2_sars <- sheet2[sheet2$week_nb >= "2020_14" & sheet2$week_nb <= format(max_time,"%Y_%V"),]
-    message("debug3")
-    str(sheet2_sars)
+    sheet2_sars <- sheet2 %>% dplyr::arrange(week_nb, WWTP)
     
     #----------------------
     # Sheet 3
@@ -753,14 +750,11 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     test_tot <- test_tot %>% dplyr::rename(!!var_name := positive_rate)
     assign(final_3, test_tot)
 
-    sheet3 <- expand.grid(week_nb = test_tot$week_nb)
+    sheet3 <- expand.grid(week_nb = weeks)
     sheet3 <- dplyr::left_join(sheet3, positivity_rate_qPCR, by = "week_nb")
     sheet3 <- sheet3 %>% dplyr::filter(sheet3$week_nb != "NA")
     sheet2 <- sheet2 %>% dplyr::select(WWTP, week_nb) %>% dplyr::distinct()
-    sheet3 <- sheet3 %>% dplyr::arrange(week_nb)
-    sheet3_sars <- sheet3[sheet3$week_nb >= "2020_14" & sheet3$week_nb <= format(max_time,"%Y_%V"),]
-    message("debug4")
-    str(sheet3_sars)
+    sheet3_sars <- sheet3 %>% dplyr::arrange(week_nb)
 
     #----------------------
     # Sheet 4
@@ -780,14 +774,11 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     test_tot <- test_tot %>% dplyr::rename(!!var_name := positive_rate)
     assign(final_4, test_tot)
 
-    sheet4 <- expand.grid(week_nb = test_tot$week_nb, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
+    sheet4 <- expand.grid(week_nb = weeks, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
     sheet4 <- dplyr::left_join(sheet4, positivity_rate_WWTP_qPCR, by = c("week_nb","WWTP"))
     sheet4 <- sheet4 %>% dplyr::filter(sheet4$week_nb != "NA")
     sheet2 <- sheet2 %>% dplyr::select(WWTP, week_nb) %>% dplyr::distinct()
-    sheet4 <- sheet4 %>% dplyr::arrange(week_nb, WWTP)
-    sheet4_sars <- sheet4[sheet4$week_nb >= "2020_14" & sheet4$week_nb <= format(max_time, "%Y_%V"),]
-    message("debug5")
-    str(sheet4_sars)
+    sheet4_sars <- sheet4 %>% dplyr::arrange(week_nb, WWTP)
     
     wb <- openxlsx::createWorkbook()
     openxlsx::addWorksheet(wb, "1.CT Aggregate data")
