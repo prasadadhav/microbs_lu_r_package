@@ -387,6 +387,10 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
 
     data_hRSV_ddPCR$WWTP <- utils_extract_WWTP(data_hRSV_ddPCR$Sample)
 
+    max_time <- pmax(as.Date(max(as.Date(data_hRSV_ddPCR$Sample_Date), na.rm = TRUE)), na.rm = TRUE)
+    weeks <- data.frame(week_nb = generate_weeks(2024, 2025))
+    weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%Y_%V"),]
+
     #----------------------
     # Sheet 1: Aggregate the data for all weekly per WWTP and nationwide.
     #----------------------
@@ -411,7 +415,10 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     aggregate_ddPCR_hRSV <- plyr::join(aggregate_ddPCR_hRSV_num,aggregate_ddPCR_den, by = 'week_nb')
     aggregate_ddPCR_hRSV$copies_days_inhab_ddPCR_hRSV <- aggregate_ddPCR_hRSV$copies_day_sum_ddPCR_hRSV / aggregate_ddPCR_hRSV$inhab_sum * 100000
 
-    sheet1_hRSV <- aggregate_ddPCR_hRSV %>% dplyr::arrange(week_nb) 
+    sheet1_hRSV <- expand.grid(week_nb = weeks)
+    sheet1_hRSV <- dplyr::left_join(sheet1_hRSV, aggregate_ddPCR_hRSV, by = "week_nb")
+    sheet1_hRSV <- sheet1_hRSV %>% dplyr::filter(week_nb != "NA")
+    sheet1_hRSV <- sheet1_hRSV %>% dplyr::arrange(week_nb) 
 
     #----------------------
     # Sheet 2: Weekly flu concentrations per WWTP
@@ -428,9 +435,10 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     
     aggregate_hRSV_WWTP_ddPCR <- dplyr::full_join(aggregate_hRSV_WWTP_ddPCR,aggregate_hRSV_inhab_WWTP_ddPCR,by = c('WWTP','week_nb'))
 
-    sheet2_hRSV <- expand.grid(week_nb = aggregate_hRSV_WWTP_ddPCR$week_nb, 
+    sheet2_hRSV <- expand.grid(week_nb = weeks, 
                         WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
     sheet2_hRSV <- dplyr::left_join(sheet2_hRSV, aggregate_hRSV_WWTP_ddPCR, by = c('WWTP','week_nb'))
+    sheet2_hRSV <- sheet2_hRSV %>% dplyr::filter(week_nb != "NA")
     sheet2_hRSV <- sheet2_hRSV %>% dplyr::distinct(WWTP, week_nb, .keep_all = TRUE)                    
     sheet2_hRSV <- sheet2_hRSV %>% dplyr::arrange(week_nb)
 
@@ -449,8 +457,9 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     test_tot_hRSV_ddPCR$positive_rate_hRSV_ddPCR <- test_tot_hRSV_ddPCR$numerator / test_tot_hRSV_ddPCR$denominator*100
     test_tot_hRSV_ddPCR <- dplyr::select(test_tot_hRSV_ddPCR,-c(numerator, denominator))
 
-    sheet3_hRSV <- expand.grid(week_nb = test_tot_hRSV_ddPCR$week_nb)
+    sheet3_hRSV <- expand.grid(week_nb = weeks)
     sheet3_hRSV <- dplyr::left_join(sheet3_hRSV, test_tot_hRSV_ddPCR, by = 'week_nb')
+    sheet3_hRSV <- sheet3_hRSV %>% dplyr::filter(week_nb != "NA")
     sheet3_hRSV <- sheet3_hRSV %>% dplyr::arrange(week_nb)
 
     #----------------------
@@ -467,8 +476,9 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     test_tot_hRSV_ddPCR$positive_rate_hRSV_ddPCR <- test_tot_hRSV_ddPCR$numerator / test_tot_hRSV_ddPCR$denominator*100
     test_tot_hRSV_ddPCR <- dplyr::select(test_tot_hRSV_ddPCR, -c(numerator,denominator))
 
-    sheet4_hRSV <- expand.grid(week_nb = test_tot_hRSV_ddPCR$week_nb, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
+    sheet4_hRSV <- expand.grid(week_nb = weeks, WWTP = c("SCH", "PET", "BEG", "BET", "BLE", "MER", "HES", "ECH", "UEB", "GRE", "VIE", "BOE", "WIL"))
     sheet4_hRSV <- dplyr::left_join(sheet4_hRSV, test_tot_hRSV_ddPCR, by = c('WWTP','week_nb'))
+    sheet4_hRSV <- sheet4_hRSV %>% dplyr::filter(week_nb != "NA")
     sheet4_hRSV <- sheet4_hRSV %>% dplyr::arrange(week_nb) 
 
     wb <- openxlsx::createWorkbook()
