@@ -381,6 +381,8 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
         message("or use the default by using load_microbs_new_calc_ddPCR_Data()")
     }
 
+    data_hRSV_ddPCR <- subset(data_hRSV_ddPCR, Target_Name %in% c("hRSV"))
+
     names(data_hRSV_ddPCR)[names(data_hRSV_ddPCR) == "copies_day_mean"] <- "copies_day_ddPCR_hRSV"
     names(data_hRSV_ddPCR)[names(data_hRSV_ddPCR) == "sign_mean"] <- "CT_sign_ddPCR_hRSV"
     names(data_hRSV_ddPCR)[names(data_hRSV_ddPCR) == "copies_inhab_mean"] <- "copies_inhab_ddPCR_hRSV"
