@@ -1377,3 +1377,207 @@ load_microbs_flux_Data <- function(path_to_flux_data = .microbs_env$flux_path) {
     # Return both the calced dataframe 
     .microbs_env$df_flux_data
 }
+
+
+#--------------------------------------------------------------------------------------------------------
+# Load the old dashboard data flu
+#--------------------------------------------------------------------------------------------------------
+#' @title Load the dashboard data file 
+#'
+#' @description This function loads the old dashboard data and stores for later usage.
+#' This file contains the old dashboarded flu raw data. Columns will be added to this data later.
+#'
+#' @param path_to_dashboard_data_flu A string to describe the path to the dashboarded excel flu data `SUPERVIR_CAL_DATA_flu_*.xlxs`. 
+#' 
+#' @return A tibble with the containing the the old dashboardulated data
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' path_to_dashboard_data_flu <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/4_data_4_dashboard"
+#' set_microbs_dashboard_DataPath(path_to_dashboard_data_flu)
+#' df_dashboard_flu_data <- load_microbs_old_dashboard_flu_Data(path_to_dashboard_data_flu)
+#' }
+#' 
+#'
+#' @export
+load_microbs_old_dashboard_flu_Data <- function(path_to_dashboard_data_flu = .microbs_env$dashboard_data_path) {
+    # load the path
+    if ( missing(path_to_dashboard_data_flu) ) {
+        path_to_dashboard_data_flu <- get_microbs_dashboard_DataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_dashboard_data_flu)
+    }
+
+    # Validate if the provided path exists
+    if (!dir.exists(path_to_dashboard_data_flu)) {
+        stop("[microbs Error]: The provided path does not exist: ", path_to_dashboard_data_flu)
+    }
+
+    # load the names of all files and folders in the given directory path
+    file_info <- utils::fileSnapshot(path_to_dashboard_data_flu)$info
+    # remove all the directories from the list
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    # only keep the file names containg "Data_Flu.xlsx"
+    file_info <- subset(file_info,grepl("Data_Flu",rownames(file_info)))
+    
+    # dashboard if we have atleast one file
+    if (nrow(file_info) == 0) {
+        stop("[microbs Error]: No matching files found in directory: ", path_to_dashboard_data_flu)
+    }
+
+    # re-order the files according to time
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
+    }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
+
+    message("[microbs Report]: Load the Data_Flu.xlsx file: ", latest_file)
+
+    # create the file path
+    latest_excel_file_path <- file.path(path_to_dashboard_data_flu, latest_file)
+
+    # Load the latest excel file for flu
+    .microbs_env$df_old_dashboard_flu_data <- readxl::read_excel(latest_excel_file_path, sheet = 1)
+
+    # Return both the dashboarded dataframe 
+    .microbs_env$df_old_dashboard_flu_data
+}
+
+
+
+#--------------------------------------------------------------------------------------------------------
+# Load the old dashboard data hRSV
+#--------------------------------------------------------------------------------------------------------
+#' @title Load the dashboard data file 
+#'
+#' @description This function loads the old dashboard data and stores for later usage.
+#' This file contains the old dashboarded hRSV raw data. Columns will be added to this data later.
+#'
+#' @param path_to_dashboard_data_hRSV A string to describe the path to the dashboarded excel hRSV data `SUPERVIR_CAL_DATA_hRSV_*.xlxs`. 
+#' 
+#' @return A tibble with the containing the the old dashboardulated data
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' path_to_dashboard_data_hRSV <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/4_data_4_dashboard"
+#' set_microbs_dashboard_DataPath(path_to_dashboard_data_hRSV)
+#' df_dashboard_hRSV_data <- load_microbs_old_dashboard_hRSV_Data(path_to_dashboard_data_hRSV)
+#' }
+#' 
+#'
+#' @export
+load_microbs_old_dashboard_hRSV_Data <- function(path_to_dashboard_data_hRSV = .microbs_env$dashboard_data_path) {
+    # load the path
+    if ( missing(path_to_dashboard_data_hRSV) ) {
+        path_to_dashboard_data_hRSV <- get_microbs_dashboard_DataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_dashboard_data_hRSV)
+    }
+
+    # Validate if the provided path exists
+    if (!dir.exists(path_to_dashboard_data_hRSV)) {
+        stop("[microbs Error]: The provided path does not exist: ", path_to_dashboard_data_hRSV)
+    }
+
+    # load the names of all files and folders in the given directory path
+    file_info <- utils::fileSnapshot(path_to_dashboard_data_hRSV)$info
+    # remove all the directories from the list
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    # only keep the file names containg "Data_RSV.xlsx"
+    file_info <- subset(file_info,grepl("Data_RSV",rownames(file_info)))
+    
+    # dashboard if we have atleast one file
+    if (nrow(file_info) == 0) {
+        stop("[microbs Error]: No matching files found in directory: ", path_to_dashboard_data_hRSV)
+    }
+
+    # re-order the files according to time
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
+    }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
+
+    message("[microbs Report]: Load the Data_Flu.xlsx file: ", latest_file)
+
+    # create the file path
+    latest_excel_file_path <- file.path(path_to_dashboard_data_hRSV, latest_file)
+
+    # Load the latest excel file for hRSV
+    .microbs_env$df_old_dashboard_hRSV_data <- readxl::read_excel(latest_excel_file_path, sheet = 1)
+
+    # Return both the dashboarded dataframe 
+    .microbs_env$df_old_dashboard_hRSV_data
+}
+
+
+
+
+#--------------------------------------------------------------------------------------------------------
+# Load the old dashboard data sars
+#--------------------------------------------------------------------------------------------------------
+#' @title Load the dashboard data file 
+#'
+#' @description This function loads the old dashboard data and stores for later usage.
+#' This file contains the old dashboarded sars raw data. Columns will be added to this data later.
+#'
+#' @param path_to_dashboard_data_sars A string to describe the path to the dashboarded excel sars data `SUPERVIR_CAL_DATA_sars_*.xlxs`. 
+#' 
+#' @return A tibble with the containing the the old dashboardulated data
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' path_to_dashboard_data_sars <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/4_data_4_dashboard"
+#' set_microbs_dashboard_DataPath(path_to_dashboard_data_sars)
+#' df_dashboard_sars_data <- load_microbs_old_dashboard_sars_Data(path_to_dashboard_data_sars)
+#' }
+#' 
+#'
+#' @export
+load_microbs_old_dashboard_sars_Data <- function(path_to_dashboard_data_sars = .microbs_env$dashboard_data_path) {
+    # load the path
+    if ( missing(path_to_dashboard_data_sars) ) {
+        path_to_dashboard_data_sars <- get_microbs_dashboard_DataPath()
+        message("[microbs Report]: No path provided. Using default path: ", path_to_dashboard_data_sars)
+    }
+
+    # Validate if the provided path exists
+    if (!dir.exists(path_to_dashboard_data_sars)) {
+        stop("[microbs Error]: The provided path does not exist: ", path_to_dashboard_data_sars)
+    }
+
+    # load the names of all files and folders in the given directory path
+    file_info <- utils::fileSnapshot(path_to_dashboard_data_sars)$info
+    # remove all the directories from the list
+    file_info <- subset(file_info, file_info$isdir == FALSE)
+    # only keep the file names containg "Data_SARCoV.xlsx"
+    file_info <- subset(file_info,grepl("Data_SARCoV",rownames(file_info)))
+    
+    # dashboard if we have atleast one file
+    if (nrow(file_info) == 0) {
+        stop("[microbs Error]: No matching files found in directory: ", path_to_dashboard_data_sars)
+    }
+
+    # re-order the files according to time
+    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+
+    excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
+    if (length(excel_files) == 0) {
+        stop("[microbs Error]: No Excel files found to determine latest.")
+    }
+    latest_file <- excel_files[which.max(file_info[excel_files, "mtime"])]
+
+    message("[microbs Report]: Load the Data_Flu.xlsx file: ", latest_file)
+
+    # create the file path
+    latest_excel_file_path <- file.path(path_to_dashboard_data_sars, latest_file)
+
+    # Load the latest excel file for sars
+    .microbs_env$df_old_dashboard_sars_data <- readxl::read_excel(latest_excel_file_path, sheet = 1)
+
+    # Return both the dashboarded dataframe 
+    .microbs_env$df_old_dashboard_sars_data
+}
