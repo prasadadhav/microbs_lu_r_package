@@ -27,7 +27,7 @@ library(microbs.lu)
 ```
 
 
-## Table: {cloc} 📦 metrics for microbs.lu (11 Jun 2025)
+## Table: {cloc} 📦 metrics for microbs.lu (12 Jun 2025)
 
 |Lang | # Files|  (%)|  LoC|  (%)| Blank lines|  (%)| # Lines|  (%)|
 |:----|-------:|----:|----:|----:|-----------:|----:|-------:|----:|
