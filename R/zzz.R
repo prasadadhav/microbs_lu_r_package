@@ -92,4 +92,12 @@
     .microbs_env$sheet3_sars
     .microbs_env$sheet4_sars
 
+    # Dashboard data
+    .microbs_env$df_old_dashboard_flu_data
+    .microbs_env$df_old_dashboard_hRSV_data
+    .microbs_env$df_old_dashboard_sars_data
+
+    .microbs_env$df_new_dashboard_flu_data
+    .microbs_env$df_new_dashboard_hRSV_data
+    .microbs_env$df_new_dashboard_sars_data
 }
