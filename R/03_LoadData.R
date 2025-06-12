@@ -44,8 +44,10 @@ load_microbs_old_raw_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .micro
     file_info <- utils::fileSnapshot(path_to_old_raw_excel_ddPCR)$info
     # remove all the directories from the list
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     # only keep the file names containg "RAW_DATA_ddPCR"
-    file_info <- subset(file_info,grepl("RAW_DATA_ddPCR",rownames(file_info)))
+    file_info <- subset(file_info, grepl("RAW_DATA_ddPCR", rownames(file_info)))
+    
     
     # Check if we have atleast one file
     if (nrow(file_info) == 0) {
@@ -109,7 +111,8 @@ archive_microbs_loaded_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .mic
     # TODO: Here use a specific format lookup such as "\\.csv$", because csv will pickup the file even if we have file.csv.txt
     file_info <- utils::fileSnapshot(path_to_old_raw_excel_ddPCR)$info
     file_info <- subset(file_info, file_info$isdir == FALSE)
-    file_info <- subset(file_info,grepl("SUPERVIR_RAW_DATA_ddPCR_",rownames(file_info)))
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
+    file_info <- subset(file_info, grepl("SUPERVIR_RAW_DATA_ddPCR_",rownames(file_info)))
 
     if (nrow(file_info) == 0) {
         stop("[microbs Error]: No matching files found in directory: ", path_to_old_raw_excel_ddPCR)
@@ -190,8 +193,9 @@ load_microbs_old_raw_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .microbs
     file_info <- utils::fileSnapshot(path_to_old_raw_excel_qPCR)$info
     # remove all the directories from the list
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     # only keep the file names containg "RAW_DATA_qPCR"
-    file_info <- subset(file_info,grepl("RAW_DATA_qPCR",rownames(file_info)))
+    file_info <- subset(file_info, grepl("RAW_DATA_qPCR",rownames(file_info)))
     
     # Check if we have atleast one file
     if (nrow(file_info) == 0) {
@@ -257,7 +261,8 @@ archive_microbs_loaded_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .micro
     # TODO: Here use a specific format lookup such as "\\.csv$", because csv will pickup the file even if we have file.csv.txt
     file_info <- utils::fileSnapshot(path_to_old_raw_excel_qPCR)$info
     file_info <- subset(file_info, file_info$isdir == FALSE)
-    file_info <- subset(file_info,grepl("SUPERVIR_RAW_DATA_qPCR_",rownames(file_info)))
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
+    file_info <- subset(file_info, grepl("SUPERVIR_RAW_DATA_qPCR_",rownames(file_info)))
 
     if (nrow(file_info) == 0) {
         stop("[microbs Error]: No matching files found in directory: ", path_to_old_raw_excel_qPCR)
@@ -780,6 +785,7 @@ load_microbs_old_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microb
     file_info <- utils::fileSnapshot(path_to_check_data_ddPCR)$info
     # remove all the directories from the list
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     # only keep the file names containg "Check_data_ddPCR_"
     file_info <- subset(file_info,grepl("Check_data_ddPCR_", rownames(file_info)))
     
@@ -842,7 +848,8 @@ archive_microbs_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microbs
 
     file_info <- utils::fileSnapshot(path_to_check_data_ddPCR)$info
     file_info <- subset(file_info, file_info$isdir == FALSE)
-    file_info <- subset(file_info,grepl("Check_data_ddPCR_",rownames(file_info)))
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
+    file_info <- subset(file_info, grepl("Check_data_ddPCR_", rownames(file_info)))
 
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
 
@@ -925,6 +932,7 @@ load_microbs_old_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_
     file_info <- utils::fileSnapshot(path_to_check_data_qPCR)$info
     # remove all the directories from the list
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     # only keep the file names containg "Check_data_qPCR_"
     file_info <- subset(file_info,grepl("Check_data_qPCR_",rownames(file_info)))
     
@@ -987,6 +995,7 @@ archive_microbs_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_e
 
     file_info <- utils::fileSnapshot(path_to_check_data_qPCR)$info
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     file_info <- subset(file_info,grepl("Check_data_qPCR_",rownames(file_info)))
 
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
@@ -1061,6 +1070,7 @@ load_microbs_old_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_
     file_info <- utils::fileSnapshot(path_to_calc_data_ddPCR)$info
     # remove all the directories from the list
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     # only keep the file names containg "SUPERVIR_CAL_DATA_ddPCR_"
     file_info <- subset(file_info,grepl("SUPERVIR_CAL_DATA_ddPCR_",rownames(file_info)))
     
@@ -1123,6 +1133,7 @@ archive_microbs_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_e
 
     file_info <- utils::fileSnapshot(path_to_calc_data_ddPCR)$info
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     file_info <- subset(file_info,grepl("calc_data_ddPCR_",rownames(file_info)))
 
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
@@ -1202,6 +1213,7 @@ load_microbs_old_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_en
     file_info <- utils::fileSnapshot(path_to_calc_data_qPCR)$info
     # remove all the directories from the list
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     # only keep the file names containg "SUPERVIR_CAL_DATA_qPCR_"
     file_info <- subset(file_info,grepl("SUPERVIR_CAL_DATA_qPCR_",rownames(file_info)))
     
@@ -1264,9 +1276,10 @@ archive_microbs_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env
 
     file_info <- utils::fileSnapshot(path_to_calc_data_qPCR)$info
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     file_info <- subset(file_info,grepl("calc_data_qPCR_",rownames(file_info)))
 
-    file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
+    file_info <- file_info[order(file_info$mtime, decreasing = TRUE),]
 
     excel_files <- rownames(file_info)[grepl("\\.xlsx$|\\.xls$", rownames(file_info), ignore.case = TRUE)]
     if (length(excel_files) == 0) {
@@ -1341,6 +1354,7 @@ load_microbs_flux_Data <- function(path_to_flux_data = .microbs_env$flux_path) {
     # load the names of all files and folders in the given directory path
     file_info <- utils::fileSnapshot(path_to_flux_data)$info
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     file_info <- subset(file_info,grepl("VIRALERT_WW_",rownames(file_info)))
     
     # calc if we have atleast one file
@@ -1416,6 +1430,7 @@ load_microbs_old_dashboard_flu_Data <- function(path_to_dashboard_data_flu = .mi
     file_info <- utils::fileSnapshot(path_to_dashboard_data_flu)$info
     # remove all the directories from the list
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     # only keep the file names containg "Data_Flu.xlsx"
     file_info <- subset(file_info,grepl("Data_Flu",rownames(file_info)))
     
@@ -1484,6 +1499,7 @@ load_microbs_old_dashboard_hRSV_Data <- function(path_to_dashboard_data_hRSV = .
     file_info <- utils::fileSnapshot(path_to_dashboard_data_hRSV)$info
     # remove all the directories from the list
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     # only keep the file names containg "Data_RSV.xlsx"
     file_info <- subset(file_info,grepl("Data_RSV",rownames(file_info)))
     
@@ -1553,6 +1569,7 @@ load_microbs_old_dashboard_sars_Data <- function(path_to_dashboard_data_sars = .
     file_info <- utils::fileSnapshot(path_to_dashboard_data_sars)$info
     # remove all the directories from the list
     file_info <- subset(file_info, file_info$isdir == FALSE)
+    file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     # only keep the file names containg "Data_SARCoV.xlsx"
     file_info <- subset(file_info,grepl("Data_SARCoV",rownames(file_info)))
     
