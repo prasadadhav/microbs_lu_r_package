@@ -620,3 +620,173 @@ get_microbs_flux_Data <- function() {
     }
     .microbs_env$df_flux_data
 }
+
+
+#--------------------------------------------------------------------------------------------------------
+# get old flu dashboard data
+#--------------------------------------------------------------------------------------------------------
+#' @title get the flux data
+#' 
+#' @description If it returns NULL, it means that the old dashboard data has not been loaded yet.
+#' Call load_microbs_old_dashboard_flu_Data() to load the data.
+#' Need to set relevant paths.
+#' Preferably use full path.
+#' This function allows you to load the old dashbpard data located in `4_data_4_dashboard`.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' result <- get_microbs_old_dashboard_flu_Data()
+#' result
+#' }
+#' 
+#' @export 
+get_microbs_old_dashboard_flu_Data <- function() {
+    if (is.null(.microbs_env$df_old_dashboard_flu_data)) {
+        message("[microbs Warning]: Did not yet load the data. Use the load_microbs_old_dashboard_flu_Data() function to load the old data")
+    }
+    .microbs_env$df_old_dashboard_flu_data
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get old hRSV dashboard data
+#--------------------------------------------------------------------------------------------------------
+#' @title get the hRSVx data
+#' 
+#' @description If it returns NULL, it means that the old dashboard data has not been loaded yet.
+#' Call load_microbs_old_dashboard_hRSV_Data() to load the data.
+#' Need to set relevant paths.
+#' Preferably use full path.
+#' This function allows you to load the old dashbpard data located in `4_data_4_dashboard`.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' result <- get_microbs_old_dashboard_hRSV_Data()
+#' result
+#' }
+#' 
+#' @export 
+get_microbs_old_dashboard_hRSV_Data <- function() {
+    if (is.null(.microbs_env$df_old_dashboard_hRSV_data)) {
+        message("[microbs Warning]: Did not yet load the data. Use the load_microbs_old_dashboard_hRSV_Data() function to load the old data")
+    }
+    .microbs_env$df_old_dashboard_hRSV_data
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get old sars dashboard data
+#--------------------------------------------------------------------------------------------------------
+#' @title get the sarsx data
+#' 
+#' @description If it returns NULL, it means that the old dashboard data has not been loaded yet.
+#' Call load_microbs_old_dashboard_sars_Data() to load the data.
+#' Need to set relevant paths.
+#' Preferably use full path.
+#' This function allows you to load the old dashbpard data located in `4_data_4_dashboard`.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' result <- get_microbs_old_dashboard_sars_Data()
+#' result
+#' }
+#' 
+#' @export 
+get_microbs_old_dashboard_sars_Data <- function() {
+    if (is.null(.microbs_env$df_old_dashboard_sars_data)) {
+        message("[microbs Warning]: Did not yet load the data. Use the load_microbs_old_dashboard_sars_Data() function to load the old data")
+    }
+    .microbs_env$df_old_dashboard_sars_data
+}
+
+
+#--------------------------------------------------------------------------------------------------------
+# get new flu dashboard data
+#--------------------------------------------------------------------------------------------------------
+#' @title get the flux data
+#' 
+#' @description If it returns NULL, it means that the new dashboard data has not been loaded yet.
+#' Call load_microbs_new_dashboard_flu_Data() to load the data.
+#' Need to set relevant paths.
+#' Preferably use full path.
+#' This function allows you to load the new dashbpard data located in `4_data_4_dashboard`.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' result <- get_microbs_new_dashboard_flu_Data()
+#' result
+#' }
+#' 
+#' @export 
+get_microbs_new_dashboard_flu_Data <- function() {
+    if (is.null(.microbs_env$df_new_dashboard_flu_data)) {
+        message("[microbs Warning]: Did not yet load the data. Use the load_microbs_new_dashboard_flu_Data() function to load the new data")
+    }
+    .microbs_env$df_new_dashboard_flu_data
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new hRSV dashboard data
+#--------------------------------------------------------------------------------------------------------
+#' @title get the hRSVx data
+#' 
+#' @description If it returns NULL, it means that the new dashboard data has not been loaded yet.
+#' Call load_microbs_new_dashboard_hRSV_Data() to load the data.
+#' Need to set relevant paths.
+#' Preferably use full path.
+#' This function allows you to load the new dashbpard data located in `4_data_4_dashboard`.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' result <- get_microbs_new_dashboard_hRSV_Data()
+#' result
+#' }
+#' 
+#' @export 
+get_microbs_new_dashboard_hRSV_Data <- function() {
+    if (is.null(.microbs_env$df_new_dashboard_hRSV_data)) {
+        message("[microbs Warning]: Did not yet load the data. Use the load_microbs_new_dashboard_hRSV_Data() function to load the new data")
+    }
+    .microbs_env$df_new_dashboard_hRSV_data
+}
+
+#--------------------------------------------------------------------------------------------------------
+# get new sars dashboard data
+#--------------------------------------------------------------------------------------------------------
+#' @title get the sarsx data
+#' 
+#' @description If it returns NULL, it means that the new dashboard data has not been loaded yet.
+#' Call load_microbs_new_dashboard_sars_Data() to load the data.
+#' Need to set relevant paths.
+#' Preferably use full path.
+#' This function allows you to load the new dashbpard data located in `4_data_4_dashboard`.
+#' 
+#' file ./microbs.lu/R/03_DataGetters.R
+#' 
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' result <- get_microbs_new_dashboard_sars_Data()
+#' result
+#' }
+#' 
+#' @export 
+get_microbs_new_dashboard_sars_Data <- function() {
+    if (is.null(.microbs_env$df_new_dashboard_sars_data)) {
+        message("[microbs Warning]: Did not yet load the data. Use the load_microbs_new_dashboard_sars_Data() function to load the new data")
+    }
+    .microbs_env$df_new_dashboard_sars_data
+}
