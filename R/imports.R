@@ -5,3 +5,4 @@
 #' @importFrom writexl write_xlsx
 #' @importFrom base position
 #' @importFrom stringr str_detect regex str_sub
+#' @importFrom openxlsx createWorkbook addWorksheet writeData saveWorkbook 
