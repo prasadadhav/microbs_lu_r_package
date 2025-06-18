@@ -41,7 +41,11 @@ dashboard_microbs_hRSV_export <- function(sheet1_hRSV = .microbs_env$sheet1_hRSV
     df_nat_long <- df_nat %>%
                         dplyr::select(week_nb, copies_days_inhab_ddPCR_hRSV) %>%
                         dplyr::rename(`RSV-Nat` = copies_days_inhab_ddPCR_hRSV) %>%
-                        dplyr::mutate(`Mov-RSV-Nat` = zoo::rollmean(`RSV-Nat`, k = 3, fill = NA, align = "right"))
+                        dplyr::mutate(`Mov-RSV-Nat` = zoo::na.locf(
+                            zoo::rollmean(`RSV-Nat`, k = 3, fill = NA, align = "right"),
+                            na.rm = FALSE
+                            )
+                        )
 
     # Per WWTP
     df_wwtp_wide <- df_wwtp %>%
@@ -55,7 +59,7 @@ dashboard_microbs_hRSV_export <- function(sheet1_hRSV = .microbs_env$sheet1_hRSV
 
     df_wwtp_mov <- df_wwtp_wide %>%
                         dplyr::mutate(dplyr::across(dplyr::starts_with("RSV-"),
-                                                    ~ zoo::rollmean(.x, k = 3, fill = NA, align = "right"),
+                                                    ~ zoo::na.locf(zoo::rollmean(.x, k = 3, fill = NA, align = "right"), na.rm = FALSE),
                                                     .names = "Mov-{.col}"))
 
     # Combine all
@@ -76,10 +80,10 @@ dashboard_microbs_hRSV_export <- function(sheet1_hRSV = .microbs_env$sheet1_hRSV
     sample_cols <- sub("^RSV-", "SAMPLES-", rsv_cols)
 
     for (i in seq_along(rsv_cols)) {
-        df_final_combined[[mov_rsv_cols[i]]] <- zoo::rollmean(df_final_combined[[rsv_cols[i]]], 
+        df_final_combined[[mov_rsv_cols[i]]] <- zoo::na.locf(zoo::rollmean(df_final_combined[[rsv_cols[i]]], 
                                                         k = 3, 
                                                         fill = NA, 
-                                                        align = "right")
+                                                        align = "right"), na.rm = FALSE)
     }
 
     # df_final_combined[df_final_combined == 0] <- NA
@@ -127,7 +131,8 @@ dashboard_microbs_hRSV_export <- function(sheet1_hRSV = .microbs_env$sheet1_hRSV
         x = df_samples_new,
         startCol = n_cols_main + 1,
         startRow = 1,
-        headerStyle = header_st
+        headerStyle = header_st,
+        colWidths = "auto"
     )
 
     n_cols_samples <- ncol(df_samples_new)
@@ -137,7 +142,8 @@ dashboard_microbs_hRSV_export <- function(sheet1_hRSV = .microbs_env$sheet1_hRSV
         x = df_situation,
         startCol = n_cols_main + n_cols_samples + 1,
         startRow = 1,
-        headerStyle = header_st
+        headerStyle = header_st,
+        colWidths = "auto"
     )
         
     numeric_cols <- which(sapply(df_final_combined, is.numeric))
@@ -204,7 +210,7 @@ dashboard_microbs_SARS_CoV_export <- function(sheet1_SARS_CoV = .microbs_env$she
         message("and then load_microbs_old_raw_ddPCR_Data() function to set a path")
     }
 
-    path_to_dashboard_data_SARS-CoV <- get_microbs_dashboard_DataPath()
+    path_to_dashboard_data_SARS_CoV <- get_microbs_dashboard_DataPath()
 
     df_nat <- get_microbs_new_create_sars_sheet1()
     df_wwtp <- get_microbs_new_create_sars_sheet2()
@@ -222,23 +228,27 @@ dashboard_microbs_SARS_CoV_export <- function(sheet1_SARS_CoV = .microbs_env$she
     # National level
     df_nat <- df_nat %>% dplyr::mutate(dplyr::across(dplyr::everything(), ~ tidyr::replace_na(.x, 0)))
     df_nat_long <- df_nat %>%
-                        dplyr::select(week_nb, copies_days_inhab_ddPCR_SARS-CoV) %>%
-                        dplyr::rename(`SARS-CoV-Nat` = copies_days_inhab_ddPCR_SARS-CoV) %>%
-                        dplyr::mutate(`Mov-SARS-CoV-Nat` = zoo::rollmean(`SARS-CoV-Nat`, k = 3, fill = NA, align = "right"))
+                        dplyr::select(week_nb, copies_days_inhab_qPCR) %>%
+                        dplyr::rename(`SARS-CoV-Nat` = copies_days_inhab_qPCR) %>%
+                        dplyr::mutate(`Mov-SARS-CoV-Nat` = zoo::na.locf(
+                            zoo::rollmean(`SARS-CoV-Nat`, k = 3, fill = NA, align = "right"),
+                            na.rm = FALSE
+                            )
+                        )
 
     # Per WWTP
     df_wwtp_wide <- df_wwtp %>%
-                        dplyr::select(week_nb, WWTP, copies_inhab_ddPCR_SARS-CoV) %>%
+                        dplyr::select(week_nb, WWTP, copies_days_inhab_qPCR) %>%
                         tidyr::pivot_wider(
                             names_from = WWTP,
-                            values_from = copies_inhab_ddPCR_SARS-CoV,
+                            values_from = copies_days_inhab_qPCR,
                             names_prefix = "SARS-CoV-"
                         ) %>%
                         dplyr::arrange(week_nb)        
 
     df_wwtp_mov <- df_wwtp_wide %>%
                         dplyr::mutate(dplyr::across(dplyr::starts_with("SARS-CoV-"),
-                                                    ~ zoo::rollmean(.x, k = 3, fill = NA, align = "right"),
+                                                    ~ zoo::na.locf(zoo::rollmean(.x, k = 3, fill = NA, align = "right"), na.rm = FALSE),
                                                     .names = "Mov-{.col}"))
 
     # Combine all
@@ -259,10 +269,10 @@ dashboard_microbs_SARS_CoV_export <- function(sheet1_SARS_CoV = .microbs_env$she
     sample_cols <- sub("^SARS-CoV-", "SAMPLES-", sar_cols)
 
     for (i in seq_along(sar_cols)) {
-        df_final_combined[[mov_sar_cols[i]]] <- zoo::rollmean(df_final_combined[[sar_cols[i]]], 
+        df_final_combined[[mov_sar_cols[i]]] <- zoo::na.locf(zoo::rollmean(df_final_combined[[sar_cols[i]]], 
                                                         k = 3, 
                                                         fill = NA, 
-                                                        align = "right")
+                                                        align = "right"), na.rm = FALSE)
     }
 
     # df_final_combined[df_final_combined == 0] <- NA
@@ -310,7 +320,8 @@ dashboard_microbs_SARS_CoV_export <- function(sheet1_SARS_CoV = .microbs_env$she
         x = df_samples_new,
         startCol = n_cols_main + 1,
         startRow = 1,
-        headerStyle = header_st
+        headerStyle = header_st,
+        colWidths = "auto"
     )
 
     n_cols_samples <- ncol(df_samples_new)
@@ -320,7 +331,8 @@ dashboard_microbs_SARS_CoV_export <- function(sheet1_SARS_CoV = .microbs_env$she
         x = df_situation,
         startCol = n_cols_main + n_cols_samples + 1,
         startRow = 1,
-        headerStyle = header_st
+        headerStyle = header_st,
+        colWidths = "auto"
     )
         
     numeric_cols <- which(sapply(df_final_combined, is.numeric))
@@ -338,6 +350,7 @@ dashboard_microbs_SARS_CoV_export <- function(sheet1_SARS_CoV = .microbs_env$she
     
     openxlsx::freezePane(wb, sheet = "Data", firstRow = TRUE)
 
+    # Hide columns
     openxlsx::setColWidths(
         wb,
         sheet = "Data",
@@ -354,11 +367,11 @@ dashboard_microbs_SARS_CoV_export <- function(sheet1_SARS_CoV = .microbs_env$she
     #     hidden = TRUE       
     # )
 
-    xlxs_filename <- paste0(path_to_dashboard_data_SARS-CoV, "/Data_SARCoV_",
+    xlxs_filename <- paste0(path_to_dashboard_data_SARS_CoV, "/Data_SARCoV_",
                    gsub(":", "-", sub(" CEST", "", Sys.time())),
                    ".xlsx")
     openxlsx::saveWorkbook(wb, xlxs_filename, overwrite = TRUE)
 
-    .microbs_env$df_new_dashboard_SARS-CoV_data <- df_final_combined
-    .microbs_env$df_new_dashboard_SARS-CoV_data
+    .microbs_env$df_new_dashboard_SARS_CoV_data <- df_final_combined
+    .microbs_env$df_new_dashboard_SARS_CoV_data
 }
