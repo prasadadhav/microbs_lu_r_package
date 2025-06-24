@@ -64,7 +64,7 @@ dashboard_microbs_flu_export <- function(sheet1_flu = .microbs_env$sheet1_flu, s
                         tidyr::pivot_wider(
                             names_from = WWTP,
                             values_from = copies_inhab_ddPCR_FluA,
-                            names_prefix = "Flu-A"
+                            names_prefix = "FluA-"
                         ) %>%
                         dplyr::arrange(week_nb)        
 
@@ -79,7 +79,7 @@ dashboard_microbs_flu_export <- function(sheet1_flu = .microbs_env$sheet1_flu, s
                         tidyr::pivot_wider(
                             names_from = WWTP,
                             values_from = copies_inhab_ddPCR_FluB,
-                            names_prefix = "Flu-B"
+                            names_prefix = "FluB-"
                         ) %>%
                         dplyr::arrange(week_nb)        
 
@@ -109,7 +109,7 @@ dashboard_microbs_flu_export <- function(sheet1_flu = .microbs_env$sheet1_flu, s
     sample_fluA_cols <- sub("^FluA-", "SAMPLES-", fluA_cols)
 
     for (i in seq_along(fluA_cols)) {
-        df_final_combined[[fluA_cols[i]]] <- zoo::na.locf(zoo::rollmean(df_final_combined[[fluA_cols[i]]], 
+        df_final_combined[[mov_fluA_cols[i]]] <- zoo::na.locf(zoo::rollmean(df_final_combined[[fluA_cols[i]]], 
                                                         k = 3, 
                                                         fill = NA, 
                                                         align = "right"), na.rm = FALSE)
@@ -121,7 +121,7 @@ dashboard_microbs_flu_export <- function(sheet1_flu = .microbs_env$sheet1_flu, s
     sample_fluB_cols <- sub("^FluB-", "SAMPLES-", fluB_cols)
 
     for (i in seq_along(fluB_cols)) {
-        df_final_combined[[fluB_cols[i]]] <- zoo::na.locf(zoo::rollmean(df_final_combined[[fluB_cols[i]]], 
+        df_final_combined[[mov_fluB_cols[i]]] <- zoo::na.locf(zoo::rollmean(df_final_combined[[fluB_cols[i]]], 
                                                         k = 3, 
                                                         fill = NA, 
                                                         align = "right"), na.rm = FALSE)
