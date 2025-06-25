@@ -140,6 +140,21 @@ dashboard_microbs_flu_export <- function(sheet1_flu = .microbs_env$sheet1_flu, s
 
     # Create a one-row data.frame from the sample counts
     df_samples_new <- as.data.frame(sample_counts, optional = TRUE)
+    
+    # Here we manually add somenumbers to accout for 2 samples a week that are not added to the
+    # microbs dashboard
+    # there is a difference of 8 samples, so probably comes from a 
+    
+    df_samples_new$`SAMPLES-BEG`[1] <- df_samples_new$`SAMPLES-BEG`[1] + 8
+    df_samples_new$`SAMPLES-BET`[1] <- df_samples_new$`SAMPLES-BET`[1] + 8
+    df_samples_new$`SAMPLES-PET`[1] <- df_samples_new$`SAMPLES-PET`[1] + 8
+    df_samples_new$`SAMPLES-SCH`[1] <- df_samples_new$`SAMPLES-SCH`[1] + 8
+    df_samples_new$`SAMPLES-BLE`[1] <- df_samples_new$`SAMPLES-BLE`[1] + 0
+    df_samples_new$`SAMPLES-MER`[1] <- df_samples_new$`SAMPLES-MER`[1] + 0
+    df_samples_new$`SAMPLES-UEB`[1] <- df_samples_new$`SAMPLES-UEB`[1] - 1
+    df_samples_new$`SAMPLES-ECH`[1] <- df_samples_new$`SAMPLES-ECH`[1] + 0
+    
+    # Make the total 
     total_samples <- 0
     for (col in names(df_samples_new)) {
         if (col == "SAMPLES-Nat") {
@@ -522,6 +537,26 @@ dashboard_microbs_SARS_CoV_export <- function(sheet1_SARS_CoV = .microbs_env$she
 
     # Create a one-row data.frame from the sample counts
     df_samples_new <- as.data.frame(sample_counts, optional = TRUE)
+
+    # Here we manually add somenumbers to accout for 2 samples a week that are not added to the
+    # microbs dashboard
+    # there is a difference because of the 2 samples per week during 6 months
+
+    df_samples_new$`SAMPLES-BEG`[1] <- df_samples_new$`SAMPLES-BEG`[1] + 77
+    df_samples_new$`SAMPLES-BET`[1] <- df_samples_new$`SAMPLES-BET`[1] + 78
+    df_samples_new$`SAMPLES-PET`[1] <- df_samples_new$`SAMPLES-PET`[1] + 91
+    df_samples_new$`SAMPLES-SCH`[1] <- df_samples_new$`SAMPLES-SCH`[1] + 91
+    df_samples_new$`SAMPLES-BLE`[1] <- df_samples_new$`SAMPLES-BLE`[1] + 80
+    df_samples_new$`SAMPLES-MER`[1] <- df_samples_new$`SAMPLES-MER`[1] + 78
+    df_samples_new$`SAMPLES-UEB`[1] <- df_samples_new$`SAMPLES-UEB`[1] + 63
+    df_samples_new$`SAMPLES-ECH`[1] <- df_samples_new$`SAMPLES-ECH`[1] + 62
+    df_samples_new$`SAMPLES-BOE`[1] <- df_samples_new$`SAMPLES-BOE`[1] - 1
+    df_samples_new$`SAMPLES-GRE`[1] <- df_samples_new$`SAMPLES-GRE`[1] + 66
+    df_samples_new$`SAMPLES-HES`[1] <- df_samples_new$`SAMPLES-HES`[1] + 2
+    df_samples_new$`SAMPLES-VIE`[1] <- df_samples_new$`SAMPLES-VIE`[1] + 78
+    df_samples_new$`SAMPLES-WIL`[1] <- df_samples_new$`SAMPLES-WIL`[1] + 77
+
+    # Make the total
     total_samples <- 0
     for (col in names(df_samples_new)) {
         if (col == "SAMPLES-Nat") {
