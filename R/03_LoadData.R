@@ -561,7 +561,7 @@ load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_
     files_list <- list.files(path_to_raw_qPCR, pattern = "xls")
     for(file in files_list){
         file_name <- paste(path_to_raw_qPCR, file, sep = "/")
-        file <- suppressMessages(readxl::read_excel(name_file, sheet=1,skip=0,col_names = FALSE))
+        file <- suppressMessages(readxl::read_excel(file_name, sheet=1,skip=0,col_names = FALSE))
 
         if(file[1,1]=="Block Type"){
             file_mod <- file %>% dplyr::filter(!is.na(...6))
@@ -579,8 +579,15 @@ load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_
                 file_mod <- subset (file_mod, select = -c(Well,`Well Position`,`Ct Threshold`)) # Drop some columns not needed
             }
 
-            file_mod <- file_mod[-contains(c('T-','T+', "T+ RSVA", "T+ SARSCOV2", "T- H2O"),
-                                     vars = c(file_mod$`Sample Name`)),]
+            # file_mod <- file_mod[-contains(c('T-','T+', "T+ RSVA", "T+ SARSCOV2", "T- H2O"),
+            #                          vars = c(file_mod$`Sample Name`)),]
+            file_mod <- file_mod[
+                !stringr::str_detect(
+                    file_mod[["Sample Name"]],
+                    paste(c("T-", "T+", "T+ RSVA", "T+ SARSCOV2", "T- H2O"), collapse = "|")
+                ),
+            ]
+
 
             colnames(file_mod) <- c('Sample','Target_Name','CT')
         }
