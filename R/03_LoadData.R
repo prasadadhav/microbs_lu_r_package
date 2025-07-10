@@ -579,16 +579,14 @@ load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_
                 file_mod <- subset (file_mod, select = -c(Well,`Well Position`,`Ct Threshold`)) # Drop some columns not needed
             }
 
-            # file_mod <- file_mod[-contains(c('T-','T+', "T+ RSVA", "T+ SARSCOV2", "T- H2O"),
-            #                          vars = c(file_mod$`Sample Name`)),]
-            file_mod <- file_mod[
-                !stringr::str_detect(
-                    file_mod[["Sample Name"]],
-                    paste(c("T-", "T+", "T+ RSVA", "T+ SARSCOV2", "T- H2O"), collapse = "|")
-                ),
-            ]
-
-
+            file_mod <- file_mod[-dplyr::contains(c('T-','T+', "T+ RSVA", "T+ SARSCOV2", "T- H2O"),
+                                     vars = c(file_mod$`Sample Name`)),]
+            # file_mod <- file_mod[
+            #     !stringr::str_detect(
+            #         file_mod[["Sample Name"]],
+            #         paste(c("T-", "T+", "T+ RSVA", "T+ SARSCOV2", "T- H2O"), collapse = "|")
+            #     ),
+            # ]
             colnames(file_mod) <- c('Sample','Target_Name','CT')
         }
 
@@ -609,21 +607,21 @@ load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_
                 .default = as.character(file_mod$Target_Name)
             )
 
-            for(j in 1 : nrow(file_mod)){
             file_mod <- file_mod %>%
                 dplyr::mutate(dilution = dplyr::case_when(
                     grepl("D$", Sample) ~ 2,      # if the name ends with "D", value = 2
                     grepl("d$", Sample) ~ 10,
                     TRUE ~ 0                    # if not, value = 0
-                ))
-            }
+            ))
 
-            if(substr(file_mod$Sample[j], 1, 3)  %in% c("BET","BEG","PET","SCH", "BLE", "MER", "HES","ECH", "UEB", "GRE", "VIE", "BOE", "WIL")){
-                    df_new_raw_qPCR_data <- plyr::rbind.fill(df_new_raw_qPCR_data , file_mod[j,])
-                }
-                else{
-                    df_new_raw_qPCR_data  <- plyr::rbind.fill(df_new_raw_qPCR_data , file_mod[j,])
-                }
+            # if(substr(file_mod$Sample[j], 1, 3)  %in% c("BET","BEG","PET","SCH", "BLE", "MER", "HES","ECH", "UEB", "GRE", "VIE", "BOE", "WIL")){
+            #         df_new_raw_qPCR_data <- plyr::rbind.fill(df_new_raw_qPCR_data , file_mod[j,])
+            #     }
+            #     else{
+            #         df_new_raw_qPCR_data  <- plyr::rbind.fill(df_new_raw_qPCR_data , file_mod[j,])
+            #     }
+
+            df_new_raw_qPCR_data  <- plyr::rbind.fill(df_new_raw_qPCR_data , file_mod[j,])
         }
     }
 
