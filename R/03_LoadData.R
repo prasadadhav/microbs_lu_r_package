@@ -143,6 +143,8 @@ archive_microbs_loaded_ddPCR_Data <- function(path_to_old_raw_excel_ddPCR = .mic
         }
     }
 
+    unique(files_list)
+
     if (length(files_list) == 0) {
         message("[microbs Report]: No SUPERVIR_RAW_DATA_ddPCR_* files found to archive in ", path_to_old_raw_excel_ddPCR)
         return(invisible(character(0)))
@@ -292,6 +294,8 @@ archive_microbs_loaded_qPCR_Data <- function(path_to_old_raw_excel_qPCR = .micro
             files_list <- c(files_list, file)
         }
     }
+
+    unique(files_list)
 
     if (length(files_list) == 0) {
         message("[microbs Report]: No SUPERVIR_RAW_DATA_qPCR_* files found to archive in ", path_to_old_raw_excel_qPCR)
@@ -508,6 +512,8 @@ archive_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPC
         file.remove(from = file_name)
     }
 
+    unique(files_list)
+
     if (length(files_list) == 0) {
         message("[microbs Report]: No CSV files found to archive in ", path_to_raw_ddPCR)
         return(invisible(character(0)))
@@ -723,6 +729,8 @@ archive_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_r
         file.remove(from = file_name)
     }
 
+    unique(files_list)
+
     if (length(files_list) == 0) {
         message("[microbs Report]: No XLS files found to archive in ", path_to_raw_qPCR)
         return(invisible(character(0)))
@@ -884,6 +892,8 @@ archive_microbs_check_ddPCR_Data <- function(path_to_check_data_ddPCR = .microbs
         }
     }
 
+    unique(files_list)
+
     if (length(files_list) == 0) {
         message("[microbs Report]: No Check_data_ddPCR_ files found to archive in ", path_to_check_data_ddPCR)
         return(invisible(character(0)))
@@ -1031,6 +1041,8 @@ archive_microbs_check_qPCR_Data <- function(path_to_check_data_qPCR = .microbs_e
         }
     }
 
+    unique(files_list)
+
     if (length(files_list) == 0) {
         message("[microbs Report]: No Check_data_qPCR_ files found to archive in ", path_to_check_data_qPCR)
         return(invisible(character(0)))
@@ -1127,7 +1139,7 @@ load_microbs_old_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_
 archive_microbs_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_env$calc_data_path) {
     # load the data 
     if (missing(path_to_calc_data_ddPCR)) {
-        path_to_calc_data_ddPCR = get_microbs_ddPCR_rawDataPath()
+        path_to_calc_data_ddPCR = get_microbs_calc_DataPath()
         message("[microbs Report]: No path provided. Using default path: ", path_to_calc_data_ddPCR)
     }
 
@@ -1139,7 +1151,7 @@ archive_microbs_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_e
     file_info <- utils::fileSnapshot(path_to_calc_data_ddPCR)$info
     file_info <- subset(file_info, file_info$isdir == FALSE)
     file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
-    file_info <- subset(file_info,grepl("calc_data_ddPCR_",rownames(file_info)))
+    file_info <- subset(file_info,grepl("CAL_DATA_ddPCR",rownames(file_info)))
 
     file_info <- file_info[order(file_info$mtime,decreasing = TRUE),]
 
@@ -1168,6 +1180,8 @@ archive_microbs_calc_ddPCR_Data <- function(path_to_calc_data_ddPCR = .microbs_e
             files_list <- c(files_list, file)
         }
     }
+
+    unique(files_list)
 
     if (length(files_list) == 0) {
         message("[microbs Report]: No SUPERVIR_CAL_DATA_ddPCR_ files found to archive in ", path_to_calc_data_ddPCR)
@@ -1270,7 +1284,7 @@ load_microbs_old_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_en
 archive_microbs_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env$calc_data_path) {
     # load the data 
     if (missing(path_to_calc_data_qPCR)) {
-        path_to_calc_data_qPCR = get_microbs_qPCR_rawDataPath()
+        path_to_calc_data_qPCR = get_microbs_calc_DataPath()
         message("[microbs Report]: No path provided. Using default path: ", path_to_calc_data_qPCR)
     }
 
@@ -1282,7 +1296,7 @@ archive_microbs_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env
     file_info <- utils::fileSnapshot(path_to_calc_data_qPCR)$info
     file_info <- subset(file_info, file_info$isdir == FALSE)
     file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
-    file_info <- subset(file_info,grepl("calc_data_qPCR_",rownames(file_info)))
+    file_info <- subset(file_info,grepl("CAL_DATA_qPCR",rownames(file_info)))
 
     file_info <- file_info[order(file_info$mtime, decreasing = TRUE),]
 
@@ -1311,6 +1325,8 @@ archive_microbs_calc_qPCR_Data <- function(path_to_calc_data_qPCR = .microbs_env
             files_list <- c(files_list, file)
         }
     }
+
+    unique(files_list)
 
     if (length(files_list) == 0) {
         message("[microbs Report]: No SUPERVIR_CAL_DATA_qPCR_ files found to archive in ", path_to_calc_data_qPCR)
