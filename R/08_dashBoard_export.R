@@ -427,7 +427,7 @@ dashboard_microbs_hRSV_export <- function(sheet1_hRSV = .microbs_env$sheet1_hRSV
         hidden = TRUE       
     )
 
-    xlxs_filename <- paste0(path_to_dashboard_data_hRSV, "/Data_hRSV_",
+    xlxs_filename <- paste0(path_to_dashboard_data_hRSV, "/Data_RSV_",
                    gsub(":", "-", sub(" CEST", "", Sys.time())),
                    ".xlsx")
     openxlsx::saveWorkbook(wb, xlxs_filename, overwrite = TRUE)
