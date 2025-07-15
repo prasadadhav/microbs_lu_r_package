@@ -86,7 +86,7 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
             substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "GRE" ~ 9835,
             substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "VIE" ~ 3411,
             substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "BOE" ~ 7818,
-            substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "WIL" ~ 6944,
+            substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "WIL" ~ 6944
         )
     )
 
@@ -329,14 +329,14 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 #' 
 
 calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_env$loaded_data_path, path_to_calc_data_qPCR = .microbs_env$calc_data_path) {
-    if (is.null(path_to_loaded_raw_excel_qPCR = .microbs_env$loaded_data_path)) {
+    if (is.null(.microbs_env$loaded_data_path)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_loaded_DataPath(),")
         message("and then load_microbs_old_raw_qPCR_Data() function to set a path")
     }
     
     df_new_raw_qPCR_data <- get_microbs_new_raw_qPCR_Data()
 
-    if (is.null(path_to_calc_data_qPCR = .microbs_env$calc_data_path)) {
+    if (is.null(.microbs_env$calc_data_path)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_calc_DataPath(),")
         message("and then load_microbs_old_calc_qPCR_Data() function to set a path")
     }
@@ -378,7 +378,7 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
     df_new_raw_qPCR_data_mutate <- tidyr::pivot_wider(df_new_raw_qPCR_data_mutate,
                                                     names_from = num,
                                                     id_cols = c(Sample,Target_Name),
-                                                    values_from = c(CT,CT_sign,positive)
+                                                    values_from = c(CT, CT_sign, positive)
                                                 )
 
     std_curve_path <- get_microbs_stdCurve_DataPath()
@@ -407,7 +407,7 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
             substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "GRE" ~ 9835,
             substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "VIE" ~ 3411,
             substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "BOE" ~ 7818,
-            substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "WIL" ~ 6944,
+            substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "WIL" ~ 6944
         )
     )
 
@@ -417,6 +417,12 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
 
     df_flux_data <- df_flux_data[ , !names(df_flux_data) %in% c("Site", "Water type")]
     colnames(df_flux_data) <- c('Sample','Sample_Date','Flow_rate','week_nb')
+
+    fix_sample_name <- function(x) {
+        stringr::str_replace(x, "^([A-Z]{3})0*(\\d+)d$", "\\1\\2d")
+    }
+
+    df_new_raw_qPCR_data_mutate$Sample <- fix_sample_name(df_new_raw_qPCR_data_mutate$Sample)
 
     df_new_raw_qPCR_data_mutate <- dplyr::left_join(df_new_raw_qPCR_data_mutate, df_flux_data, by = c("Sample"))
 

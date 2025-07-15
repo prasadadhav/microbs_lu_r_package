@@ -626,7 +626,7 @@ archive_microbs_created_rsv_Data <- function(path_to_create_data_ddPCR = .microb
 #' 
 #' @export 
 create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$created_data_path) {
-    if (is.null(path_to_create_data_qPCR = .microbs_env$created_data_path)) {
+    if (is.null(path_to_create_data_qPCR)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_created_DataPath(),")
         message("and then load_microbs_old_raw_ddPCR_Data() function to set a path")
     }
