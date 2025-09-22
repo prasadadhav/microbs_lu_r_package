@@ -1522,7 +1522,7 @@ load_microbs_old_dashboard_hRSV_Data <- function(path_to_dashboard_data_hRSV = .
     file_info <- subset(file_info, file_info$isdir == FALSE)
     file_info <- subset(file_info, !grepl("^~", rownames(file_info)))
     # only keep the file names containg "Data_RSV.xlsx"
-    file_info <- subset(file_info,grepl("Data_RSV",rownames(file_info)))
+    file_info <- subset(file_info,grepl("Data_hRSV",rownames(file_info)))
     
     # dashboard if we have atleast one file
     if (nrow(file_info) == 0) {
