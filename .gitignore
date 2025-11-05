@@ -4,3 +4,5 @@ inst/doc
 *.Rd
 token.txt
 999_dummy_file.R
+/doc/
+/Meta/
