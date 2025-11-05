@@ -1,0 +1,97 @@
+
+---
+title: "Pipeline Walkthrough by Stage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pipeline Walkthrough by Stage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4
+)
+```
+
+
+# Pipeline Walkthrough by Stage
+
+This vignette maps each stage to the relevant functions, expected inputs/outputs, typical filenames, and suggested validations.
+
+## 1) Paths & Configuration
+
+Helpers (setter + getter for each path):
+- `set_microbs_wdirectory()`, `get_microbs_wdirectory()` — package root/WD (e.g., a mapped network drive).
+- `set_microbs_connector_dir()`, `get_microbs_connector_dir()` — usually `Data_Treatment/`.
+- Raw data: `set_microbs_qPCR_rawDataPath()`, `get_microbs_qPCR_rawDataPath()`, `set_microbs_ddPCR_rawDataPath()`, `get_microbs_ddPCR_rawDataPath()`.
+- Shared data: `set_microbs_flux_DataPath()`, `get_microbs_flux_DataPath()`, `set_microbs_stdCurve_DataPath()`, `get_microbs_stdCurve_DataPath()`.
+- Processed stages: `set_microbs_loaded_DataPath()`, `get_microbs_loaded_DataPath()`, `set_microbs_check_DataPath()`, `get_microbs_check_DataPath()`,
+  `set_microbs_calc_DataPath()`, `get_microbs_calc_DataPath()`, `set_microbs_created_DataPath()`, `get_microbs_created_DataPath()`,
+  `set_microbs_dashboard_DataPath()`, `get_microbs_dashboard_DataPath()`.
+
+**Validation:** After setting, call each `get_…()` to confirm the resolved absolute path exists and is writable.
+
+## 2) Load shared reference data
+
+- `load_microbs_flux_Data()` → DataFrame with `Sample_Date` and other fields used in downstream merges and date validation.
+- (if provided) `load_microbs_stdCurve_Data()` → Standard curve parameters for calculations.
+
+**Files:** sourced from `00_flux_data/` and `00_standard_curve/` (Excel format by convention).
+
+## 3) Old raw data (historical context)
+
+- `load_microbs_old_raw_ddPCR_Data()` and `load_microbs_old_raw_qPCR_Data()`
+  - Reads historical “loaded” raw data from `1_loaded_data/` to retain continuity (e.g., historical sample IDs).
+
+## 4) New raw data ingestion → `1_loaded_data/`
+
+- `load_microbs_raw_ddPCR_Data()` and `load_microbs_raw_qPCR_Data()`
+  - Read fresh input files under `0_raw_data_*PCR/` and **write merged** Excel files under `1_loaded_data/`,
+    typically named: `SUPERVIR_RAW_DATA_ddPCR_*.xlsx`, `SUPERVIR_RAW_DATA_qPCR_*.xlsx` (with a timestamp).
+
+**Archiving (optional):**  
+- `archive_microbs_raw_ddPCR_Data()`, `archive_microbs_raw_qPCR_Data()` — move consumed raw inputs to an archive subfolder.  
+- `archive_microbs_loaded_ddPCR_Data()`, `archive_microbs_loaded_qPCR_Data()` — archive previous merged files before overwriting.
+
+## 5) Check & Clean → `1_ckeck_data/`
+
+- `check_microbs_raw_ddPCR_Data()` — generate a `Check_data_ddPCR_*.xlsx` with validation flags (duplicates, missing fields, date mismatches, etc.).
+- `check_microbs_raw_qPCR_Data()` — similar for qPCR (enable when implemented).
+
+**Tip:** Keep this step under review and expand rules as new edge cases are found.
+
+## 6) Calculations → `2_calc_data/`
+
+- `load_microbs_old_calc_ddPCR_Data()`, `load_microbs_old_calc_qPCR_Data()` — read previously calculated data.
+- `calculations_microbs_ddPCR()`, `calculations_microbs_qPCR()` — compute concentrations/converted measures and write
+  `SUPERVIR_CAL_DATA_ddPCR_*.xlsx` / `SUPERVIR_CAL_DATA_qPCR_*.xlsx`.
+
+**Archiving:** `archive_microbs_calc_ddPCR_Data()`, `archive_microbs_calc_qPCR_Data()` if you want to keep a rolling history.
+
+## 7) Create per-virus deliverables → `3_created_data/`
+
+- `create_microbs_flu_file()`
+- `create_microbs_rsv_file()`
+- `create_microbs_sars_file()`
+
+These slice calculated data by virus and write curated sheets/files for downstream use.
+
+**Archiving:** `archive_microbs_created_flu_Data()`, `archive_microbs_created_rsv_Data()` as needed.
+
+## 8) Dashboard exports → `4_data_4_dashboard/`
+
+- Historical reads: `load_microbs_old_dashboard_flu_Data()`, `load_microbs_old_dashboard_hRSV_Data()`, `load_microbs_old_dashboard_sars_Data()`
+- Exports: `dashboard_microbs_flu_export()`, `dashboard_microbs_hRSV_export()`, `dashboard_microbs_SARS_CoV_export()`
+  - Write CSV/XLSX ready for publication to the dashboard.
+
+## 9) Verification checklist
+
+- The **latest `Sample_Date`** in flux aligns with the newest raw sample dates.
+- The **row counts** for Flu, RSV, and SARS outputs reflect the ingestion period.
+- No **NA/Inf** in key numeric columns post-calculation.
+- Filenames include today’s timestamp where expected.
+- A quick `sessionInfo()` is stored with outputs for traceability.

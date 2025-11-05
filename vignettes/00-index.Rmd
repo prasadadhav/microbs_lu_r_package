@@ -1,0 +1,36 @@
+
+---
+title: "microbs.lu — Index"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{microbs.lu — Index}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4
+)
+```
+
+
+# About
+
+This set of vignettes documents the **microbs.lu** package for processing **qPCR** and **ddPCR** data, generating calculations and dashboard-ready outputs. It is organized for two audiences:
+
+- **Operators** (non-technical): how to install, set up folders, run the weekly pipeline, and verify results.
+- **Developers**: how the package is structured, how to edit functions, rebuild, test, and release.
+
+## Vignette list
+
+- **Getting Started & Quick Pipeline** — an end-to-end walkthrough of a typical weekly run.
+- **Pipeline Walkthrough by Stage** — each function family, expected inputs/outputs, and file naming.
+- **Troubleshooting & FAQs** — common errors and quick fixes.
+- **Developer Guide** — develop, document, test, check, build, and version the package.
+- **Examples & Recipes** — small example snippets for common tasks.
+
+> These vignettes are written against the repository `prasadadhav/microbs_lu_r_package`. Function names follow the package namespace `microbs.lu`.

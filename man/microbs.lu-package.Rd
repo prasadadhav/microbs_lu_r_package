@@ -9,7 +9,7 @@
 In Luxembourg the waste water treatment plant samples are used to monitor for epidemic disease such as RSV, Influenza, SARS CoV2 etc. This package takes the raw data files from qPCR and ddPCR tests and prepares them for the microbs.lu i.e. Luxembourgish national dashboard.
 }
 \author{
-\strong{Maintainer}: Prasad ADHAV \email{prasad.adhav@list.lu}
+\strong{Maintainer}: Prasad prasada31@yahoo.in ADHAV \email{prasad.adhav@list.lu}
 
 }
 \keyword{internal}

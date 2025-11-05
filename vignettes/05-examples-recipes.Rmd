@@ -1,0 +1,85 @@
+
+---
+title: "Examples & Recipes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Examples & Recipes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4
+)
+```
+
+
+# Examples & Recipes
+
+This vignette contains small, copy-pasteable snippets for common tasks.
+
+## Print active paths
+
+```r
+c(
+  wd            = get_microbs_wdirectory(),
+  connector     = get_microbs_connector_dir(),
+  raw_qpcr      = get_microbs_qPCR_rawDataPath(),
+  raw_ddpcr     = get_microbs_ddPCR_rawDataPath(),
+  flux          = get_microbs_flux_DataPath(),
+  stdcurve      = get_microbs_stdCurve_DataPath(),
+  loaded        = get_microbs_loaded_DataPath(),
+  check         = get_microbs_check_DataPath(),
+  calc          = get_microbs_calc_DataPath(),
+  created       = get_microbs_created_DataPath(),
+  dashboard     = get_microbs_dashboard_DataPath()
+)
+```
+
+## Import new ddPCR files only
+
+```r
+set_microbs_ddPCR_rawDataPath("0_raw_data_ddPCR")
+set_microbs_loaded_DataPath("1_loaded_data", build_path = TRUE)
+
+ddPCR_old <- load_microbs_old_raw_ddPCR_Data()
+ddPCR_new <- load_microbs_raw_ddPCR_Data()
+
+# Archive raw after success:
+# archive_microbs_raw_ddPCR_Data()
+```
+
+## Re-run calculations for qPCR
+
+```r
+set_microbs_calc_DataPath("2_calc_data")
+
+old_q <- load_microbs_old_calc_qPCR_Data()
+new_q <- calculations_microbs_qPCR()
+
+# Archive old calc after success:
+# archive_microbs_calc_qPCR_Data()
+```
+
+## Create dashboard exports only
+
+```r
+dashboard_microbs_flu_export()
+dashboard_microbs_hRSV_export()
+dashboard_microbs_SARS_CoV_export()
+```
+
+## Minimal smoke test (suggested)
+
+```r
+stopifnot(dir.exists(get_microbs_wdirectory()))
+stopifnot(file.exists(file.path(get_microbs_wdirectory(),
+                                get_microbs_connector_dir(),
+                                "00_flux_data")))
+# Add more asserts for required input files/columns as needed.
+```
+

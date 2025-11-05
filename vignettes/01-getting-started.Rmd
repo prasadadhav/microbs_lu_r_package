@@ -1,0 +1,121 @@
+
+---
+title: "Getting Started & Quick Pipeline"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started & Quick Pipeline}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4
+)
+```
+
+
+# Overview
+
+The **microbs.lu** package organizes data ingestion, checks, calculations, creation of per‑virus sheets, and export of dashboard‑ready files. It expects a specific directory layout and provides helper functions to define paths, load & archive files, and run the pipeline stage by stage.
+
+## Installation
+
+```r
+# One-time: install devtools/remotes if needed
+install.packages(c("remotes","devtools"))
+
+# If your GitHub requires a token:
+Sys.setenv(GITHUB_PAT = "YOUR_TOKEN")
+
+# Install the development version from GitHub
+remotes::install_github("prasadadhav/microbs_lu_r_package")
+library(microbs.lu)
+```
+
+## Required directory structure
+
+Under your working directory (WD), ensure this exact layout (names are significant):
+
+```
+Data_Treatment/
+  00_flux_data/
+  00_standard_curve/
+  0_raw_data_ddPCR/
+  0_raw_data_qPCR/
+  1_loaded_data/
+  1_ckeck_data/        # note spelling
+  2_calc_data/
+  3_created_data/
+  4_data_4_dashboard/
+microbs_runtime.R
+```
+
+## Quick pipeline (minimal example)
+
+```r
+library(microbs.lu)
+
+# --- Configure paths (prints will confirm active locations) ---
+set_microbs_wdirectory("L:/Units & Programmes/BIOTECH/ENVMICRO/_Common/Projects/SUPERVIR/11-Results")
+get_microbs_wdirectory()
+
+set_microbs_connector_dir("Data_Treatment");        get_microbs_connector_dir()
+set_microbs_qPCR_rawDataPath("0_raw_data_qPCR");    get_microbs_qPCR_rawDataPath()
+set_microbs_ddPCR_rawDataPath("0_raw_data_ddPCR");  get_microbs_ddPCR_rawDataPath()
+set_microbs_flux_DataPath("00_flux_data");          get_microbs_flux_DataPath()
+set_microbs_stdCurve_DataPath("00_standard_curve"); get_microbs_stdCurve_DataPath()
+set_microbs_loaded_DataPath("1_loaded_data", build_path = TRUE);  get_microbs_loaded_DataPath()
+set_microbs_check_DataPath("1_ckeck_data");         get_microbs_check_DataPath()
+set_microbs_calc_DataPath("2_calc_data");           get_microbs_calc_DataPath()
+set_microbs_created_DataPath("3_created_data");     get_microbs_created_DataPath()
+set_microbs_dashboard_DataPath("4_data_4_dashboard"); get_microbs_dashboard_DataPath()
+
+# --- Load shared data ---
+df_flux_data <- load_microbs_flux_Data()
+tail(df_flux_data$Sample_Date, 1)
+
+# --- Load old raw ---
+ddPCR_old_raw <- load_microbs_old_raw_ddPCR_Data()
+qPCR_old_raw  <- load_microbs_old_raw_qPCR_Data()
+
+# --- Load new raw -> 1_loaded_data ---
+ddPCR_new_raw <- load_microbs_raw_ddPCR_Data()
+qPCR_new_raw  <- load_microbs_raw_qPCR_Data()
+
+# [Optional] archive consumed raw & the updated 'loaded' files
+# archive_microbs_raw_ddPCR_Data(); archive_microbs_raw_qPCR_Data()
+# archive_microbs_loaded_ddPCR_Data(); archive_microbs_loaded_qPCR_Data()
+
+# --- Checks -> 1_ckeck_data ---
+# ddPCR_new_check <- check_microbs_raw_ddPCR_Data()
+# qPCR_new_check  <- check_microbs_raw_qPCR_Data()   # if implemented
+
+# --- Calculations -> 2_calc_data ---
+ddPCR_calc <- calculations_microbs_ddPCR()
+qPCR_calc  <- calculations_microbs_qPCR()
+
+# --- Create per-virus -> 3_created_data ---
+create_microbs_flu_file()
+create_microbs_rsv_file()
+create_microbs_sars_file()
+
+# --- Dashboard exports -> 4_data_4_dashboard ---
+dash_flu  <- load_microbs_old_dashboard_flu_Data()
+dash_rsv  <- load_microbs_old_dashboard_hRSV_Data()
+dash_sars <- load_microbs_old_dashboard_sars_Data()
+
+dashboard_microbs_flu_export()
+dashboard_microbs_hRSV_export()
+dashboard_microbs_SARS_CoV_export()
+
+sessionInfo()
+```
+
+## Archiving — when to enable
+
+- First run: inspect outputs; if good, re-run the relevant `archive_microbs_*()` helpers to tidy inputs/previous outputs.
+- Routine use: archive immediately after a successful weekly run to keep the folders clean and traceable.

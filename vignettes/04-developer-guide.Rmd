@@ -1,0 +1,85 @@
+
+---
+title: "Developer Guide"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Developer Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4
+)
+```
+
+
+# Developer Guide
+
+This vignette explains how to inspect, modify, test, and release **microbs.lu**.
+
+## Explore the package
+
+```r
+library(microbs.lu)
+help(package = "microbs.lu")               # index
+getNamespaceExports("microbs.lu")          # exported functions
+?load_microbs_flux_Data                    # example: open a function's help
+```
+
+## Make a change
+
+1. Clone/open the repository in RStudio (`microbs.lu.Rproj`).
+2. Edit functions under `R/`. Keep one function per file where practical.
+3. Add **roxygen2** comments: `@param`, `@return`, `@examples`, `@export`.
+4. Regenerate docs and install:
+   ```r
+   install.packages(c("devtools","roxygen2","testthat"))
+   devtools::document()
+   devtools::install()
+   ```
+5. Run tests (if present):
+   ```r
+   devtools::test()
+   ```
+6. Run a full check:
+   ```r
+   devtools::check()
+   ```
+
+## Build & install artifacts
+
+```r
+devtools::build()     # source tar.gz
+# Terminal:
+# R CMD build .
+# R CMD INSTALL microbs.lu_X.Y.Z.tar.gz
+```
+
+## Reproducible environments
+
+Pin dependency versions with **renv**:
+
+```r
+install.packages("renv")
+renv::init()
+# install deps / make changes
+renv::snapshot()
+# On a new machine:
+renv::restore()
+```
+
+## Coding patterns worth following
+
+- Prefer explicit `readxl::read_xlsx()` and `writexl::write_xlsx()` calls with schemas documented in function headers.
+- Validate inputs early (`stopifnot()` or custom validators).
+- Keep a small `inst/extdata/` example to support smoke tests.
+
+## Versioning & NEWS
+
+- Bump `Version:` in `DESCRIPTION` for any user-visible changes.
+- Maintain `NEWS.md` summarizing changes for operators.

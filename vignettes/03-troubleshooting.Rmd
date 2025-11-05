@@ -1,0 +1,72 @@
+
+---
+title: "Troubleshooting & FAQs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Troubleshooting & FAQs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4
+)
+```
+
+
+# Troubleshooting & FAQs
+
+This vignette lists common symptoms, likely causes, and fixes during weekly runs.
+
+## File & path issues
+
+**“File or directory not found”**  
+- Working directory not set / wrong drive mapping.  
+- The network path changed or you lack write permissions.  
+**Fix:** re-run the path `set_microbs_*()` calls and confirm with `get_microbs_*()`; prefer UNC paths on servers.
+
+**“Cannot write Excel / file is locked”**  
+- Excel has the file open; a network lock is active.  
+**Fix:** close the file everywhere; if necessary, write with a new suffix, then archive older versions.
+
+## Data problems
+
+**No new samples imported**  
+- Raw filenames or column headers don’t match expectations.  
+**Fix:** compare to a known-good file from last week; adjust headers; re-run only the “Load new raw” step.
+
+**Dates look wrong**  
+- Locale mismatch / Excel serial dates.  
+**Fix:** enforce ISO `YYYY-MM-DD` in raw files; if a column is numeric, format as Date before saving.
+
+**Missing columns in virus outputs**  
+- Standard curve or flux is missing/stale.  
+**Fix:** refresh `00_standard_curve/` and `00_flux_data/` and re-run from the top.
+
+## Function-level debugging
+
+Use base R tools:
+
+```r
+debugonce(load_microbs_raw_ddPCR_Data)
+load_microbs_raw_ddPCR_Data()
+
+traceback()          # after an error
+# rlang::last_trace()  # if tidyverse style errors appear
+browser()            # add inside a function body to inspect runtime state
+```
+
+## Archiving strategy
+
+- Confirm outputs first; then archive.  
+- In a recovery scenario, re-hydrate from the archived files (kept with original timestamps).
+
+## When to re-run which block?
+
+- **Changed raw files:** re-run *Load new raw → Checks → Calculations → Create → Dashboard*.
+- **Adjusted calculations only:** re-run *Calculations → Create → Dashboard*.
+- **Dashboard layout tweaks:** re-run *Create → Dashboard*.
