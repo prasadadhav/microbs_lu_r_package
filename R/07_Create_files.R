@@ -10,6 +10,35 @@
 #' 
 #' file ./microbs.lu/R/07_Create_files.R
 #' 
+#' @param path_to_create_data_ddPCR Path to store the created Flu data files.
+#'   Defaults to `.microbs_env$created_data_path`.
+#'
+#' @return Invisibly returns NULL. Side effects include:
+#'   \itemize{
+#'     \item Creates an Excel workbook with sheets for aggregate CT data, 
+#'       WWTP-specific CT data, aggregate positivity rates, and WWTP positivity rates
+#'     \item Saves the workbook as an xlsx file with timestamp
+#'     \item Stores results in `.microbs_env$sheet1_flu`, `.microbs_env$sheet2_flu`,
+#'       `.microbs_env$sheet3_flu`, and `.microbs_env$sheet4_flu`
+#'   }
+#'
+#' @details
+#' This function processes calculated ddPCR data for Flu A/B by:
+#' \itemize{
+#'   \item Extracting Flu A and Flu B data from calculated results
+#'   \item Aggregating weekly concentration data nationwide and by WWTP
+#'   \item Computing copies per day per 100,000 inhabitants
+#'   \item Calculating weekly positivity rates
+#'   \item Creating four sheets:
+#'     \itemize{
+#'       \item Sheet 1: National weekly CT aggregate data
+#'       \item Sheet 2: Weekly CT data per WWTP
+#'       \item Sheet 3: Weekly positivity rates (national)
+#'       \item Sheet 4: Weekly positivity rates per WWTP
+#'     }
+#'   \item Freezing header rows in all sheets
+#' }
+#' 
 #' @examples
 #' \dontrun{
 #' # Example usage
@@ -336,6 +365,35 @@ archive_microbs_created_flu_Data <- function(path_to_create_data_ddPCR = .microb
 #' 
 #' file ./microbs.lu/R/07_Create_files.R
 #' 
+#' @param path_to_create_data_ddPCR Path to store the created RSV data files.
+#'   Defaults to `.microbs_env$created_data_path`.
+#'
+#' @return Invisibly returns NULL. Side effects include:
+#'   \itemize{
+#'     \item Creates an Excel workbook with sheets for aggregate CT data,
+#'       WWTP-specific CT data, aggregate positivity rates, and WWTP positivity rates
+#'     \item Saves the workbook as an xlsx file with timestamp
+#'     \item Stores results in `.microbs_env$sheet1_hRSV`, `.microbs_env$sheet2_hRSV`,
+#'       `.microbs_env$sheet3_hRSV`, and `.microbs_env$sheet4_hRSV`
+#'   }
+#' 
+#' @details
+#' This function processes calculated ddPCR data for hRSV by:
+#' \itemize{
+#'   \item Extracting hRSV data from calculated results
+#'   \item Aggregating weekly concentration data nationwide and by WWTP
+#'   \item Computing copies per day per 100,000 inhabitants
+#'   \item Calculating weekly positivity rates
+#'   \item Creating four sheets:
+#'     \itemize{
+#'       \item Sheet 1: National weekly CT aggregate data
+#'       \item Sheet 2: Weekly CT data per WWTP
+#'       \item Sheet 3: Weekly positivity rates (national)
+#'       \item Sheet 4: Weekly positivity rates per WWTP
+#'     }
+#'   \item Freezing header rows in all sheets
+#' }
+#' 
 #' @examples
 #' \dontrun{
 #' # Example usage
@@ -595,6 +653,25 @@ archive_microbs_created_rsv_Data <- function(path_to_create_data_ddPCR = .microb
 #' 
 #' file ./microbs.lu/R/07_Create_files.R
 #' 
+#' @param path_to_create_data_qPCR Character. Path where created SARS-CoV-2 output
+#'   files will be saved. Defaults to `.microbs_env$created_data_path`.
+#'
+#' @return Invisibly returns NULL. Side effects:
+#'   \itemize{
+#'     \item Creates and saves an xlsx file named SUPERVIR_WW_SARSCOV2_AGG_*.xlsx
+#'     \item Stores sheet data frames in `.microbs_env$sheet1_sars`,
+#'       `.microbs_env$sheet2_sars`, `.microbs_env$sheet3_sars`,
+#'       and `.microbs_env$sheet4_sars`.
+#'   }
+#' 
+#' @details The function:
+#'   \itemize{
+#'     \item Loads calculated qPCR SARS-CoV-2 data via get_microbs_new_calc_qPCR_Data()
+#'     \item Computes WWTP means, national aggregates and per-100k inhabitants values
+#'     \item Builds four sheets (weekly aggregate, WWTP weekly, positivity aggregate, positivity WWTP)
+#'     \item Writes and timestamps an Excel workbook to path_to_create_data_qPCR
+#'   }
+#' 
 #' @examples
 #' \dontrun{
 #' # Example usage
@@ -824,10 +901,10 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' path_to_create_data_qPCR <- "D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/Data_Treatment/3_created_data"
-#' df_raw_qPCR_data <- archive_microbs_created_rsv_Data(path_to_create_data_qPCR)
+#' df_raw_qPCR_data <- archive_microbs_created_sars_Data(path_to_create_data_qPCR)
 #' }
 #' @export
-archive_microbs_created_rsv_Data <- function(path_to_create_data_qPCR = .microbs_env$created_data_path) {
+archive_microbs_created_sars_Data <- function(path_to_create_data_qPCR = .microbs_env$created_data_path) {
     # load the data 
     if (missing(path_to_create_data_qPCR)) {
         path_to_create_data_qPCR = get_microbs_qPCR_rawDataPath()

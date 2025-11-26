@@ -3,10 +3,35 @@
 #--------------------------------------------------------------------------------------------------------
 #' @title Do the export of flu for dashboard
 #' 
-#' @description The creation step export the calculated data 
-#' for export to be used on the dashboard for each virus. 
-#' In this funcion we handle all the excel files in the created data directory
+#' @description Export reformatted Flu A/B data for the dashboard. The function
+#'   builds national and WWTP-level tables, computes 3-week rolling means,
+#'   merges with historical dashboard data and sample/situation metadata, and
+#'   writes an Excel file named "Data_Flu_*.xlsx" into the dashboard data path.
 #' 
+#' @param sheet1_flu Data.frame. National Flu A/B aggregated sheet. Defaults to
+#'   `.microbs_env$sheet1_flu`.
+#' @param sheet2_flu Data.frame. Per-WWTP Flu A/B sheet. Defaults to
+#'   `.microbs_env$sheet2_flu`.
+#' @param path_to_create_data_ddPCR Character. Path to the created ddPCR data
+#'   directory (used to locate the created files). Defaults to
+#'   `.microbs_env$created_data_path`.
+#'
+#' @return Invisibly returns the new dashboard Flu data frame (`.microbs_env$df_new_dashboard_flu_data`).
+#'   Side effects:
+#'   \itemize{
+#'     \item Writes an xlsx file "Data_Flu_*.xlsx" to the dashboard data path
+#'     \item Stores the combined dashboard data in `.microbs_env$df_new_dashboard_flu_data`
+#'   }
+#'
+#' @details
+#'   The function:
+#'   \itemize{
+#'     \item Loads new create tables via get_microbs_new_create_flu_sheet1()/sheet2()
+#'     \item Loads historical dashboard data via get_microbs_old_dashboard_flu_Data()
+#'     \item Computes 3-week moving averages (zoo::rollmean + zoo::na.locf)
+#'     \item Recomputes sample counts and merges with situation metadata
+#'     \item Writes the results to an Excel workbook using openxlsx
+#'   }
 #' 
 #' file ./microbs.lu/R/08_dashBoard_export.R
 #' 
@@ -255,10 +280,36 @@ dashboard_microbs_flu_export <- function(sheet1_flu = .microbs_env$sheet1_flu, s
 #--------------------------------------------------------------------------------------------------------
 #' @title Do the export of RSV for dashboard
 #' 
-#' @description The creation step export the calculated data 
-#' for export to be used on the dashboard for each virus. 
-#' In this funcion we handle all the excel files in the created data directory
+#' @description Export reformatted hRSV ddPCR data for the dashboard. The
+#'   function builds national and WWTP-level tables, computes 3-week rolling
+#'   means, merges with historical dashboard data and sample/situation metadata,
+#'   and writes an Excel file named "Data_RSV_*.xlsx" into the dashboard data path.
 #' 
+#' 
+#' @param sheet1_hRSV Data.frame. National hRSV aggregated sheet. Defaults to
+#'   `.microbs_env$sheet1_hRSV`.
+#' @param sheet2_hRSV Data.frame. Per-WWTP hRSV sheet. Defaults to
+#'   `.microbs_env$sheet2_hRSV`.
+#' @param path_to_create_data_ddPCR Character. Path to the created ddPCR data
+#'   directory (used to locate the created files). Defaults to
+#'   `.microbs_env$created_data_path`.
+#'
+#' @return Invisibly returns the new dashboard hRSV data frame
+#'   (`.microbs_env$df_new_dashboard_hRSV_data`). Side effects:
+#'   \itemize{
+#'     \item Writes an xlsx file "Data_RSV_*.xlsx" to the dashboard data path
+#'     \item Stores the combined dashboard data in `.microbs_env$df_new_dashboard_hRSV_data`
+#'   }
+#'
+#' @details
+#'   The function:
+#'   \itemize{
+#'     \item Loads new create tables via get_microbs_new_create_hRSV_sheet1()/sheet2()
+#'     \item Loads historical dashboard data via get_microbs_old_dashboard_hRSV_Data()
+#'     \item Computes 3-week moving averages (zoo::rollmean + zoo::na.locf)
+#'     \item Recomputes sample counts and merges with situation metadata
+#'     \item Writes the results to an Excel workbook using openxlsx
+#'   }
 #' 
 #' file ./microbs.lu/R/08_dashBoard_export.R
 #' 
@@ -442,10 +493,34 @@ dashboard_microbs_hRSV_export <- function(sheet1_hRSV = .microbs_env$sheet1_hRSV
 #--------------------------------------------------------------------------------------------------------
 #' @title Do the export of SARS-CoV for dashboard
 #' 
-#' @description The creation step export the calculated data 
-#' for export to be used on the dashboard for each virus. 
-#' In this funcion we handle all the excel files in the created data directory
-#' 
+#' @description Reformat calculated SARS-CoV (qPCR) results for the dashboard.
+#'   The function computes WWTP and national tables, calculates 3-week rolling
+#'   means, merges with historical dashboard data and sample/situation metadata,
+#'   and writes an Excel file named "Data_SARCoV_*.xlsx" into the dashboard data path.
+#'
+#' @param sheet1_SARS_CoV Data.frame. National SARS-CoV aggregated sheet. Defaults to
+#'   `.microbs_env$sheet1_sars`.
+#' @param sheet2_SARS_CoV Data.frame. Per-WWTP SARS-CoV sheet. Defaults to
+#'   `.microbs_env$sheet2_sars`.
+#' @param path_to_create_data_ddPCR Character. Path to the created qPCR data
+#'   directory (used to locate the created files). Defaults to
+#'   `.microbs_env$created_data_path`.
+#'
+#' @return Invisibly returns the new dashboard SARS-CoV data frame
+#'   (`.microbs_env$df_new_dashboard_SARS_CoV_data`). Side effects:
+#'   \itemize{
+#'     \item Writes an xlsx file "Data_SARCoV_*.xlsx" to the dashboard data path
+#'     \item Stores the combined dashboard data in `.microbs_env$df_new_dashboard_SARS_CoV_data`
+#'   }
+#'
+#' @details The function:
+#'   \itemize{
+#'     \item Loads new create tables via get_microbs_new_create_sars_sheet1()/sheet2()
+#'     \item Loads historical dashboard data via get_microbs_old_dashboard_sars_Data()
+#'     \item Computes 3-week moving averages (zoo::rollmean + zoo::na.locf)
+#'     \item Recomputes sample counts and merges with situation metadata
+#'     \item Writes the results to an Excel workbook using openxlsx
+#'   }
 #' 
 #' file ./microbs.lu/R/08_dashBoard_export.R
 #' 

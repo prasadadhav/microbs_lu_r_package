@@ -10,6 +10,28 @@
 #' 
 #' file ./microbs.lu/R/06_Calculations.R
 #' 
+#' @param path_to_loaded_raw_excel_ddPCR Path to the loaded raw ddPCR data.
+#'   Defaults to `.microbs_env$loaded_data_path`.
+#' @param path_to_calc_data_ddPCR Path to store calculated ddPCR data.
+#'   Defaults to `.microbs_env$calc_data_path`.
+#'
+#' @return A data frame containing calculated ddPCR data with additional columns
+#'   for positive/negative classification, copies per liter, copies per day,
+#'   and copies per inhabitants, with dilution-adjusted values highlighted in yellow.
+#'
+#' @details
+#' This function processes ddPCR data by:
+#' \itemize{
+#'   \item Filtering for accepted droplets >= 10000
+#'   \item Classifying results as Positive or Negative based on positive droplet thresholds
+#'   \item Assigning population values based on sample site codes
+#'   \item Calculating copies per liter, per day, and per inhabitants
+#'   \item Applying dilution corrections (2x or 10x)
+#'   \item Pivoting data to wide format with multiple replicates
+#'   \item Computing mean values across replicates
+#'   \item Writing results to Excel with metadata and site information
+#' }
+#' 
 #' @examples
 #' \dontrun{
 #' # Example usage
@@ -295,6 +317,24 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 #' Preferably use full path.
 #' 
 #' file ./microbs.lu/R/06_Calculations.R
+#' 
+#' @param path_to_loaded_raw_excel_qPCR Path to the loaded raw qPCR data.
+#'   Defaults to `.microbs_env$loaded_data_path`.
+#' @param path_to_calc_data_qPCR Path to store calculated qPCR data.
+#'   Defaults to `.microbs_env$calc_data_path`.
+#'
+#' @return A data frame containing calculated qPCR data with additional columns
+#'   for CT classification, copies per reaction, and integrated flux data.
+#'
+#' @details
+#' This function processes qPCR data by:
+#' \itemize{
+#'   \item Replacing undetermined or NA CT values with 999
+#'   \item Classifying results as Positive (CT <= 37) or Negative (CT > 37)
+#'   \item Pivoting data to wide format with multiple replicates
+#'   \item Joining with standard curve and flux data
+#'   \item Calculating copies per reaction using standard curve parameters
+#' }
 #' 
 #' @examples
 #' \dontrun{
