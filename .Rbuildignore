@@ -1,3 +1,7 @@
+^renv$
+^renv\.lock$
 ^microbs\.lu\.Rproj$
 ^\.Rproj\.user$
 ^cran-comments\.md$
+^doc$
+^Meta$

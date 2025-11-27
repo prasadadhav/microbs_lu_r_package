@@ -6,3 +6,6 @@ token.txt
 999_dummy_file.R
 /doc/
 /Meta/
+/renv/
+.Rprofile
+renv.lock
