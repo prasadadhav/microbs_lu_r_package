@@ -112,11 +112,19 @@ utils_extract_WWTP <- function(sample_column) {
 #' [0-9]+.*$ → skips the rest (digits and any trailing letter like d)
 #'
 generate_weeks <- function(start_year, end_year) {
-    # Créer une séquence de dates pour chaque lundi de chaque semaine
-    dates <- seq.Date(from = as.Date(paste0(start_year, "-01-01")),
-                      to = as.Date(paste0(end_year, "-12-31")),
+
+    # ISO week 1 Monday is the Monday of the week containing Jan 4
+    start_date <- as.Date(paste0(start_year, "-01-04"))
+    start_monday <- start_date - lubridate::wday(start_date, week_start = 1) + 1
+
+    end_date <- as.Date(paste0(end_year, "-12-28"))  # always in last ISO week
+
+    dates <- seq.Date(from = start_monday,
+                      to = end_date,
                       by = "week")
-    # Extraire l'année et la semaine en format "YYYY_WW"
-    weeks <- format(dates, "%Y_%V")
+    
+    # Using %G instead of %Y, because %G is the ISO week-year
+    # %Y is the calendar year
+    weeks <- unique(format(dates, "%G_%V"))  # %G = ISO year (important!)
     return(unique(weeks))
 }

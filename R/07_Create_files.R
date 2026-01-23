@@ -71,7 +71,7 @@
 #' 
 #' @export 
 create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$created_data_path) {
-    if (is.null(path_to_loaded_raw_excel_ddPCR) | is.null(.microbs_env$created_data_path)) {
+    if (is.null(path_to_create_data_ddPCR) | is.null(.microbs_env$created_data_path)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_loaded_DataPath(),")
         message("and then load_microbs_old_raw_ddPCR_Data() function to set a path")
     }
@@ -117,7 +117,7 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
                                                                 na.rm = TRUE)
 
     weeks <- data.frame(week_nb = generate_weeks(2024, 2050))
-    weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%Y_%V"),]
+    weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%G_%V"),]
 
     #----------------------
     # Sheet 1: Aggregate the data for all weekly per WWTP and nationwide.
@@ -449,7 +449,7 @@ create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
 
     max_time <- pmax(as.Date(max(as.Date(data_hRSV_ddPCR$Sample_Date), na.rm = TRUE)), na.rm = TRUE)
     weeks <- data.frame(week_nb = generate_weeks(2024, 2050))
-    weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%Y_%V"),]
+    weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%G_%V"),]
 
     #----------------------
     # Sheet 1: Aggregate the data for all weekly per WWTP and nationwide.
@@ -747,7 +747,7 @@ create_microbs_sars_file <- function(path_to_create_data_qPCR = .microbs_env$cre
     max_time <- pmax(as.Date(max(as.Date(data_qPCR$Sample_Date), na.rm=TRUE)), na.rm = TRUE)
 
     weeks <- data.frame(week_nb = generate_weeks(2020, 2050))
-    weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%Y_%V"),]
+    weeks <- weeks[weeks$week_nb >= "2020_14" & weeks$week_nb <= format(max_time,"%G_%V"),]
 
     copies_days_inhab <- "copies_days_inhab_qPCR"
     var_name_num_1 <- "copies_day_sum_qPCR"
