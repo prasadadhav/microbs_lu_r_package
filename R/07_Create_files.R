@@ -71,7 +71,7 @@
 #' 
 #' @export 
 create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$created_data_path) {
-    if (is.null(path_to_loaded_raw_excel_ddPCR = .microbs_env$created_data_path)) {
+    if (is.null(path_to_loaded_raw_excel_ddPCR) | is.null(.microbs_env$created_data_path)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_loaded_DataPath(),")
         message("and then load_microbs_old_raw_ddPCR_Data() function to set a path")
     }
@@ -425,7 +425,7 @@ archive_microbs_created_flu_Data <- function(path_to_create_data_ddPCR = .microb
 #' 
 #' @export 
 create_microbs_rsv_file <- function(path_to_create_data_ddPCR = .microbs_env$created_data_path) {
-    if (is.null(path_to_create_data_ddPCR = .microbs_env$created_data_path)) {
+    if (is.null(path_to_create_data_ddPCR) | is.null(.microbs_env$created_data_path)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_created_DataPath(),")
         message("and then load_microbs_old_raw_ddPCR_Data() function to set a path")
     }

@@ -60,14 +60,14 @@
 #' 
 #' @export 
 calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs_env$loaded_data_path, path_to_calc_data_ddPCR = .microbs_env$calc_data_path) {
-    if (is.null(path_to_loaded_raw_excel_ddPCR = .microbs_env$loaded_data_path)) {
+    if (is.null(path_to_loaded_raw_excel_ddPCR) | is.null(.microbs_env$loaded_data_path)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_loaded_DataPath(),")
         message("and then load_microbs_old_raw_ddPCR_Data() function to set a path")
     }
 
     df_new_raw_ddPCR_data <- get_microbs_new_raw_ddPCR_Data()
 
-    if (is.null(path_to_calc_data_ddPCR = .microbs_env$calc_data_path)) {
+    if (is.null(path_to_calc_data_ddPCR) | is.null(.microbs_env$calc_data_path)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_calc_DataPath(),")
         message("and then load_microbs_old_calc_ddPCR_Data() function to set a path")
     }
