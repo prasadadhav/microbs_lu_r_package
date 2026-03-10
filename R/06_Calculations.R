@@ -2,14 +2,14 @@
 # Do the Calculations for ddPCR
 #--------------------------------------------------------------------------------------------------------
 #' @title Do the calculations for ddPCR
-#' 
+#'
 #' @description We only have the raw data from the ddPCR tests, and now we need to convert
 #' them into copies of RNA (per liter, per day, per day per 100.000 inhabitants)
 #' The calculations can be different for for different pathogens.
 #' Preferably use full path.
-#' 
+#'
 #' file ./microbs.lu/R/06_Calculations.R
-#' 
+#'
 #' @param path_to_loaded_raw_excel_ddPCR Path to the loaded raw ddPCR data.
 #'   Defaults to `.microbs_env$loaded_data_path`.
 #' @param path_to_calc_data_ddPCR Path to store calculated ddPCR data.
@@ -31,34 +31,34 @@
 #'   \item Computing mean values across replicates
 #'   \item Writing results to Excel with metadata and site information
 #' }
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' set_microbs_connector_dir("Data_Treatment")
-#' 
+#'
 #' path_to_raw_ddPCR <- "0_raw_data_ddPCR"
 #' set_microbs_ddPCR_rawDataPath(path_to_raw_ddPCR)
-#' 
+#'
 #' path_to_old_raw_excel_ddPCR <- "1_loaded_data"
 #' set_microbs_loaded_DataPath(path_to_old_raw_excel_ddPCR, , build_path = TRUE)
-#' 
+#'
 #' df_raw_old_ddPCR_data <- load_microbs_old_raw_ddPCR_Data()
 #' df_raw_ddPCR_data <- load_microbs_raw_ddPCR_Data()
-#' 
+#'
 #' load_microbs_old_raw_ddPCR_Data()
-#' 
+#'
 #' path_to_flux_data <- "00_flux_data"
 #' set_microbs_flux_DataPath(path_to_flux_data)
 #' load_microbs_flux_Data()
-#' 
+#'
 #' set_microbs_calc_DataPath("2_calc_data")
-#' 
+#'
 #' calculations_microbs_ddPCR()
 #' }
-#' 
-#' @export 
+#'
+#' @export
 calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs_env$loaded_data_path, path_to_calc_data_ddPCR = .microbs_env$calc_data_path) {
     if (is.null(path_to_loaded_raw_excel_ddPCR) | is.null(.microbs_env$loaded_data_path)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_loaded_DataPath(),")
@@ -73,7 +73,7 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
     }
 
     df_old_calc_ddPCR_data <- get_microbs_new_raw_ddPCR_Data()
-    
+
     # flux has the sample dates
     df_flux_data <- get_microbs_flux_Data()
 
@@ -92,7 +92,7 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
                                     )
 
     df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data %>%
-                             dplyr::filter(df_new_calc_ddPCR_data$Accepted_droplets >= 10000)
+                             dplyr::filter(df_new_calc_ddPCR_data$Accepted_droplets >= 8000)
 
     df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data %>%  dplyr::mutate(
         inhab = dplyr::case_when(
@@ -104,7 +104,7 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
             substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "MER" ~ 30473,
             substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "HES" ~ 15479,
             substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "ECH" ~ 7499,
-            substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "UEB" ~ 18600, 
+            substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "UEB" ~ 18600,
             substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "GRE" ~ 9835,
             substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "VIE" ~ 3411,
             substr(df_new_calc_ddPCR_data$Sample, 1, 3) %in% "BOE" ~ 7818,
@@ -124,11 +124,11 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 
             # The following conditions are added for dilution
             if(df_new_calc_ddPCR_data$dilution[i] == 2){
-                df_new_calc_ddPCR_data$copies_L[i] = df_new_calc_ddPCR_data$copies_L[i]*2 
+                df_new_calc_ddPCR_data$copies_L[i] = df_new_calc_ddPCR_data$copies_L[i]*2
             } else if(df_new_calc_ddPCR_data$dilution[i] == 10){
                 df_new_calc_ddPCR_data$copies_L[i] = df_new_calc_ddPCR_data$copies_L[i]*10
             }
-            
+
             df_new_calc_ddPCR_data$copies_day[i] <- df_new_calc_ddPCR_data$copies_L[i]*df_new_calc_ddPCR_data$Flow_rate[i]*1000
             df_new_calc_ddPCR_data$copies_inhab[i] <- (df_new_calc_ddPCR_data$copies_day[i]/df_new_calc_ddPCR_data$inhab[i])*100000
         }
@@ -137,25 +137,25 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
     df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data[with(df_new_calc_ddPCR_data, order(Target_Name,Sample)),]
     df_new_calc_ddPCR_data$num <- sequence(rle(df_new_calc_ddPCR_data$Sample)$lengths)
     max_reliquat <- max(df_new_calc_ddPCR_data$num)
-    df_new_calc_ddPCR_data <- tidyr::pivot_wider(df_new_calc_ddPCR_data, names_from = num, 
-                                                                        id_cols = c(Sample, 
-                                                                        Target_Name, 
-                                                                        Sample_Date, 
-                                                                        week_nb, 
-                                                                        Flow_rate, 
+    df_new_calc_ddPCR_data <- tidyr::pivot_wider(df_new_calc_ddPCR_data, names_from = num,
+                                                                        id_cols = c(Sample,
+                                                                        Target_Name,
+                                                                        Sample_Date,
+                                                                        week_nb,
+                                                                        Flow_rate,
                                                                         inhab),
                         values_from = c(copies_uL,
-                        Accepted_droplets, 
-                        Positive_droplets, 
-                        Negative_droplets, 
-                        sign, 
-                        PoissonConfMax, 
-                        PoissonConfMin, 
-                        dilution, 
-                        copies_L, 
-                        copies_day, 
+                        Accepted_droplets,
+                        Positive_droplets,
+                        Negative_droplets,
+                        sign,
+                        PoissonConfMax,
+                        PoissonConfMin,
+                        dilution,
+                        copies_L,
+                        copies_day,
                         copies_inhab))
-    
+
     # in R code the line 122 to 141 is repeated code
     # skipping here
 
@@ -178,7 +178,7 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 
     df_new_calc_ddPCR_data$copies_L_mean <- apply(df_new_calc_ddPCR_data[, c("copies_L_1", "copies_L_2")], 1, function(x) {
         if (sum(!is.na(x)) == 2) {
-            mean(x, na.rm = TRUE) 
+            mean(x, na.rm = TRUE)
         } else if
             (sum(!is.na(x)) == 1) {
             x[!is.na(x)]
@@ -212,7 +212,7 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 
     df_new_calc_ddPCR_data$Sample_Date <- as.Date(df_new_calc_ddPCR_data$Sample_Date, "%d-%m-%y")
     df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data %>% dplyr::select(Sample, Target_Name, Sample_Date, week_nb, Flow_rate, inhab, everything()) #Rearrange the columns
-    
+
     .microbs_env$df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data
 
     ## Ajout d'information
@@ -310,14 +310,14 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 # Do the Calculations for qPCR
 #--------------------------------------------------------------------------------------------------------
 #' @title Do the calculations for qPCR
-#' 
+#'
 #' @description We only have the raw data from the qPCR tests, and now we need to convert
 #' them into copies of RNA (per liter, per day, per day per 100.000 inhabitants)
 #' The calculations can be different for for different pathogens.
 #' Preferably use full path.
-#' 
+#'
 #' file ./microbs.lu/R/06_Calculations.R
-#' 
+#'
 #' @param path_to_loaded_raw_excel_qPCR Path to the loaded raw qPCR data.
 #'   Defaults to `.microbs_env$loaded_data_path`.
 #' @param path_to_calc_data_qPCR Path to store calculated qPCR data.
@@ -335,45 +335,45 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
 #'   \item Joining with standard curve and flux data
 #'   \item Calculating copies per reaction using standard curve parameters
 #' }
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' # Example usage
 #' set_microbs_wdirectory("D:/03_Workspace/01_R_Package/microbs_lu_dummy_data/")
 #' set_microbs_connector_dir("Data_Treatment")
-#' 
+#'
 #' set_microbs_stdCurve_DataPath("00_standard_curve")
-#' 
+#'
 #' path_to_raw_qPCR <- "0_raw_data_qPCR"
 #' set_microbs_qPCR_rawDataPath(path_to_raw_qPCR)
-#' 
+#'
 #' path_to_old_raw_excel_qPCR <- "1_loaded_data"
 #' set_microbs_loaded_DataPath(path_to_old_raw_excel_qPCR, , build_path = TRUE)
-#' 
+#'
 #' df_raw_old_qPCR_data <- load_microbs_old_raw_qPCR_Data()
 #' df_raw_qPCR_data <- load_microbs_raw_qPCR_Data()
-#' 
+#'
 #' load_microbs_old_raw_qPCR_Data()
-#' 
+#'
 #' path_to_flux_data <- "00_flux_data"
 #' set_microbs_flux_DataPath(path_to_flux_data)
 #' load_microbs_flux_Data()
-#' 
+#'
 #' set_microbs_calc_DataPath("2_calc_data")
-#' 
+#'
 #' calculations_microbs_qPCR()
 #' }
-#' 
-#' @export 
-#' 
-#' 
+#'
+#' @export
+#'
+#'
 
 calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_env$loaded_data_path, path_to_calc_data_qPCR = .microbs_env$calc_data_path) {
     if (is.null(.microbs_env$loaded_data_path)) {
         message("[microbs Warning]: Did not yet access the loaded data. Use the set_microbs_loaded_DataPath(),")
         message("and then load_microbs_old_raw_qPCR_Data() function to set a path")
     }
-    
+
     df_new_raw_qPCR_data <- get_microbs_new_raw_qPCR_Data()
 
     if (is.null(.microbs_env$calc_data_path)) {
@@ -407,8 +407,8 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
         df_new_raw_qPCR_data$CT == "Undetermined" ~ 0
     )
 
-    # total <- df_new_raw_qPCR_data %>% 
-    #             dplyr::group_by(Target_Name, Sample, .drop = FALSE) %>% 
+    # total <- df_new_raw_qPCR_data %>%
+    #             dplyr::group_by(Target_Name, Sample, .drop = FALSE) %>%
     #             dplyr::count() 3
 
     df_new_raw_qPCR_data <- df_new_raw_qPCR_data[with(df_new_raw_qPCR_data, order(Target_Name, Sample)),]
@@ -423,7 +423,7 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
 
     std_curve_path <- get_microbs_stdCurve_DataPath()
     info_target_data<- read.csv(paste0(std_curve_path,"/","SUPERVIR_LIST_RT-qPCR_Assay summary.csv"), header = TRUE)
-    df_new_raw_qPCR_data_mutate <- dplyr::left_join(df_new_raw_qPCR_data_mutate, info_target_data, 
+    df_new_raw_qPCR_data_mutate <- dplyr::left_join(df_new_raw_qPCR_data_mutate, info_target_data,
                                                     by = dplyr::join_by(Target_Name == Assay)
                                                     )
 
@@ -443,7 +443,7 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
             substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "MER" ~ 30473,
             substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "HES" ~ 15479,
             substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "ECH" ~ 7499,
-            substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "UEB" ~ 18600, 
+            substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "UEB" ~ 18600,
             substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "GRE" ~ 9835,
             substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "VIE" ~ 3411,
             substr(df_new_raw_qPCR_data_mutate$Sample, 1, 3) %in% "BOE" ~ 7818,
@@ -489,13 +489,13 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
             ifelse(df_new_raw_qPCR_data_mutate$CT_sign_2 =="Positive" & df_new_raw_qPCR_data_mutate$copies_reaction_2 < df_new_raw_qPCR_data_mutate$LOQ..copie.reaction.,
                     "Positive_non_quanti",df_new_raw_qPCR_data_mutate$CT_sign_2)
                     )
-    
+
     df_new_raw_qPCR_data_mutate$CT_sign_3 <- ifelse(
         df_new_raw_qPCR_data_mutate$CT_sign_3 == "Positive" & df_new_raw_qPCR_data_mutate$copies_reaction_3 >= df_new_raw_qPCR_data_mutate$LOQ..copie.reaction., "Positive_quanti",
             ifelse(df_new_raw_qPCR_data_mutate$CT_sign_3 =="Positive" & df_new_raw_qPCR_data_mutate$copies_reaction_3 < df_new_raw_qPCR_data_mutate$LOQ..copie.reaction.,
                     "Positive_non_quanti",df_new_raw_qPCR_data_mutate$CT_sign_3)
                     )
-    
+
     df_new_raw_qPCR_data_mutate$CT_sign_4 <- ifelse(
         df_new_raw_qPCR_data_mutate$CT_sign_4 == "Positive" & df_new_raw_qPCR_data_mutate$copies_reaction_4 >= df_new_raw_qPCR_data_mutate$LOQ..copie.reaction., "Positive_quanti",
             ifelse(df_new_raw_qPCR_data_mutate$CT_sign_4 =="Positive" & df_new_raw_qPCR_data_mutate$copies_reaction_4 < df_new_raw_qPCR_data_mutate$LOQ..copie.reaction.,
@@ -504,30 +504,30 @@ calculations_microbs_qPCR <- function(path_to_loaded_raw_excel_qPCR = .microbs_e
 
     # PSA: for qPCR, we directly have 20uL so we do not need to convert 5uL to 20uL, hence we do not multiply by 20
     df_new_raw_qPCR_data_mutate$copies_L_1 <- ifelse(
-        df_new_raw_qPCR_data_mutate$CT_sign_1 == "Positive_quanti" & 
-        !is.na(df_new_raw_qPCR_data_mutate$CT_sign_1) & 
-        !is.na(df_new_raw_qPCR_data_mutate$copies_reaction_1), 
+        df_new_raw_qPCR_data_mutate$CT_sign_1 == "Positive_quanti" &
+        !is.na(df_new_raw_qPCR_data_mutate$CT_sign_1) &
+        !is.na(df_new_raw_qPCR_data_mutate$copies_reaction_1),
             ((df_new_raw_qPCR_data_mutate$copies_reaction_1/ 5) * 80) * (1000 / 40), NA
         )
-    
+
     df_new_raw_qPCR_data_mutate$copies_L_2 <- ifelse(
-        df_new_raw_qPCR_data_mutate$CT_sign_2 == "Positive_quanti" & 
-        !is.na(df_new_raw_qPCR_data_mutate$CT_sign_2) & 
-        !is.na(df_new_raw_qPCR_data_mutate$copies_reaction_2), 
+        df_new_raw_qPCR_data_mutate$CT_sign_2 == "Positive_quanti" &
+        !is.na(df_new_raw_qPCR_data_mutate$CT_sign_2) &
+        !is.na(df_new_raw_qPCR_data_mutate$copies_reaction_2),
             ((df_new_raw_qPCR_data_mutate$copies_reaction_2/ 5) * 80) * (1000 / 40), NA
         )
-    
+
     df_new_raw_qPCR_data_mutate$copies_L_3 <- ifelse(
-        df_new_raw_qPCR_data_mutate$CT_sign_3 == "Positive_quanti" & 
-        !is.na(df_new_raw_qPCR_data_mutate$CT_sign_3) & 
-        !is.na(df_new_raw_qPCR_data_mutate$copies_reaction_3), 
+        df_new_raw_qPCR_data_mutate$CT_sign_3 == "Positive_quanti" &
+        !is.na(df_new_raw_qPCR_data_mutate$CT_sign_3) &
+        !is.na(df_new_raw_qPCR_data_mutate$copies_reaction_3),
             ((df_new_raw_qPCR_data_mutate$copies_reaction_3/ 5) * 80) * (1000 / 40), NA
         )
-    
+
     df_new_raw_qPCR_data_mutate$copies_L_4 <- ifelse(
-        df_new_raw_qPCR_data_mutate$CT_sign_4 == "Positive_quanti" & 
-        !is.na(df_new_raw_qPCR_data_mutate$CT_sign_4) & 
-        !is.na(df_new_raw_qPCR_data_mutate$copies_reaction_4), 
+        df_new_raw_qPCR_data_mutate$CT_sign_4 == "Positive_quanti" &
+        !is.na(df_new_raw_qPCR_data_mutate$CT_sign_4) &
+        !is.na(df_new_raw_qPCR_data_mutate$copies_reaction_4),
             ((df_new_raw_qPCR_data_mutate$copies_reaction_4/ 5) * 80) * (1000 / 40), NA
         )
 
