@@ -91,8 +91,16 @@ calculations_microbs_ddPCR <- function(path_to_loaded_raw_excel_ddPCR = .microbs
                                         )
                                     )
 
+    # df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data %>%
+    #                           dplyr::filter(df_new_calc_ddPCR_data$Accepted_droplets >= 8000)
     df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data %>%
-                             dplyr::filter(df_new_calc_ddPCR_data$Accepted_droplets >= 8000)
+                                dplyr::filter(
+                                    Accepted_droplets >= dplyr::case_when(
+                                    week_nb >= "2026_10" ~ 8000, # Any week after 2026_10 should have at least 8000 accepted droplets
+                                    week_nb == "2026_09" ~ 10000,  # for specific week, we can add conditions if needed, just replicate this line & change the week_nb and the threshold
+                                    TRUE ~ 10000 # all other weeks should have at least 10000 accepted droplets
+                                    )
+                                )
 
     df_new_calc_ddPCR_data <- df_new_calc_ddPCR_data %>%  dplyr::mutate(
         inhab = dplyr::case_when(
