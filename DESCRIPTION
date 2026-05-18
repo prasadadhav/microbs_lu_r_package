@@ -1,6 +1,6 @@
 Package: microbs.lu
 Title: Process PCR datafiles for the microbs.lu dashboard
-Version: 0.0.2.3100
+Version: 0.0.2.3102
 Authors@R: 
     person("Prasad", "ADHAV",  "prasada31@yahoo.in", "prasad.adhav@list.lu", role = c("aut", "cre"))
 Description: In Luxembourg the waste water treatment plant samples are used to 
