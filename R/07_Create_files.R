@@ -105,8 +105,10 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     names(df_new_calc_ddPCR_data_fluB)[names(df_new_calc_ddPCR_data_fluB) == "sign_mean"] <- "CT_sign_ddPCR_FluB"
     names(df_new_calc_ddPCR_data_fluB)[names(df_new_calc_ddPCR_data_fluB) == "copies_inhab_mean"] <- "copies_inhab_ddPCR_FluB"
 
+    df_new_calc_ddPCR_data_fluB$WWTP <- utils_extract_WWTP(df_new_calc_ddPCR_data_fluB$Sample)
+
     sheet_1_data <- dplyr::full_join(df_new_calc_ddPCR_data_fluA, df_new_calc_ddPCR_data_fluB, 
-                            by = dplyr::join_by(Sample, week_nb, inhab),
+                            by = dplyr::join_by(Sample, week_nb, inhab, WWTP),
                             relationship = "many-to-many")
 
     max_time <- pmax(as.Date(max(lubridate::parse_date_time(paste(as.integer(stringr::str_sub(sheet_1_data$week_nb, 1, 4)),
@@ -123,8 +125,9 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     # Sheet 1: Aggregate the data for all weekly per WWTP and nationwide.
     #----------------------
     # flu A
-    mean_WWTP_week_FluA_ddPCR <- aggregate(sheet_1_data$copies_day_ddPCR_FluA,
-                                        by = list(week_nb = sheet_1_data$week_nb, WWTP = sheet_1_data$WWTP),
+    mean_WWTP_week_FluA_ddPCR <- aggregate(df_new_calc_ddPCR_data_fluA$copies_day_ddPCR_FluA,
+                                        by = list(week_nb = df_new_calc_ddPCR_data_fluA$week_nb,
+                                                WWTP = df_new_calc_ddPCR_data_fluA$WWTP),
                                         FUN = function(x) if (all(is.na(x))) 0 else mean(x, na.rm = TRUE))
 
     colnames(mean_WWTP_week_FluA_ddPCR)[3] <- "mean_WWTP_week"
@@ -134,18 +137,25 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
                                         FUN = function(x) sum(x[x != 0], na.rm = TRUE))
 
     aggregate_ddPCR_FluA_num <- aggregate_ddPCR_FluA_num %>% dplyr::rename(copies_day_sum_ddPCR_FluA := x)
-    den_ddPCR <- sheet_1_data %>% dplyr::select(WWTP,week_nb,inhab) %>% dplyr::distinct()
+
+    den_ddPCR <- df_new_calc_ddPCR_data_fluA %>%
+        dplyr::select(WWTP, week_nb, inhab) %>%
+        dplyr::distinct()
+
     aggregate_ddPCR_den <- aggregate(den_ddPCR$inhab, by = list(den_ddPCR$week_nb),
                                     FUN = function(x) if(all(is.na(x))) 0 else sum(x, na.rm = TRUE))
 
-    aggregate_ddPCR_den <- aggregate_ddPCR_den %>% dplyr::rename(inhab_sum= x, week_nb = Group.1)
+    aggregate_ddPCR_den <- aggregate_ddPCR_den %>% dplyr::rename(inhab_sum = x, week_nb = Group.1)
+
     aggregate_ddPCR_FluA <- plyr::join(aggregate_ddPCR_FluA_num, aggregate_ddPCR_den, by = 'week_nb')
     aggregate_ddPCR_FluA$copies_days_inhab_ddPCR_FluA <- aggregate_ddPCR_FluA$copies_day_sum_ddPCR_FluA / aggregate_ddPCR_FluA$inhab_sum * 100000
-    
-    # flu b
-    mean_WWTP_week_FluB_ddPCR <- aggregate(sheet_1_data$copies_day_ddPCR_FluB,
-                                       by = list(week_nb = sheet_1_data$week_nb, WWTP = sheet_1_data$WWTP),
-                                       FUN = function(x) if (all(is.na(x))) 0 else mean(x, na.rm = TRUE))
+
+
+    # flu B
+    mean_WWTP_week_FluB_ddPCR <- aggregate(df_new_calc_ddPCR_data_fluB$copies_day_ddPCR_FluB,
+                                        by = list(week_nb = df_new_calc_ddPCR_data_fluB$week_nb,
+                                                WWTP = df_new_calc_ddPCR_data_fluB$WWTP),
+                                        FUN = function(x) if (all(is.na(x))) 0 else mean(x, na.rm = TRUE))
 
     colnames(mean_WWTP_week_FluB_ddPCR)[3] <- "mean_WWTP_week"
 
@@ -154,7 +164,17 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
                                         FUN = function(x) sum(x[x != 0], na.rm = TRUE))
 
     aggregate_ddPCR_FluB_num <- aggregate_ddPCR_FluB_num %>% dplyr::rename(copies_day_sum_ddPCR_FluB := x)
-    aggregate_ddPCR_FluB <- plyr::join(aggregate_ddPCR_FluB_num,aggregate_ddPCR_den,by = 'week_nb')
+
+    den_ddPCR <- df_new_calc_ddPCR_data_fluB %>%
+        dplyr::select(WWTP, week_nb, inhab) %>%
+        dplyr::distinct()
+
+    aggregate_ddPCR_den <- aggregate(den_ddPCR$inhab, by = list(den_ddPCR$week_nb),
+                                    FUN = function(x) if(all(is.na(x))) 0 else sum(x, na.rm = TRUE))
+
+    aggregate_ddPCR_den <- aggregate_ddPCR_den %>% dplyr::rename(inhab_sum = x, week_nb = Group.1)
+
+    aggregate_ddPCR_FluB <- plyr::join(aggregate_ddPCR_FluB_num, aggregate_ddPCR_den, by = 'week_nb')
     aggregate_ddPCR_FluB$copies_days_inhab_ddPCR_FluB <- aggregate_ddPCR_FluB$copies_day_sum_ddPCR_FluB / aggregate_ddPCR_FluB$inhab_sum * 100000
 
     ddPCR <- dplyr::full_join(aggregate_ddPCR_FluA, aggregate_ddPCR_FluB, by = 'week_nb')
@@ -167,27 +187,40 @@ create_microbs_flu_file <- function(path_to_create_data_ddPCR = .microbs_env$cre
     #----------------------
     # Sheet 2: Weekly flu concentrations per WWTP
     #----------------------
-    # flu a
-    aggregate_FluA_WWTP_ddPCR <- aggregate(sheet_1_data$copies_day_ddPCR_FluA, by = list(sheet_1_data$WWTP,sheet_1_data$week_nb),
+   # flu a
+    aggregate_FluA_WWTP_ddPCR <- aggregate(df_new_calc_ddPCR_data_fluA$copies_day_ddPCR_FluA,
+                                        by = list(df_new_calc_ddPCR_data_fluA$WWTP,
+                                                df_new_calc_ddPCR_data_fluA$week_nb),
                                         FUN = function(x) if(all(is.na(x))) 0 else mean(x, na.rm = TRUE))
 
     aggregate_FluA_WWTP_ddPCR <- aggregate_FluA_WWTP_ddPCR %>% dplyr::rename(copies_ddPCR_FluA = x, WWTP = Group.1, week_nb = Group.2)
-    aggregate_FluA_inhab_WWTP_ddPCR <- aggregate(sheet_1_data$copies_inhab_ddPCR_FluA, by = list(sheet_1_data$WWTP,sheet_1_data$week_nb),
+
+    aggregate_FluA_inhab_WWTP_ddPCR <- aggregate(df_new_calc_ddPCR_data_fluA$copies_inhab_ddPCR_FluA,
+                                                by = list(df_new_calc_ddPCR_data_fluA$WWTP,
+                                                        df_new_calc_ddPCR_data_fluA$week_nb),
                                                 FUN = function(x) if(all(is.na(x))) 0 else mean(x, na.rm = TRUE))
-    
+
     aggregate_FluA_inhab_WWTP_ddPCR <- aggregate_FluA_inhab_WWTP_ddPCR %>% dplyr::rename(copies_inhab_ddPCR_FluA = x, WWTP = Group.1, week_nb =  Group.2)
-    aggregate_FluA_WWTP_ddPCR <- dplyr::full_join(aggregate_FluA_WWTP_ddPCR,aggregate_FluA_inhab_WWTP_ddPCR,by = c('WWTP', 'week_nb'))
+
+    aggregate_FluA_WWTP_ddPCR <- dplyr::full_join(aggregate_FluA_WWTP_ddPCR, aggregate_FluA_inhab_WWTP_ddPCR, by = c('WWTP', 'week_nb'))
+
 
     # flu b
-    aggregate_FluB_WWTP_ddPCR <- aggregate(sheet_1_data$copies_day_ddPCR_FluB, by = list(sheet_1_data$WWTP,sheet_1_data$week_nb),
+    aggregate_FluB_WWTP_ddPCR <- aggregate(df_new_calc_ddPCR_data_fluB$copies_day_ddPCR_FluB,
+                                        by = list(df_new_calc_ddPCR_data_fluB$WWTP,
+                                                df_new_calc_ddPCR_data_fluB$week_nb),
                                         FUN = function(x) if(all(is.na(x))) 0 else mean(x, na.rm = TRUE))
 
     aggregate_FluB_WWTP_ddPCR <- aggregate_FluB_WWTP_ddPCR %>% dplyr::rename(copies_ddPCR_FluB = x, WWTP = Group.1, week_nb = Group.2)
-    aggregate_FluB_inhab_WWTP_ddPCR <- aggregate(sheet_1_data$copies_inhab_ddPCR_FluB, by = list(sheet_1_data$WWTP,sheet_1_data$week_nb),
+
+    aggregate_FluB_inhab_WWTP_ddPCR <- aggregate(df_new_calc_ddPCR_data_fluB$copies_inhab_ddPCR_FluB,
+                                                by = list(df_new_calc_ddPCR_data_fluB$WWTP,
+                                                        df_new_calc_ddPCR_data_fluB$week_nb),
                                                 FUN = function(x) if(all(is.na(x))) 0 else mean(x, na.rm = TRUE))
-    
+
     aggregate_FluB_inhab_WWTP_ddPCR <- aggregate_FluB_inhab_WWTP_ddPCR %>% dplyr::rename(copies_inhab_ddPCR_FluB = x, WWTP = Group.1, week_nb = Group.2)
-    aggregate_FluB_WWTP_ddPCR <- dplyr::full_join(aggregate_FluB_WWTP_ddPCR,aggregate_FluB_inhab_WWTP_ddPCR,by = c('WWTP', 'week_nb'))
+
+    aggregate_FluB_WWTP_ddPCR <- dplyr::full_join(aggregate_FluB_WWTP_ddPCR, aggregate_FluB_inhab_WWTP_ddPCR, by = c('WWTP', 'week_nb'))
 
     ddPCR <- dplyr::full_join(aggregate_FluA_WWTP_ddPCR,aggregate_FluB_WWTP_ddPCR, by = c('WWTP', 'week_nb'))
 
