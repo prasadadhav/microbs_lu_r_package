@@ -377,10 +377,26 @@ load_microbs_raw_ddPCR_Data <- function(path_to_raw_ddPCR = .microbs_env$ddPCR_r
         for(j in 1 : nrow(file)){
             file <- file %>%
                 dplyr::mutate(dilution = dplyr::case_when(
-                    grepl("D$", Sample) ~ 2,      # if the name ends with "D", value = 2
-                    grepl("T$", Sample) ~ 3,      # if the name ends with "D", value = 3
-                    grepl("d$", Sample) ~ 10,
-                    TRUE ~ 0                    # if not, value = 0
+                    grepl("D$", Sample) ~ 2,   # Double (2×)
+                    grepl("T$", Sample) ~ 3,   # Triple (3×)
+                    grepl("Q$", Sample) ~ 4,   # Quadruple (4×)
+                    grepl("C$", Sample) ~ 5,   # Cintuple / Quintuple (5×)
+                    grepl("S$", Sample) ~ 6,   # Sextuple (6×)
+                    grepl("V$", Sample) ~ 7,   # Septuple (7×)
+                    grepl("O$", Sample) ~ 8,   # Octuple (8×)
+                    grepl("N$", Sample) ~ 9,   # Nonuple (9×)
+                    grepl("d$", Sample) ~ 10,  # Decuple (10×)
+                    grepl("e$", Sample) ~ 11,  # Undecuple (11×)
+                    grepl("l$", Sample) ~ 12,  # Duodecuple (12×)
+                    grepl("r$", Sample) ~ 13,  # Tredecuple (13×)
+                    grepl("f$", Sample) ~ 14,  # Quattuordecuple (14×)
+                    grepl("i$", Sample) ~ 15,  # Quindecuple (15×)
+                    grepl("x$", Sample) ~ 16,  # Sexdecuple (16×)
+                    grepl("v$", Sample) ~ 17,  # Septendecuple (17×)
+                    grepl("g$", Sample) ~ 18,  # Octodecuple (18×)
+                    grepl("h$", Sample) ~ 19,  # Novemdecuple (19×)
+                    grepl("t$", Sample) ~ 20,  # Vigintuple (20×)
+                    TRUE ~ 0                   # No dilution suffix
                 ))
 
             # Module: Add new Virus name here
@@ -615,9 +631,26 @@ load_microbs_raw_qPCR_Data <- function(path_to_raw_qPCR = .microbs_env$qPCR_raw_
 
             file_mod <- file_mod %>%
                 dplyr::mutate(dilution = dplyr::case_when(
-                    grepl("D$", Sample) ~ 2,      # if the name ends with "D", value = 2
-                    grepl("d$", Sample) ~ 10,
-                    TRUE ~ 0                    # if not, value = 0
+                    grepl("D$", Sample) ~ 2,   # Double (2×)
+                    grepl("T$", Sample) ~ 3,   # Triple (3×)
+                    grepl("Q$", Sample) ~ 4,   # Quadruple (4×)
+                    grepl("C$", Sample) ~ 5,   # Cintuple / Quintuple (5×)
+                    grepl("S$", Sample) ~ 6,   # Sextuple (6×)
+                    grepl("V$", Sample) ~ 7,   # Septuple (7×)
+                    grepl("O$", Sample) ~ 8,   # Octuple (8×)
+                    grepl("N$", Sample) ~ 9,   # Nonuple (9×)
+                    grepl("d$", Sample) ~ 10,  # Decuple (10×)
+                    grepl("e$", Sample) ~ 11,  # Undecuple (11×)
+                    grepl("l$", Sample) ~ 12,  # Duodecuple (12×)
+                    grepl("r$", Sample) ~ 13,  # Tredecuple (13×)
+                    grepl("f$", Sample) ~ 14,  # Quattuordecuple (14×)
+                    grepl("i$", Sample) ~ 15,  # Quindecuple (15×)
+                    grepl("x$", Sample) ~ 16,  # Sexdecuple (16×)
+                    grepl("v$", Sample) ~ 17,  # Septendecuple (17×)
+                    grepl("g$", Sample) ~ 18,  # Octodecuple (18×)
+                    grepl("h$", Sample) ~ 19,  # Novemdecuple (19×)
+                    grepl("t$", Sample) ~ 20,  # Vigintuple (20×)
+                    TRUE ~ 0                   # No dilution suffix
             ))
 
             # if(substr(file_mod$Sample[j], 1, 3)  %in% c("BET","BEG","PET","SCH", "BLE", "MER", "HES","ECH", "UEB", "GRE", "VIE", "BOE", "WIL")){
